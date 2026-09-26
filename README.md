@@ -21,12 +21,12 @@ Locally, open `docs/index.html` in a browser (or run any static file server, e.g
 ## Enabling GitHub Pages (one-time setup)
 
 This repo doesn't have Pages turned on yet — that setting can only be changed by a repo admin
-in the GitHub UI:
+in the GitHub UI. `.github/workflows/pages.yml` builds and deploys `docs/` on every push to
+`main`, but the Pages *source* still has to be set once:
 
 1. Go to **Settings → Pages** on `github.com/Kaleaon/Cleverferret-design`.
-2. Under **Build and deployment → Source**, choose **Deploy from a branch**.
-3. Branch: `main`, folder: **`/docs`**. Save.
-4. After merging this branch to `main`, the site publishes at
+2. Under **Build and deployment → Source**, choose **GitHub Actions**.
+3. After merging this branch to `main`, the workflow runs and the site publishes at
    `https://kaleaon.github.io/Cleverferret-design/`.
 
 ## How the prototypes work
