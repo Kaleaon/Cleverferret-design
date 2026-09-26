@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CleverFerret Design System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="CleverFerret design system — interactive theme studio and phone app prototype for the CleverFerret media library.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>
+  :root{
+    --bg:#0f1117; --panel:#1a1c25; --border:#2e3140; --ink:#e4e4e7; --sub:#9ca3af; --pri:#818cf8; --pri-ink:#0f1117;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.5}
+  a{color:var(--pri);text-decoration:none}
+  a:hover{color:#a5b4fc}
+  .wrap{max-width:1040px;margin:0 auto;padding:56px 24px 80px}
+  header.hero{display:flex;flex-direction:column;gap:14px;margin-bottom:48px}
+  .eyebrow{font:700 11px/1 'JetBrains Mono',monospace;letter-spacing:.16em;color:var(--pri);text-transform:uppercase}
+  h1{font:800 40px/1.15 Inter,sans-serif;margin:0;letter-spacing:-.01em}
+  .lede{font:400 16px/1.6 Inter,sans-serif;color:var(--sub);max-width:640px;margin:0}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-bottom:56px}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:14px;transition:border-color .15s,transform .15s}
+  .card:hover{border-color:var(--pri);transform:translateY(-2px)}
+  .card h2{font:700 20px/1.3 Inter,sans-serif;margin:0;color:var(--ink)}
+  .card p{font:400 14px/1.55 Inter,sans-serif;color:var(--sub);margin:0;flex:1}
+  .btn{align-self:flex-start;font:600 13px/1 Inter,sans-serif;letter-spacing:.02em;color:var(--pri-ink);background:var(--pri);padding:10px 16px;border-radius:8px}
+  .btn:hover{background:#a5b4fc;color:var(--pri-ink)}
+  .tag{font:600 10px/1 'JetBrains Mono',monospace;letter-spacing:.1em;color:var(--sub);text-transform:uppercase}
+  .preview{width:100%;border-radius:10px;border:1px solid var(--border);display:block;margin-top:4px}
+  section.map{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:32px}
+  section.map h2{font:700 18px/1.3 Inter,sans-serif;margin:0 0 16px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border)}
+  th{color:var(--sub);font:600 11px/1 Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase}
+  td{color:var(--ink)}
+  td.src{color:var(--sub);font-family:'JetBrains Mono',monospace;font-size:12px}
+  footer{color:var(--sub);font-size:13px;padding-top:24px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">CleverFerret · Design System</div>
+    <h1>Rule &amp; Rail — the CleverFerret UI</h1>
+    <p class="lede">A themeable interface system for the CleverFerret media library: layout packs, colour palettes, motion and effect
+      settings composed into a working phone prototype. Pick a theme in the Theme Studio and it carries straight into the App
+      Prototype's nine screens.</p>
+  </header>
+
+  <div class="cards">
+    <div class="card">
+      <span class="tag">Live prototype</span>
+      <h2>App Prototype</h2>
+      <p>Nine navigable screens — Home, Library, Discover, Search, Player, Reader, Settings, Downloads and a Theme Studio —
+        wired together with real navigation and state. Try the Sweep Console's LCARS-style rail.</p>
+      <img class="preview" src="assets/theme-preview.webp" alt="CleverFerret phone prototype and theme picker preview" loading="lazy">
+      <a class="btn" href="app.dc.html">Open App Prototype →</a>
+    </div>
+    <div class="card">
+      <span class="tag">Spec sheet</span>
+      <h2>Theme System</h2>
+      <p>The full token system: layout packs, colour families, effects, motion and reader modes, previewed live across Home,
+        Library, Player, Reader, Settings, tablet and TV layouts.</p>
+      <a class="btn" href="theme-system.dc.html">Open Theme System →</a>
+    </div>
+  </div>
+
+  <section class="map">
+    <h2>Screen map</h2>
+    <table>
+      <thead><tr><th>Project screen</th><th>Repo source</th></tr></thead>
+      <tbody>
+        <tr><td>Home</td><td class="src">ui/modern/home/ModernHomeScreen.kt, ui/modern/components/Scaffolding.kt, SharedComponents.kt (MiniPlayer)</td></tr>
+        <tr><td>Library (phone / tablet)</td><td class="src">ui/modern/library/ModernLibraryScreen.kt, ui/modern/domain/Models.kt</td></tr>
+        <tr><td>Discover</td><td class="src">ui/modern/discover/ModernDiscoverScreen.kt</td></tr>
+        <tr><td>Search</td><td class="src">ui/modern/search/ModernSearchScreen.kt</td></tr>
+        <tr><td>Audio player</td><td class="src">ui/modern/player/ModernAudioPlayerScreen.kt</td></tr>
+        <tr><td>Reader</td><td class="src">ui/modern/reader/ModernReaderScreen.kt, docs/THEMING.md (Day/Sepia/Night)</td></tr>
+        <tr><td>Settings</td><td class="src">ui/modern/settings/ModernSettingsScreen.kt</td></tr>
+        <tr><td>Theme Studio</td><td class="src">ui/modern/theme/ModernThemePickerScreen.kt (layout / colour / effect tabs)</td></tr>
+        <tr><td>Tokens / type</td><td class="src">ui/modern/theme/CFTokens.kt, CFTheme.kt, ui/theme/UnifiedThemeSystem.kt, MetallicColors.kt</td></tr>
+        <tr><td>Downloads, TV preview</td><td class="src">new</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    Source app: <a href="https://github.com/Kaleaon/CleverFerret" target="_blank" rel="noopener">Kaleaon/CleverFerret</a>
+    &nbsp;·&nbsp; Design repo: <a href="https://github.com/Kaleaon/Cleverferret-design" target="_blank" rel="noopener">Kaleaon/Cleverferret-design</a>
+  </footer>
+
+</div>
+</body>
+</html>

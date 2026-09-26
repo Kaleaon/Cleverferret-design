@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Roboto:wght@400;500;700;900&family=Antonio:wght@400;600;700&family=Open+Sans:wght@300;400;600;800&family=Nunito+Sans:wght@400;600;800;900&family=Jost:wght@300;400;500;700;900&family=Source+Serif+4:wght@400;600;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0&display=block">
+<style>
+body{margin:0;background:#0f1117;color:#e4e4e7;font-family:Inter,system-ui,sans-serif}
+a{color:#818cf8}a:hover{color:#a5b4fc}
+@keyframes cfShimmer{from{background-position:160% 0}to{background-position:-160% 0}}
+@keyframes cfPulse{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 18px 3px color-mix(in srgb,var(--pri) 60%,transparent)}}
+</style>
+</helmet>
+
+<div style="display:flex;min-height:100vh;align-items:flex-start">
+
+<aside style="width:272px;flex:none;position:sticky;top:0;height:100vh;overflow-y:auto;background:#1a1c25;border-right:1px solid #2e3140;padding:20px 16px 40px;box-sizing:border-box;display:flex;flex-direction:column;gap:22px">
+  <div style="display:flex;flex-direction:column;gap:4px">
+    <div style="font:700 11px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#818cf8">CLEVERFERRET · THEMES</div>
+    <div style="font:600 18px/1.3 Inter,sans-serif;color:#e4e4e7">{{ themeName }}</div>
+    <div style="font:400 12px/1.4 Inter,sans-serif;color:#9ca3af">{{ effectName }} effects · motion {{ motionLabel }}</div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div style="font:600 11px/1 Inter,sans-serif;letter-spacing:.08em;color:#9ca3af">1 · LAYOUT PACK</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <sc-for list="{{ layoutList }}" as="l" hint-placeholder-count="7">
+        <div role="button" tabindex="0" onClick="{{ l.pick }}" style="{{ l.st }}">{{ l.name }}</div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font:600 11px/1 Inter,sans-serif;letter-spacing:.08em;color:#9ca3af">2 · COLOUR PACK</div>
+    <sc-for list="{{ families }}" as="f" hint-placeholder-count="4">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.1em;color:#6b7280">{{ f.name }}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <sc-for list="{{ f.items }}" as="p" hint-placeholder-count="5">
+            <div role="button" tabindex="0" title="{{ p.name }}" aria-label="{{ p.name }}" onClick="{{ p.pick }}" style="{{ p.st }}">
+              <div style="{{ p.dot }}"></div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div style="font:600 11px/1 Inter,sans-serif;letter-spacing:.08em;color:#9ca3af">3 · EFFECT PACK</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <sc-for list="{{ effectList }}" as="e" hint-placeholder-count="8">
+        <div role="button" tabindex="0" onClick="{{ e.pick }}" style="{{ e.st }}">{{ e.name }}</div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div style="font:600 11px/1 Inter,sans-serif;letter-spacing:.08em;color:#9ca3af">MOTION</div>
+    <div style="display:flex;gap:6px">
+      <sc-for list="{{ motionList }}" as="m" hint-placeholder-count="3">
+        <div role="button" tabindex="0" onClick="{{ m.pick }}" style="{{ m.st }}">{{ m.name }}</div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div style="font:600 11px/1 Inter,sans-serif;letter-spacing:.08em;color:#9ca3af">READER PAGE</div>
+    <div style="display:flex;gap:6px">
+      <sc-for list="{{ readerList }}" as="m" hint-placeholder-count="3">
+        <div role="button" tabindex="0" onClick="{{ m.pick }}" style="{{ m.st }}">{{ m.name }}</div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div style="font:600 11px/1 Inter,sans-serif;letter-spacing:.08em;color:#9ca3af">FORM FACTOR</div>
+    <div style="display:flex;gap:6px">
+      <sc-for list="{{ deviceList }}" as="m" hint-placeholder-count="3">
+        <div role="button" tabindex="0" onClick="{{ m.pick }}" style="{{ m.st }}">{{ m.name }}</div>
+      </sc-for>
+    </div>
+  </div>
+</aside>
+
+<main style="flex:1;min-width:0;padding:32px 36px 80px;box-sizing:border-box;display:flex;flex-direction:column;gap:48px">
+
+  <header style="display:flex;flex-direction:column;gap:10px;max-width:880px">
+    <div style="font:600 12px/1 'JetBrains Mono',monospace;letter-spacing:.12em;color:#818cf8">SPEC · v1 · BUILT ON KTHEME + LINKPOINT-DESIGN</div>
+    <h1 style="margin:0;font:700 34px/1.15 Inter,sans-serif;color:#e4e4e7;letter-spacing:-.01em">CleverFerret theme system</h1>
+    <p style="margin:0;font:400 15px/1.55 Inter,sans-serif;color:#9ca3af;text-wrap:pretty">A theme is three layers that can be combined freely: a <b style="color:#e4e4e7">layout pack</b> (shape, navigation, type), a <b style="color:#e4e4e7">colour pack</b> (MD3 roles, metal, reader pages) and an <b style="color:#e4e4e7">effect pack</b> (sheen, glow, glass, pattern, motion). Any layout works with any colour pack and any effect pack: 7 × 24 × 8 = 1,344 themes. <b style="color:#e4e4e7">Media mode</b> then adjusts chrome density for browsing, reading, listening and watching, without changing the theme.</p>
+  </header>
+
+  <section data-screen-label="Live preview" style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+      <h2 style="margin:0;font:600 20px/1.2 Inter,sans-serif;color:#e4e4e7">Live preview</h2>
+      <span style="font:400 13px/1.4 'JetBrains Mono',monospace;color:#9ca3af">{{ themeId }}</span>
+    </div>
+
+    <div style="{{ vars }}">
+    <sc-if value="{{ isPhone }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+
+      <!-- HOME -->
+      <div data-screen-label="Home" style="display:flex;flex-direction:column;gap:10px;flex:none">
+        <div style="width:360px;height:740px;border-radius:36px;border:10px solid #05060a;box-shadow:0 30px 60px rgba(0,0,0,.45);overflow:hidden;display:flex;flex-direction:column;background:var(--pbg);color:var(--ink);font-family:var(--ff);position:relative">
+          <div style="height:28px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font:500 12px/1 var(--lf);color:var(--ink)"><span>9:41</span><span style="font-family:'Material Symbols Outlined';font-size:15px;font-variation-settings:'FILL' 1;letter-spacing:2px">signal_cellular_4_bar wifi battery_full</span></div>
+          <div style="height:56px;flex:none;display:flex;align-items:center;padding:0 4px 0 16px">
+            <div style="flex:1;font:900 19px/1.2 var(--dff);background:var(--metal);-webkit-background-clip:text;background-clip:text;color:transparent;filter:var(--wglow)">CleverFerret</div>
+            <div style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:24px;color:var(--ink)">search</div>
+            <div style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:24px;color:var(--ink)">cast</div>
+          </div>
+          <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;gap:16px;padding-bottom:90px">
+            <div style="margin:8px 16px 0;display:flex;gap:16px;padding:16px;border-radius:var(--rl);background:var(--herobg);border-top:var(--cbt);border-right:var(--cbr);border-bottom:var(--cbb);border-left:var(--cbl);box-shadow:var(--csh);backdrop-filter:var(--bf)">
+              <div style="width:96px;height:132px;flex:none;border-radius:var(--rc);background:linear-gradient(135deg,#1B3A5C,rgba(27,58,92,.6))"></div>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;align-items:flex-start">
+                <div style="position:relative;overflow:hidden;padding:4px 10px;border-radius:var(--rs);background:var(--metal);color:var(--ctafg);font:900 11px/1.2 var(--lf);letter-spacing:.13em" style-after="content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);background-size:250% 100%;opacity:var(--shimo);animation:var(--shim)">RESUME</div>
+                <div style="font:900 22px/1.15 var(--dff);letter-spacing:var(--htls);text-transform:var(--tt);color:var(--ink)">The Three-Body Problem</div>
+                <div style="font:400 14px/20px var(--ff);color:var(--ink2)">Liu Cixin</div>
+                <div style="font:600 11px/1.2 var(--lf);letter-spacing:.1em;color:var(--ink2)">Ch. 7 · 4h 12m left</div>
+                <div style="width:100%;height:4px;border-radius:2px;background:var(--track);overflow:hidden"><div style="width:42%;height:100%;background:var(--pri)"></div></div>
+                <div style="position:relative;overflow:hidden;display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:var(--rs);background:var(--metal);color:var(--ctafg);box-shadow:var(--ctash);animation:var(--pulse)" style-after="content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);background-size:250% 100%;opacity:var(--shimo);animation:var(--shim)"><span style="font-family:'Material Symbols Outlined';font-size:22px;font-variation-settings:'FILL' 1">play_arrow</span><span style="font:900 13px/1 var(--lf);letter-spacing:.02em">Resume</span></div>
+              </div>
+            </div>
+            <div style="padding:0 16px;display:flex;flex-direction:column;gap:8px">
+              <div style="font:var(--tw) 17px/1.3 var(--dff);letter-spacing:var(--htls);text-transform:var(--tt);color:var(--ink)">Quick actions</div>
+              <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--qgap)">
+                <sc-for list="{{ quick }}" as="q" hint-placeholder-count="6">
+                  <div style="height:80px;box-sizing:border-box;display:flex;flex-direction:column;align-items:var(--qalign);justify-content:var(--qjust);gap:4px;padding:8px;border-radius:var(--rt);background:var(--qbg);border-top:var(--qbt);border-right:var(--qbr);border-bottom:var(--qbb);border-left:var(--qbl);box-shadow:var(--qsh);backdrop-filter:var(--bf)">
+                    <span style="font-family:'Material Symbols Outlined';font-size:24px;font-variation-settings:'FILL' 1;color:var(--qic)">{{ q.icon }}</span>
+                    <span style="font:600 11px/1.2 var(--lf);letter-spacing:.1em;text-transform:var(--tt);color:var(--qfg)">{{ q.label }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="padding:0 16px"><div style="font:var(--tw) 17px/1.3 var(--dff);letter-spacing:var(--htls);text-transform:var(--tt);color:var(--ink)">Continue</div><div style="font:400 12px/16px var(--ff);color:var(--ink2)">Pick up where you left off</div></div>
+              <div style="display:flex;gap:12px;padding:0 16px;overflow:hidden">
+                <sc-for list="{{ items }}" as="it" hint-placeholder-count="3">
+                  <div style="width:160px;flex:none;box-sizing:border-box;padding:12px;display:flex;flex-direction:column;gap:8px;border-radius:var(--rp);background:var(--cbg);border-top:var(--cbt);border-right:var(--cbr);border-bottom:var(--cbb);border-left:var(--cbl);box-shadow:var(--csh);backdrop-filter:var(--bf)">
+                    <div style="{{ it.cover196 }}"><span style="font:900 13px/1.25 var(--dff);color:#fff;text-align:center;padding:8px">{{ it.title }}</span></div>
+                    <div style="font:600 13px/1.3 var(--ff);color:var(--ink)">{{ it.title }}</div>
+                    <div style="height:2px;background:var(--track)"><div style="{{ it.bar }}"></div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          <div style="position:absolute;left:12px;right:12px;bottom:14px;border-radius:var(--rp);background:var(--mpbg);box-shadow:0 8px 24px rgba(0,0,0,.35);overflow:hidden;backdrop-filter:var(--bf)">
+            <div style="display:flex;align-items:center;gap:10px;padding:8px">
+              <div style="width:44px;height:44px;flex:none;border-radius:var(--rc);background:linear-gradient(135deg,#5C2E1B,rgba(92,46,27,.6))"></div>
+              <div style="flex:1;min-width:0"><div style="font:600 13px/1.3 var(--ff);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Project Hail Mary</div><div style="font:700 10px/1.3 var(--lf);letter-spacing:.12em;color:var(--ink2)">12h 04m · 1.2×</div></div>
+              <div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:24px;font-variation-settings:'FILL' 1;color:var(--ink)">skip_previous</div>
+              <div style="width:40px;height:40px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;background:var(--pri);color:var(--onpri);font-family:'Material Symbols Outlined';font-size:24px;font-variation-settings:'FILL' 1;box-shadow:var(--ctash)">play_arrow</div>
+            </div>
+            <div style="height:2px;background:var(--track)"><div style="width:71%;height:100%;background:var(--pri)"></div></div>
+          </div>
+        </div>
+        <div style="font:500 12px/1.3 'JetBrains Mono',monospace;color:#9ca3af">HOME · browse mode</div>
+      </div>
+
+      <!-- LIBRARY -->
+      <div data-screen-label="Library" style="display:flex;flex-direction:column;gap:10px;flex:none">
+        <div style="width:360px;height:740px;border-radius:36px;border:10px solid #05060a;box-shadow:0 30px 60px rgba(0,0,0,.45);overflow:hidden;display:flex;flex-direction:column;background:var(--pbg);color:var(--ink);font-family:var(--ff)">
+          <div style="height:28px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font:500 12px/1 var(--lf);color:var(--ink)"><span>9:41</span><span style="font-family:'Material Symbols Outlined';font-size:15px;font-variation-settings:'FILL' 1;letter-spacing:2px">signal_cellular_4_bar wifi battery_full</span></div>
+          <sc-if value="{{ navSweep }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;position:relative;background:var(--bg);overflow:hidden">
+<div style="position:absolute;left:0;top:0;right:0;height:64px;background:var(--pri);border-radius:42px 0 0 0"></div>
+<div style="position:absolute;right:62px;top:0;width:4px;height:64px;background:var(--bg)"></div>
+<div style="position:absolute;right:0;top:0;width:62px;height:64px;background:var(--sec2);display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;box-sizing:border-box;font:500 10px/1 Antonio,sans-serif;color:var(--onsec2L)">4471-12</div>
+<div style="position:absolute;left:88px;right:78px;top:6px;height:16px;display:flex;gap:2px;overflow:hidden"><span style="flex:none;display:flex;align-items:baseline;gap:4px;padding:0 7px;height:16px;background:var(--sec2);color:var(--onsec2L);border-radius:8px 0 0 8px;font:700 9px/16px Antonio,sans-serif;letter-spacing:.04em"><span style="font-size:7.5px;opacity:.8;letter-spacing:.14em">BOOKS</span>412</span><span style="flex:none;display:flex;align-items:baseline;gap:4px;padding:0 7px;height:16px;background:var(--surf2);color:var(--ink);font:700 9px/16px Antonio,sans-serif;letter-spacing:.04em"><span style="font-size:7.5px;opacity:.8;letter-spacing:.14em">SYNC</span>2M</span><span style="flex:none;display:flex;align-items:baseline;gap:4px;padding:0 7px;height:16px;background:var(--sec);color:var(--onsecL);border-radius:0 8px 8px 0;font:700 9px/16px Antonio,sans-serif;letter-spacing:.04em"><span style="font-size:7.5px;opacity:.8;letter-spacing:.14em">HFY</span>+8</span></div>
+<div style="position:absolute;left:80px;right:76px;top:0;height:64px;display:flex;align-items:flex-end;justify-content:flex-end;padding-bottom:7px;box-sizing:border-box;font:700 26px/1 Antonio,sans-serif;letter-spacing:.05em;color:var(--onpriL)">LIBRARY</div>
+<div style="position:absolute;left:76px;top:64px;width:26px;height:26px;background:var(--pri)"></div>
+<div style="position:absolute;left:76px;top:64px;width:26px;height:26px;background:var(--bg);border-radius:26px 0 0 0"></div>
+<div style="position:absolute;left:0;top:64px;width:76px;bottom:22px;display:flex;flex-direction:column;gap:4px">
+<div style="flex:none;height:32px;background:var(--pri);color:var(--onpriL);display:flex;align-items:center;padding-left:9px;font:700 9.5px/1.05 Antonio,sans-serif;letter-spacing:.14em">CLEVER<br>FERRET</div>
+<sc-for list="{{ lcRailP }}" as="r" hint-placeholder-count="7"><div role="button" tabindex="0" aria-label="{{ r.label }}" style="{{ r.st }}"><span style="{{ r.cs }}">{{ r.code }}</span>{{ r.label }}</div></sc-for>
+<div style="flex:none;height:26px;background:var(--outv);border-radius:0 0 0 22px;margin-top:auto"></div>
+</div>
+<div style="position:absolute;left:80px;right:4px;bottom:4px;height:18px;display:flex;gap:4px"><span style="width:34px;flex:none;background:var(--sec2)"></span><span style="flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;padding:0 10px;background:var(--surf);color:var(--ink2);border-radius:0 9px 9px 0;font:500 9.5px/1 Antonio,sans-serif;letter-spacing:.06em;white-space:nowrap;overflow:hidden"><span>SYNC OK · 4 SOURCES</span><span>3,696 ITEMS</span></span></div>
+<div style="position:absolute;left:80px;top:68px;right:4px;bottom:26px;border-radius:22px 0 0 0;background:var(--surf);overflow:hidden;display:flex;flex-direction:column;gap:12px;padding:14px 10px 10px 14px;box-sizing:border-box">
+<div style="display:flex;align-items:center;gap:3px;height:16px;flex:none"><span style="width:12px;height:16px;background:var(--sec);border-radius:8px 0 0 8px"></span><span style="width:16px;height:16px;background:var(--sec)"></span><span style="font:700 15px/16px Antonio,sans-serif;letter-spacing:.1em;color:var(--pri);padding:0 4px">BROWSE</span><span style="flex:1;height:16px;background:var(--sec)"></span><span style="width:12px;height:16px;background:var(--sec2);border-radius:0 8px 8px 0"></span></div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px"><sc-for list="{{ formats }}" as="fm" hint-placeholder-count="12"><div style="height:46px;box-sizing:border-box;padding:6px 7px;background:var(--surf2);display:flex;flex-direction:column;justify-content:space-between;min-width:0"><span style="font:700 17px/1 Antonio,sans-serif;color:var(--pri)">{{ fm.count }}</span><span style="align-self:flex-end;font:600 8.5px/1 Antonio,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);white-space:nowrap">{{ fm.name }}</span></div></sc-for></div>
+<div style="display:flex;align-items:center;gap:3px;height:16px;flex:none"><span style="width:12px;height:16px;background:var(--sec);border-radius:8px 0 0 8px"></span><span style="width:16px;height:16px;background:var(--sec)"></span><span style="font:700 15px/16px Antonio,sans-serif;letter-spacing:.1em;color:var(--pri);padding:0 4px">CONTINUE</span><span style="flex:1;height:16px;background:var(--sec)"></span><span style="width:12px;height:16px;background:var(--sec2);border-radius:0 8px 8px 0"></span></div>
+<div style="display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:3px"><sc-for list="{{ items }}" as="it" hint-placeholder-count="4"><div style="display:flex;height:46px;gap:3px;min-width:0"><div style="{{ it.cap }}"></div><div style="flex:1;min-width:0;background:var(--surf2);padding:6px 8px;display:flex;flex-direction:column;justify-content:space-between;box-sizing:border-box"><div style="display:flex;justify-content:space-between;font:700 8.5px/1 Antonio,sans-serif;letter-spacing:.14em;color:var(--pri)"><span>{{ it.kindU }}</span><span>{{ it.pct }}</span></div><div style="font:600 12px/1 Antonio,sans-serif;letter-spacing:.06em;color:var(--ink);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ it.title }}</div><div style="height:3px;background:var(--bg)"><div style="{{ it.bar }}"></div></div></div><div style="width:10px;flex:none;background:var(--sec);border-radius:0 23px 23px 0"></div></div></sc-for></div>
+<div style="display:flex;align-items:center;gap:3px;height:16px;flex:none"><span style="width:12px;height:16px;background:var(--sec);border-radius:8px 0 0 8px"></span><span style="width:16px;height:16px;background:var(--sec)"></span><span style="font:700 15px/16px Antonio,sans-serif;letter-spacing:.1em;color:var(--pri);padding:0 4px">SOURCES</span><span style="flex:1;height:16px;background:var(--sec)"></span><span style="width:12px;height:16px;background:var(--sec2);border-radius:0 8px 8px 0"></span></div>
+<div style="display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:3px 12px"><sc-for list="{{ sources }}" as="so" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:8px;height:24px;min-width:0"><span style="{{ so.blk }}"></span><span style="flex:1;min-width:0;font:600 11px/1 Antonio,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ so.label }}</span><span style="font:600 8.5px/1 Antonio,sans-serif;letter-spacing:.14em;color:var(--ink2)">{{ so.stateU }}</span></div></sc-for></div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ navNotSweep }}" hint-placeholder-val="{{ true }}">
+<div style="flex:1;min-height:0;display:flex">
+            <div style="flex:1;min-width:0;overflow:hidden;display:flex;flex-direction:column;gap:16px">
+              <div style="display:flex;align-items:center;padding:14px 4px 4px 16px">
+                <div style="flex:1;min-width:0"><div style="font:600 11px/1.3 var(--lf);letter-spacing:.12em;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Library · {{ themeName }}</div><div style="font:900 26px/1.2 var(--dff);background:var(--metal);-webkit-background-clip:text;background-clip:text;color:transparent;filter:var(--wglow)">CleverFerret</div></div>
+                <div style="width:44px;height:48px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:24px;color:var(--ink)">search</div>
+                <div style="width:44px;height:48px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:24px;color:var(--ink)">cast</div>
+              </div>
+              <div style="padding:0 16px;display:flex;flex-direction:column;gap:8px">
+                <div><div style="font:var(--tw) 17px/1.3 var(--dff);letter-spacing:var(--htls);text-transform:var(--tt);color:var(--ink)">Browse</div><div style="font:400 12px/16px var(--ff);color:var(--ink2)">Tap to drill into any format</div></div>
+                <div style="{{ fmtGrid }}">
+                  <sc-for list="{{ formats }}" as="fm" hint-placeholder-count="12">
+                    <div style="height:64px;box-sizing:border-box;padding:10px;display:flex;flex-direction:column;justify-content:space-between;border-radius:var(--rt);background:var(--fbg);border-top:var(--cbt);border-right:var(--cbr);border-bottom:var(--cbb);border-left:var(--cbl);box-shadow:var(--csh);backdrop-filter:var(--bf);min-width:0">
+                      <span style="font:700 9.5px/1.1 var(--lf);letter-spacing:.06em;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:var(--tt)">{{ fm.name }}</span>
+                      <span style="font:900 17px/1 var(--dff);color:var(--ink)">{{ fm.count }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="padding:0 16px"><div style="font:var(--tw) 17px/1.3 var(--dff);letter-spacing:var(--htls);text-transform:var(--tt);color:var(--ink)">Continue</div><div style="font:400 12px/16px var(--ff);color:var(--ink2)">Pick up where you left off</div></div>
+                <div style="display:flex;gap:12px;padding:0 16px;overflow:hidden">
+                  <sc-for list="{{ items }}" as="it" hint-placeholder-count="2">
+                    <div style="width:268px;flex:none;box-sizing:border-box;padding:12px;display:flex;gap:12px;border-radius:var(--rp);background:var(--cbg);border-top:var(--cbt);border-right:var(--cbr);border-bottom:var(--cbb);border-left:var(--cbl);box-shadow:var(--csh);backdrop-filter:var(--bf)">
+                      <div style="{{ it.cover88 }}"></div>
+                      <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between">
+                        <div><div style="font:700 10px/1.4 var(--lf);letter-spacing:.16em;color:var(--pri)">{{ it.kindU }}</div><div style="font:600 13px/1.3 var(--ff);color:var(--ink)">{{ it.title }}</div><div style="font:400 12px/16px var(--ff);color:var(--ink2)">{{ it.author }}</div></div>
+                        <div><div style="font:700 10px/1.4 var(--lf);letter-spacing:.1em;color:var(--ink2)">{{ it.subtitle }}</div><div style="height:3px;border-radius:2px;margin-top:4px;background:var(--track);overflow:hidden"><div style="{{ it.bar }}"></div></div></div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="padding:0 16px;display:flex;flex-direction:column">
+                <div><div style="font:var(--tw) 17px/1.3 var(--dff);letter-spacing:var(--htls);text-transform:var(--tt);color:var(--ink)">Sources</div><div style="font:400 12px/16px var(--ff);color:var(--ink2)">OPDS · Plex · Reddit · Local</div></div>
+                <sc-for list="{{ sources }}" as="so" hint-placeholder-count="4">
+                  <div style="display:flex;align-items:center;gap:12px;padding:12px 0">
+                    <div style="{{ so.dot }}"></div>
+                    <div style="flex:1;min-width:0"><div style="font:600 13px/1.3 var(--ff);color:var(--ink)">{{ so.label }}</div><div style="font:400 12px/16px var(--ff);color:var(--ink2)">{{ so.desc }}</div></div>
+                    <span style="font-family:'Material Symbols Outlined';font-size:22px;color:var(--ink2)">chevron_right</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          </sc-if>
+<sc-if value="{{ navTabs }}" hint-placeholder-val="{{ true }}">
+            <div style="height:80px;flex:none;display:flex;background:var(--navbg);border-top:var(--navbt);backdrop-filter:var(--bf)">
+              <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="4">
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
+                  <div style="{{ n.pill }}"><span style="{{ n.icon }}">{{ n.glyph }}</span></div>
+                  <span style="{{ n.lab }}">{{ n.label }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ navTiles }}" hint-placeholder-val="{{ false }}">
+            <div style="height:72px;flex:none;display:flex;gap:2px;padding:2px;background:var(--bg)">
+              <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="4">
+                <div style="{{ n.tile }}"><span style="font-family:'Material Symbols Outlined';font-size:22px;font-variation-settings:'FILL' 1">{{ n.glyph }}</span><span style="font:400 13px/1 var(--lf);text-transform:lowercase">{{ n.label }}</span></div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+        <div style="font:500 12px/1.3 'JetBrains Mono',monospace;color:#9ca3af">LIBRARY · browse mode · {{ navLabel }}</div>
+      </div>
+
+      <!-- PLAYER -->
+      <div data-screen-label="Audio player" style="display:flex;flex-direction:column;gap:10px;flex:none">
+        <div style="width:360px;height:740px;border-radius:36px;border:10px solid #05060a;box-shadow:0 30px 60px rgba(0,0,0,.45);overflow:hidden;display:flex;flex-direction:column;background:var(--pbg);color:var(--ink);font-family:var(--ff)">
+          <div style="height:28px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font:500 12px/1 var(--lf);color:var(--ink)"><span>9:41</span><span style="font-family:'Material Symbols Outlined';font-size:15px;font-variation-settings:'FILL' 1;letter-spacing:2px">signal_cellular_4_bar wifi battery_full</span></div>
+          <div style="height:56px;flex:none;display:flex;align-items:center;padding:0 4px">
+            <div style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:24px;color:var(--ink)">arrow_back</div>
+            <div style="flex:1;font:900 17px/1.2 var(--dff);background:var(--metal);-webkit-background-clip:text;background-clip:text;color:transparent;filter:var(--wglow)">Now playing</div>
+            <div style="width:44px;height:48px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:24px;color:var(--ink)">cast</div>
+            <div style="width:44px;height:48px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:24px;color:var(--ink)">more_vert</div>
+          </div>
+          <div style="flex:1;overflow:hidden;padding:12px 24px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">
+            <div style="width:248px;height:248px;flex:none;border-radius:var(--ra);background:linear-gradient(135deg,#5C2E1B,rgba(92,46,27,.6));display:flex;align-items:center;justify-content:center;box-shadow:var(--csh)"><span style="font:900 20px/1.2 var(--dff);color:#fff;text-align:center;padding:16px">Project Hail Mary</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:100%">
+              <div style="position:relative;overflow:hidden;padding:4px 10px;border-radius:var(--rs);background:var(--metal);color:var(--ctafg);font:900 11px/1.2 var(--lf);letter-spacing:.13em" style-after="content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);background-size:250% 100%;opacity:var(--shimo);animation:var(--shim)">AUDIOBOOK</div>
+              <div style="font:900 22px/1.2 var(--dff);text-transform:var(--tt);letter-spacing:var(--htls);background:var(--metal);-webkit-background-clip:text;background-clip:text;color:transparent;filter:var(--wglow)">Project Hail Mary</div>
+              <div style="font:600 13px/1.3 var(--ff);color:var(--ink2)">Andy Weir</div>
+            </div>
+            <div style="width:100%;display:flex;flex-direction:column;gap:6px">
+              <div style="position:relative;height:20px;display:flex;align-items:center"><div style="flex:1;height:4px;border-radius:2px;background:var(--track)"><div style="width:71%;height:100%;border-radius:2px;background:var(--pri)"></div></div><div style="position:absolute;left:calc(71% - 10px);width:20px;height:20px;border-radius:var(--rs);background:var(--pri);box-shadow:var(--ctash)"></div></div>
+              <div style="display:flex;justify-content:space-between;font:600 11px/1 var(--lf);letter-spacing:.1em;color:var(--ink2)"><span>11:24:31</span><span>16:08:00</span></div>
+            </div>
+            <div style="width:100%;display:flex;align-items:center;justify-content:space-evenly">
+              <span style="font-family:'Material Symbols Outlined';font-size:28px;font-variation-settings:'FILL' 1;color:var(--ink)">skip_previous</span>
+              <span style="font-family:'Material Symbols Outlined';font-size:28px;color:var(--ink)">replay_30</span>
+              <div style="position:relative;overflow:hidden;width:72px;height:72px;border-radius:var(--rs);background:var(--metal);display:flex;align-items:center;justify-content:center;color:var(--ctafg);box-shadow:var(--ctash);animation:var(--pulse)" style-after="content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);background-size:250% 100%;opacity:var(--shimo);animation:var(--shim)"><span style="font-family:'Material Symbols Outlined';font-size:36px;font-variation-settings:'FILL' 1">pause</span></div>
+              <span style="font-family:'Material Symbols Outlined';font-size:28px;color:var(--ink)">forward_30</span>
+              <span style="font-family:'Material Symbols Outlined';font-size:28px;font-variation-settings:'FILL' 1;color:var(--ink)">skip_next</span>
+            </div>
+            <div style="width:100%;box-sizing:border-box;display:flex;justify-content:space-evenly;padding:8px 0;border-radius:var(--rp);background:var(--cbg);border-top:var(--cbt);border-right:var(--cbr);border-bottom:var(--cbb);border-left:var(--cbl);box-shadow:var(--csh);backdrop-filter:var(--bf)">
+              <div style="display:flex;align-items:center;gap:4px;padding:8px;color:var(--ink);font:600 11px/1 var(--lf);letter-spacing:.1em"><span style="font-family:'Material Symbols Outlined';font-size:20px">speed</span>1.2×</div>
+              <div style="display:flex;align-items:center;gap:4px;padding:8px;color:var(--pri);font:600 11px/1 var(--lf);letter-spacing:.1em"><span style="font-family:'Material Symbols Outlined';font-size:20px;font-variation-settings:'FILL' 1">bedtime</span>12 min</div>
+              <div style="display:flex;align-items:center;gap:4px;padding:8px;color:var(--ink);font:600 11px/1 var(--lf);letter-spacing:.1em"><span style="font-family:'Material Symbols Outlined';font-size:20px">queue_music</span>Queue</div>
+            </div>
+          </div>
+        </div>
+        <div style="font:500 12px/1.3 'JetBrains Mono',monospace;color:#9ca3af">AUDIO PLAYER · player mode</div>
+      </div>
+
+      <!-- READER -->
+      <div data-screen-label="Reader" style="display:flex;flex-direction:column;gap:10px;flex:none">
+        <div style="width:360px;height:740px;border-radius:36px;border:10px solid #05060a;box-shadow:0 30px 60px rgba(0,0,0,.45);overflow:hidden;display:flex;flex-direction:column;background:var(--rpbg);color:var(--ink);font-family:var(--ff)">
+          <div style="flex:none;background:var(--surf);box-shadow:0 1px 0 var(--outv)">
+            <div style="height:28px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font:500 12px/1 var(--lf);color:var(--ink)"><span>9:41</span><span style="font-family:'Material Symbols Outlined';font-size:15px;font-variation-settings:'FILL' 1;letter-spacing:2px">signal_cellular_4_bar wifi battery_full</span></div>
+            <div style="display:flex;align-items:center;gap:0;padding:4px 4px 8px">
+              <div style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:24px;color:var(--ink)">arrow_back</div>
+              <div style="flex:1;min-width:0"><div style="font:900 13px/1.3 var(--dff);background:var(--metal);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Frankenstein</div><div style="font:700 10px/1.3 var(--lf);letter-spacing:.12em;color:var(--ink2)">Mary Shelley</div></div>
+              <div style="width:40px;height:44px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:22px;font-variation-settings:'FILL' 1;color:var(--pri)">bookmark</div>
+              <div style="width:40px;height:44px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:22px;color:var(--ink)">search</div>
+              <div style="width:40px;height:44px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:22px;color:var(--ink)">text_fields</div>
+            </div>
+          </div>
+          <div style="flex:1;overflow:hidden;padding:28px 26px;color:var(--rpink);font:400 16.5px/1.65 var(--rff);text-wrap:pretty;display:flex;flex-direction:column;gap:14px">
+            <div style="font:600 12px/1 var(--lf);letter-spacing:.2em;color:var(--rpmuted)">LETTER 1</div>
+            <div style="font:400 13px/1.4 var(--rff);font-style:italic;color:var(--rpmuted)">To Mrs. Saville, England.</div>
+            <p style="margin:0">You will rejoice to hear that no disaster has accompanied the commencement of an enterprise which you have regarded with such evil forebodings. I arrived here yesterday, and my first task is to assure my dear sister of my welfare and increasing confidence in the success of my undertaking.</p>
+            <p style="margin:0">I am already far north of London, and as I walk in the streets of Petersburgh, I feel a cold northern breeze play upon my cheeks, which braces my nerves and fills me with delight.</p>
+          </div>
+          <div style="flex:none;background:var(--surf);box-shadow:0 -1px 0 var(--outv);padding:12px 16px 16px;display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;gap:4px;padding:3px;border-radius:var(--rs);background:var(--surf2);align-self:stretch">
+              <sc-for list="{{ readerPills }}" as="rp" hint-placeholder-count="3">
+                <div role="button" tabindex="0" onClick="{{ rp.pick }}" style="{{ rp.st }}"><span style="{{ rp.sw }}"></span>{{ rp.name }}</div>
+              </sc-for>
+            </div>
+            <div style="font:600 11px/1.3 var(--lf);letter-spacing:.1em;color:var(--ink2);margin-top:4px">Letter 1 · To Mrs. Saville</div>
+            <div style="position:relative;height:20px;display:flex;align-items:center"><div style="flex:1;height:4px;border-radius:2px;background:var(--track)"><div style="width:4%;height:100%;border-radius:2px;background:var(--pri)"></div></div><div style="position:absolute;left:calc(4% - 8px);width:16px;height:16px;border-radius:var(--rs);background:var(--pri)"></div></div>
+            <div style="display:flex;align-items:center"><span style="flex:1;font:700 10px/1 var(--lf);letter-spacing:.12em;color:var(--ink2)">Page 12 of 280</span><span style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:22px;color:var(--ink)">menu_book</span><span style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:22px;color:var(--pri)">record_voice_over</span></div>
+          </div>
+        </div>
+        <div style="font:500 12px/1.3 'JetBrains Mono',monospace;color:#9ca3af">READER · reader mode · page {{ readerName }}</div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div data-screen-label="Settings" style="display:flex;flex-direction:column;gap:10px;flex:none">
+        <div style="width:360px;height:740px;border-radius:36px;border:10px solid #05060a;box-shadow:0 30px 60px rgba(0,0,0,.45);overflow:hidden;display:flex;flex-direction:column;background:var(--pbg);color:var(--ink);font-family:var(--ff)">
+          <div style="height:28px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font:500 12px/1 var(--lf);color:var(--ink)"><span>9:41</span><span style="font-family:'Material Symbols Outlined';font-size:15px;font-variation-settings:'FILL' 1;letter-spacing:2px">signal_cellular_4_bar wifi battery_full</span></div>
+          <div style="height:56px;flex:none;display:flex;align-items:center;padding:0 4px">
+            <div style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:24px;color:var(--ink)">arrow_back</div>
+            <div style="flex:1;font:900 17px/1.2 var(--dff);background:var(--metal);-webkit-background-clip:text;background-clip:text;color:transparent;filter:var(--wglow)">Settings</div>
+          </div>
+          <div style="flex:1;overflow:hidden;padding:12px 16px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;align-items:center;gap:16px;padding:16px;border-radius:var(--rl);background:var(--cbg);border-top:var(--cbt);border-right:var(--cbr);border-bottom:var(--cbb);border-left:var(--cbl);box-shadow:var(--csh);backdrop-filter:var(--bf)">
+              <div style="position:relative;overflow:hidden;width:56px;height:56px;flex:none;border-radius:var(--rp);background:var(--metal);animation:var(--pulse)" style-after="content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);background-size:250% 100%;opacity:var(--shimo);animation:var(--shim)"></div>
+              <div style="flex:1;min-width:0"><div style="font:600 11px/1.3 var(--lf);letter-spacing:.12em;color:var(--ink2)">Active theme</div><div style="font:900 17px/1.25 var(--dff);background:var(--metal);-webkit-background-clip:text;background-clip:text;color:transparent">{{ themeName }}</div><div style="font:400 12px/16px var(--ff);color:var(--ink2)">{{ effectName }} effects</div></div>
+              <span style="font-family:'Material Symbols Outlined';font-size:22px;color:var(--ink2)">chevron_right</span>
+            </div>
+            <sc-for list="{{ settingsGroups }}" as="g" hint-placeholder-count="2">
+              <div style="display:flex;flex-direction:column;gap:4px">
+                <div style="font:600 11px/1.3 var(--lf);letter-spacing:.14em;color:var(--ink2);padding:8px 0 0 8px">{{ g.title }}</div>
+                <div style="border-radius:var(--rp);background:var(--cbg);border-top:var(--cbt);border-right:var(--cbr);border-bottom:var(--cbb);border-left:var(--cbl);box-shadow:var(--csh);backdrop-filter:var(--bf);overflow:hidden">
+                  <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="4">
+                    <div style="{{ r.st }}">
+                      <div style="width:40px;height:40px;flex:none;border-radius:var(--ri);background:var(--surf2);display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:22px;font-variation-settings:'FILL' 1;color:var(--pri)">{{ r.icon }}</div>
+                      <div style="flex:1;min-width:0"><div style="font:600 13px/1.3 var(--ff);color:var(--ink)">{{ r.title }}</div><div style="font:400 12px/16px var(--ff);color:var(--ink2)">{{ r.sub }}</div></div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="font:500 12px/1.3 'JetBrains Mono',monospace;color:#9ca3af">SETTINGS · browse mode</div>
+      </div>
+
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isTablet }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Tablet library" style="display:flex;flex-direction:column;gap:10px">
+        <div style="width:1024px;max-width:100%;height:680px;border-radius:28px;border:12px solid #05060a;box-shadow:0 30px 60px rgba(0,0,0,.45);overflow:hidden;display:flex;background:var(--pbg);color:var(--ink);font-family:var(--ff);box-sizing:border-box">
+          <sc-if value="{{ navSweep }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-width:0;position:relative;background:var(--bg);overflow:hidden">
+<div style="position:absolute;left:0;top:0;right:0;height:88px;background:var(--pri);border-radius:58px 0 0 0"></div>
+<div style="position:absolute;right:104px;top:0;width:5px;height:88px;background:var(--bg)"></div>
+<div style="position:absolute;right:0;top:0;width:104px;height:88px;background:var(--sec2);display:flex;align-items:flex-end;justify-content:center;padding-bottom:12px;box-sizing:border-box;font:500 13px/1 Antonio,sans-serif;color:var(--onsec2L)">4471-12</div>
+<div style="position:absolute;left:135px;right:124px;top:10px;height:22px;display:flex;gap:2px;overflow:hidden"><span style="flex:none;display:flex;align-items:baseline;gap:4px;padding:0 10px;height:22px;background:var(--sec2);color:var(--onsec2L);border-radius:11px 0 0 11px;font:700 11px/22px Antonio,sans-serif;letter-spacing:.04em"><span style="font-size:9.5px;opacity:.8;letter-spacing:.14em">BOOKS</span>412</span><span style="flex:none;display:flex;align-items:baseline;gap:4px;padding:0 10px;height:22px;background:var(--surf2);color:var(--ink);font:700 11px/22px Antonio,sans-serif;letter-spacing:.04em"><span style="font-size:9.5px;opacity:.8;letter-spacing:.14em">SYNC</span>2M</span><span style="flex:none;display:flex;align-items:baseline;gap:4px;padding:0 10px;height:22px;background:var(--sec);color:var(--onsecL);border-radius:0 11px 11px 0;font:700 11px/22px Antonio,sans-serif;letter-spacing:.04em"><span style="font-size:9.5px;opacity:.8;letter-spacing:.14em">HFY</span>+8</span></div>
+<div style="position:absolute;left:125px;right:128px;top:0;height:88px;display:flex;align-items:flex-end;justify-content:flex-end;padding-bottom:11px;box-sizing:border-box;font:700 36px/1 Antonio,sans-serif;letter-spacing:.05em;color:var(--onpriL)">LIBRARY</div>
+<div style="position:absolute;left:120px;top:88px;width:34px;height:34px;background:var(--pri)"></div>
+<div style="position:absolute;left:120px;top:88px;width:34px;height:34px;background:var(--bg);border-radius:34px 0 0 0"></div>
+<div style="position:absolute;left:0;top:88px;width:120px;bottom:29px;display:flex;flex-direction:column;gap:5px">
+<div style="flex:none;height:42px;background:var(--pri);color:var(--onpriL);display:flex;align-items:center;padding-left:9px;font:700 12px/1.05 Antonio,sans-serif;letter-spacing:.14em">CLEVERFERRET</div>
+<sc-for list="{{ lcRailT }}" as="r" hint-placeholder-count="7"><div role="button" tabindex="0" aria-label="{{ r.label }}" style="{{ r.st }}"><span style="{{ r.cs }}">{{ r.code }}</span>{{ r.label }}</div></sc-for>
+<div style="flex:none;height:30px;background:var(--outv);border-radius:0 0 0 29px;margin-top:auto"></div>
+</div>
+<div style="position:absolute;left:125px;right:5px;bottom:5px;height:24px;display:flex;gap:5px"><span style="width:56px;flex:none;background:var(--sec2)"></span><span style="flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;padding:0 10px;background:var(--surf);color:var(--ink2);border-radius:0 12px 12px 0;font:500 11.5px/1 Antonio,sans-serif;letter-spacing:.06em;white-space:nowrap;overflow:hidden"><span>SYNC OK · 4 SOURCES</span><span>3,696 ITEMS</span></span></div>
+<div style="position:absolute;left:125px;top:93px;right:5px;bottom:34px;border-radius:29px 0 0 0;background:var(--surf);overflow:hidden;display:flex;flex-direction:column;gap:12px;padding:18px 16px 14px 20px;box-sizing:border-box">
+<div style="display:flex;align-items:center;gap:3px;height:20px;flex:none"><span style="width:16px;height:20px;background:var(--sec);border-radius:10px 0 0 10px"></span><span style="width:20px;height:20px;background:var(--sec)"></span><span style="font:700 19px/20px Antonio,sans-serif;letter-spacing:.1em;color:var(--pri);padding:0 4px">BROWSE</span><span style="flex:1;height:20px;background:var(--sec)"></span><span style="width:16px;height:20px;background:var(--sec2);border-radius:0 10px 10px 0"></span></div>
+<div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px"><sc-for list="{{ formats }}" as="fm" hint-placeholder-count="12"><div style="height:56px;box-sizing:border-box;padding:6px 7px;background:var(--surf2);display:flex;flex-direction:column;justify-content:space-between;min-width:0"><span style="font:700 22px/1 Antonio,sans-serif;color:var(--pri)">{{ fm.count }}</span><span style="align-self:flex-end;font:600 10px/1 Antonio,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);white-space:nowrap">{{ fm.name }}</span></div></sc-for></div>
+<div style="display:flex;align-items:center;gap:3px;height:20px;flex:none"><span style="width:16px;height:20px;background:var(--sec);border-radius:10px 0 0 10px"></span><span style="width:20px;height:20px;background:var(--sec)"></span><span style="font:700 19px/20px Antonio,sans-serif;letter-spacing:.1em;color:var(--pri);padding:0 4px">CONTINUE</span><span style="flex:1;height:20px;background:var(--sec)"></span><span style="width:16px;height:20px;background:var(--sec2);border-radius:0 10px 10px 0"></span></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px"><sc-for list="{{ items }}" as="it" hint-placeholder-count="4"><div style="display:flex;height:56px;gap:3px;min-width:0"><div style="{{ it.cap }}"></div><div style="flex:1;min-width:0;background:var(--surf2);padding:6px 8px;display:flex;flex-direction:column;justify-content:space-between;box-sizing:border-box"><div style="display:flex;justify-content:space-between;font:700 10px/1 Antonio,sans-serif;letter-spacing:.14em;color:var(--pri)"><span>{{ it.kindU }}</span><span>{{ it.pct }}</span></div><div style="font:600 13.5px/1 Antonio,sans-serif;letter-spacing:.06em;color:var(--ink);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ it.title }}</div><div style="height:3px;background:var(--bg)"><div style="{{ it.bar }}"></div></div></div><div style="width:10px;flex:none;background:var(--sec);border-radius:0 28px 28px 0"></div></div></sc-for></div>
+<div style="display:flex;align-items:center;gap:3px;height:20px;flex:none"><span style="width:16px;height:20px;background:var(--sec);border-radius:10px 0 0 10px"></span><span style="width:20px;height:20px;background:var(--sec)"></span><span style="font:700 19px/20px Antonio,sans-serif;letter-spacing:.1em;color:var(--pri);padding:0 4px">SOURCES</span><span style="flex:1;height:20px;background:var(--sec)"></span><span style="width:16px;height:20px;background:var(--sec2);border-radius:0 10px 10px 0"></span></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 12px"><sc-for list="{{ sources }}" as="so" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:8px;height:24px;min-width:0"><span style="{{ so.blk }}"></span><span style="flex:1;min-width:0;font:600 12.5px/1 Antonio,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ so.label }}</span><span style="font:600 10px/1 Antonio,sans-serif;letter-spacing:.14em;color:var(--ink2)">{{ so.stateU }}</span></div></sc-for></div>
+</div>
+</div>
+</sc-if>
+          <sc-if value="{{ navNotSweep }}" hint-placeholder-val="{{ true }}">
+            <div style="width:96px;flex:none;display:flex;flex-direction:column;align-items:center;gap:12px;padding:24px 0;background:var(--navbg);border-right:var(--navbr);backdrop-filter:var(--bf)">
+              <div style="font:900 26px/1 var(--dff);background:var(--metal);-webkit-background-clip:text;background-clip:text;color:transparent;filter:var(--wglow);margin-bottom:12px">CF</div>
+              <sc-for list="{{ railItems }}" as="n" hint-placeholder-count="5">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+                  <div style="{{ n.pill }}"><span style="{{ n.icon }}">{{ n.glyph }}</span></div>
+                  <span style="{{ n.lab }}">{{ n.label }}</span>
+                </div>
+              </sc-for>
+            </div>
+          
+          <div style="flex:1;min-width:0;overflow:hidden;padding:12px 24px;display:flex;flex-direction:column;gap:18px">
+            <div style="display:flex;align-items:center;padding-top:12px">
+              <div style="flex:1"><div style="font:600 11px/1.3 var(--lf);letter-spacing:.12em;color:var(--ink2)">Library · {{ themeName }}</div><div style="font:900 30px/1.2 var(--dff);background:var(--metal);-webkit-background-clip:text;background-clip:text;color:transparent;filter:var(--wglow)">CleverFerret</div></div>
+              <span style="width:48px;text-align:center;font-family:'Material Symbols Outlined';font-size:24px">search</span><span style="width:48px;text-align:center;font-family:'Material Symbols Outlined';font-size:24px">cast</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div><div style="font:var(--tw) 17px/1.3 var(--dff);letter-spacing:var(--htls);text-transform:var(--tt)">Browse</div><div style="font:400 12px/16px var(--ff);color:var(--ink2)">Tap to drill into any format</div></div>
+              <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--qgap)">
+                <sc-for list="{{ formats }}" as="fm" hint-placeholder-count="12">
+                  <div style="height:64px;box-sizing:border-box;padding:10px;display:flex;flex-direction:column;justify-content:space-between;border-radius:var(--rt);background:var(--fbg);border-top:var(--cbt);border-right:var(--cbr);border-bottom:var(--cbb);border-left:var(--cbl);box-shadow:var(--csh);backdrop-filter:var(--bf)">
+                    <span style="font:700 10px/1.1 var(--lf);letter-spacing:.1em;color:var(--ink2);text-transform:var(--tt)">{{ fm.name }}</span>
+                    <span style="font:900 17px/1 var(--dff)">{{ fm.count }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div><div style="font:var(--tw) 17px/1.3 var(--dff);letter-spacing:var(--htls);text-transform:var(--tt)">Continue</div><div style="font:400 12px/16px var(--ff);color:var(--ink2)">Pick up where you left off</div></div>
+              <div style="display:flex;gap:12px;overflow:hidden">
+                <sc-for list="{{ items }}" as="it" hint-placeholder-count="3">
+                  <div style="width:268px;flex:none;box-sizing:border-box;padding:12px;display:flex;gap:12px;border-radius:var(--rp);background:var(--cbg);border-top:var(--cbt);border-right:var(--cbr);border-bottom:var(--cbb);border-left:var(--cbl);box-shadow:var(--csh);backdrop-filter:var(--bf)">
+                    <div style="{{ it.cover88 }}"></div>
+                    <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between">
+                      <div><div style="font:700 10px/1.4 var(--lf);letter-spacing:.16em;color:var(--pri)">{{ it.kindU }}</div><div style="font:600 13px/1.3 var(--ff)">{{ it.title }}</div><div style="font:400 12px/16px var(--ff);color:var(--ink2)">{{ it.author }}</div></div>
+                      <div><div style="font:700 10px/1.4 var(--lf);letter-spacing:.1em;color:var(--ink2)">{{ it.subtitle }}</div><div style="height:3px;margin-top:4px;background:var(--track)"><div style="{{ it.bar }}"></div></div></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+</sc-if>
+        </div>
+        <div style="font:500 12px/1.3 'JetBrains Mono',monospace;color:#9ca3af">TABLET · expanded width · {{ navLabelT }}</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isTV }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="TV home" style="display:flex;flex-direction:column;gap:10px">
+        <div style="width:1120px;max-width:100%;aspect-ratio:16/9;border:14px solid #05060a;border-bottom-width:22px;box-shadow:0 30px 60px rgba(0,0,0,.45);overflow:hidden;display:flex;flex-direction:column;background:var(--pbg);color:var(--ink);font-family:var(--ff);box-sizing:border-box;padding:28px 44px;gap:22px">
+          <div style="display:flex;align-items:center;gap:36px">
+            <div style="font:900 30px/1 var(--dff);background:var(--metal);-webkit-background-clip:text;background-clip:text;color:transparent;filter:var(--wglow)">CleverFerret</div>
+            <sc-for list="{{ tvNav }}" as="n" hint-placeholder-count="5">
+              <div style="{{ n.st }}">{{ n.label }}</div>
+            </sc-for>
+            <div style="flex:1"></div>
+            <span style="font-family:'Material Symbols Outlined';font-size:30px">search</span>
+          </div>
+          <div style="display:flex;gap:28px;padding:24px;border-radius:var(--rl);background:var(--herobg);border-top:var(--cbt);border-right:var(--cbr);border-bottom:var(--cbb);border-left:var(--cbl);box-shadow:var(--csh);backdrop-filter:var(--bf)">
+            <div style="width:150px;height:206px;flex:none;border-radius:var(--rc);background:linear-gradient(135deg,#1B3A5C,rgba(27,58,92,.6))"></div>
+            <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start;justify-content:center">
+              <div style="position:relative;overflow:hidden;padding:6px 14px;border-radius:var(--rs);background:var(--metal);color:var(--ctafg);font:900 14px/1.2 var(--lf);letter-spacing:.13em" style-after="content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);background-size:250% 100%;opacity:var(--shimo);animation:var(--shim)">RESUME</div>
+              <div style="font:900 36px/1.1 var(--dff);text-transform:var(--tt);letter-spacing:var(--htls)">The Three-Body Problem</div>
+              <div style="font:400 20px/1.3 var(--ff);color:var(--ink2)">Liu Cixin · Ch. 7 · 4h 12m left</div>
+              <div style="position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;padding:16px 30px;border-radius:var(--rs);background:var(--metal);color:var(--ctafg);outline:3px solid var(--ink);outline-offset:4px;box-shadow:var(--ctash);animation:var(--pulse)" style-after="content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);background-size:250% 100%;opacity:var(--shimo);animation:var(--shim)"><span style="font-family:'Material Symbols Outlined';font-size:30px;font-variation-settings:'FILL' 1">play_arrow</span><span style="font:900 20px/1 var(--lf)">Resume</span></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="font:var(--tw) 24px/1.2 var(--dff);letter-spacing:var(--htls);text-transform:var(--tt)">Continue</div>
+            <div style="display:flex;gap:22px;padding:6px">
+              <sc-for list="{{ tvItems }}" as="it" hint-placeholder-count="5">
+                <div style="{{ it.st }}"><span style="font:900 16px/1.2 var(--dff);color:#fff;text-align:center;padding:10px">{{ it.title }}</span></div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <div style="font:500 12px/1.3 'JetBrains Mono',monospace;color:#9ca3af">TV · 10-foot · D-pad focus: 3px ink ring + 1.06 scale + effect glow</div>
+      </div>
+    </sc-if>
+    </div>
+  </section>
+
+  <section data-screen-label="Axis 1 layouts" style="display:flex;flex-direction:column;gap:14px;max-width:1100px">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <h2 style="margin:0;font:600 20px/1.2 Inter,sans-serif">1 · Layout packs</h2>
+      <p style="margin:0;font:400 14px/1.5 Inter,sans-serif;color:#9ca3af">Geometry, navigation, type and card treatment. No colour. Every value is a token that the colour and effect layers consume.</p>
+    </div>
+    <div style="border:1px solid #2e3140;border-radius:12px;overflow:auto">
+      <div style="min-width:900px">
+      <div style="display:grid;grid-template-columns:150px 110px 150px 190px minmax(0,1fr);gap:12px;padding:10px 16px;background:#22252f;font:600 11px/1.3 'JetBrains Mono',monospace;letter-spacing:.06em;color:#9ca3af"><span>PACK</span><span>NAV (phone → tablet)</span><span>TYPE</span><span>RADII lg/panel/tile/ctl</span><span>RULE</span></div>
+      <sc-for list="{{ layoutList }}" as="l" hint-placeholder-count="7">
+        <div style="{{ l.row }}"><span style="font-weight:600;color:#e4e4e7">{{ l.name }}</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px">{{ l.navSpec }}</span><span>{{ l.fontName }}</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px">{{ l.radii }}</span><span style="text-wrap:pretty">{{ l.note }}</span></div>
+      </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Axis 2 colour" style="display:flex;flex-direction:column;gap:14px;max-width:1100px">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <h2 style="margin:0;font:600 20px/1.2 Inter,sans-serif">2 · Colour pack · {{ palName }}</h2>
+      <p style="margin:0;font:400 14px/1.5 Inter,sans-serif;color:#9ca3af">MD3 roles from the Ktheme preset (contrast raised to AA, per linkpoint-design), a 4-stop metal brush, and three reader pages. Text on accent grounds uses whichever candidate has the highest WCAG contrast, so any pack works with any layout.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px">
+      <sc-for list="{{ roles }}" as="r" hint-placeholder-count="12">
+        <div style="border:1px solid #2e3140;border-radius:8px;overflow:hidden;background:#1a1c25">
+          <div style="{{ r.sw }}">{{ r.sample }}</div>
+          <div style="padding:8px 10px;display:flex;flex-direction:column;gap:2px"><span style="font:600 12px/1.3 Inter,sans-serif;color:#e4e4e7">{{ r.label }}</span><span style="font:400 11px/1.3 'JetBrains Mono',monospace;color:#9ca3af">{{ r.hex }} · {{ r.ratio }}</span></div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px">
+      <div style="border:1px solid #2e3140;border-radius:8px;padding:14px;background:#1a1c25;display:flex;flex-direction:column;gap:10px">
+        <span style="font:600 12px/1 Inter,sans-serif;color:#e4e4e7">Metal brush · shadow 0 → base .45 → highlight .85 → shimmer 1</span>
+        <div style="{{ metalBar }}"></div>
+        <span style="font:400 11px/1.4 'JetBrains Mono',monospace;color:#9ca3af">{{ metalHex }} · {{ metalSrc }}</span>
+      </div>
+      <div style="border:1px solid #2e3140;border-radius:8px;padding:14px;background:#1a1c25;display:flex;flex-direction:column;gap:10px">
+        <span style="font:600 12px/1 Inter,sans-serif;color:#e4e4e7">Reader pages (pack-tinted)</span>
+        <div style="display:flex;gap:8px">
+          <sc-for list="{{ readerSw }}" as="s" hint-placeholder-count="3">
+            <div style="{{ s.st }}"><span style="font:600 13px/1 'Source Serif 4',serif">Aa</span><span style="font:400 10px/1 'JetBrains Mono',monospace">{{ s.name }} {{ s.ratio }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Axis 3 effects" style="display:flex;flex-direction:column;gap:14px;max-width:1100px">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <h2 style="margin:0;font:600 20px/1.2 Inter,sans-serif">3 · Effect packs</h2>
+      <p style="margin:0;font:400 14px/1.5 Inter,sans-serif;color:#9ca3af">Named presets that fill fixed component slots. They upgrade any layout: Neon on Metro Tiles gives glowing tiles, and Architect on Sweep Console gives patterned consoles with crystal pulse. Animated slots follow the motion setting: System respects reduced-motion, and On or Off overrides it.</p>
+    </div>
+    <div style="border:1px solid #2e3140;border-radius:12px;overflow:auto">
+      <div style="min-width:860px">
+        <div style="display:grid;grid-template-columns:130px repeat(6,minmax(0,1fr));gap:12px;padding:10px 16px;background:#22252f;font:600 11px/1.3 'JetBrains Mono',monospace;letter-spacing:.06em;color:#9ca3af"><span>PACK</span><span>CTA · WORDMARK</span><span>SURFACES</span><span>BACKGROUND</span><span>ACTIVE / FOCUS</span><span>BORDERS</span><span>ANIMATED</span></div>
+        <sc-for list="{{ effectList }}" as="e" hint-placeholder-count="8">
+          <div style="{{ e.row }}"><span style="font-weight:600;color:#e4e4e7">{{ e.name }}</span><span>{{ e.s1 }}</span><span>{{ e.s2 }}</span><span>{{ e.s3 }}</span><span>{{ e.s4 }}</span><span>{{ e.s5 }}</span><span>{{ e.s6 }}</span></div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Media modes" style="display:flex;flex-direction:column;gap:14px;max-width:1100px">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <h2 style="margin:0;font:600 20px/1.2 Inter,sans-serif">Media modes</h2>
+      <p style="margin:0;font:400 14px/1.5 Inter,sans-serif;color:#9ca3af">Media mode is not a theme choice. Each surface sets its own chrome density and controls, the colour pack stays the same, and effects are limited to the slots listed.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">
+      <div style="border:1px solid #2e3140;border-radius:8px;padding:16px;background:#1a1c25;display:flex;flex-direction:column;gap:8px"><span style="font:600 14px/1 Inter,sans-serif">Browse</span><span style="font:400 13px/1.5 Inter,sans-serif;color:#9ca3af">Home, Library, Settings. Full navigation from the layout pack, 48dp targets, all effect slots active.</span><span style="font:400 11px/1.4 'JetBrains Mono',monospace;color:#818cf8">density: layout · effects: all</span></div>
+      <div style="border:1px solid #2e3140;border-radius:8px;padding:16px;background:#1a1c25;display:flex;flex-direction:column;gap:8px"><span style="font:600 14px/1 Inter,sans-serif">Reader</span><span style="font:400 13px/1.5 Inter,sans-serif;color:#9ca3af">Chrome hides on tap. The page uses the pack's Day, Sepia or Night colours. The text canvas never gets pattern, grain or glow; effects apply to the chrome only.</span><span style="font:400 11px/1.4 'JetBrains Mono',monospace;color:#818cf8">density: compact chrome · effects: chrome</span></div>
+      <div style="border:1px solid #2e3140;border-radius:8px;padding:16px;background:#1a1c25;display:flex;flex-direction:column;gap:8px"><span style="font:600 14px/1 Inter,sans-serif">Player</span><span style="font:400 13px/1.5 Inter,sans-serif;color:#9ca3af">Artwork is the hero. Metal and shimmer appear on the 72dp play button, title and chip. The active timer (sleep) is tinted primary.</span><span style="font:400 11px/1.4 'JetBrains Mono',monospace;color:#818cf8">density: spacious · effects: CTA + title</span></div>
+      <div style="border:1px solid #2e3140;border-radius:8px;padding:16px;background:#1a1c25;display:flex;flex-direction:column;gap:8px"><span style="font:600 14px/1 Inter,sans-serif">Video</span><span style="font:400 13px/1.5 Inter,sans-serif;color:#9ca3af">Chrome sits over a #000 scrim at 60%. The pack supplies only the progress and focus accent. Everything else is off, including shimmer, so nothing competes with the picture.</span><span style="font:400 11px/1.4 'JetBrains Mono',monospace;color:#818cf8">density: overlay · effects: focus glow only</span></div>
+    </div>
+  </section>
+
+  <section data-screen-label="Theme JSON" style="display:flex;flex-direction:column;gap:14px;max-width:1100px">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <h2 style="margin:0;font:600 20px/1.2 Inter,sans-serif">Composed theme · portable JSON</h2>
+      <p style="margin:0;font:400 14px/1.5 Inter,sans-serif;color:#9ca3af">Stored as three IDs plus overrides, and resolved at runtime into <span style="font-family:'JetBrains Mono',monospace;color:#e4e4e7">CFTokens</span> + MD3 <span style="font-family:'JetBrains Mono',monospace;color:#e4e4e7">ColorScheme</span>. This replaces <span style="font-family:'JetBrains Mono',monospace">CleverFerretTheme</span> (22 enums), <span style="font-family:'JetBrains Mono',monospace">MediaThemes</span> and <span style="font-family:'JetBrains Mono',monospace">CFLayout</span>. The layout is no longer locked to a palette.</p>
+    </div>
+    <pre style="margin:0;padding:18px;border:1px solid #2e3140;border-radius:8px;background:#1a1c25;font:400 12px/1.55 'JetBrains Mono',monospace;color:#e4e4e7;overflow:auto;max-height:420px">{{ json }}</pre>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;font:400 13px/1.5 Inter,sans-serif;color:#9ca3af">
+      <div style="border:1px solid #2e3140;border-radius:8px;padding:14px;background:#1a1c25"><b style="color:#e4e4e7">Legacy → colour pack</b><br>NAVY_GOLD → navy-gold, EMERALD_SILVER → emerald-silver, … PAPER_INK → paper-ink. COPPER_BRONZE, STEEL_TITANIUM and COBALT_CHROME move to the metal brush of the nearest pack.</div>
+      <div style="border:1px solid #2e3140;border-radius:8px;padding:14px;background:#1a1c25"><b style="color:#e4e4e7">Legacy → effect pack</b><br>ANCIENT_BRONZE, SILVER_ARCHITECT and OBSIDIAN_TECH become <i>Architect</i> on Royal Bronze, Royal Silver and Slate Cyan. Patterns, crystal glow and shimmer carry over.</div>
+      <div style="border:1px solid #2e3140;border-radius:8px;padding:14px;background:#1a1c25"><b style="color:#e4e4e7">Default</b><br>Compose / Navy Gold with Sheen, which matches today's modern surface. Motion defaults to System.</div>
+    </div>
+  </section>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const PK = {
+  ink:['Ink Terminal','0A1112 101A1C 1B2A2D D7F5E6 A7C8BC 6CFF9A 0A1112 1F6640 D7F5E6 3E4E5E 8AD0B0 365047 CF6679'],
+  noir:['Neo-Noir Neon','090A10 111420 1C2130 E7EAF7 B9C0D8 aa43ff 090A10 4B1D73 E7EAF7 00D1FF FF3D9E 363D52 FF6B6B'],
+  metro:['Metro Cyan','001A33 002448 3D4854 F0F8FF B8CAD6 00AEEF 001A33 0070ca F0F8FF 2D89EF 00AEEF 4D5A66 CF6679'],
+  aurora:['Aurora Glass Night','0A1224 101C33 1D2B4A E7F0FF B5C7E9 6DE8FF 0A1224 2A6F85 E7F0FF 8C7CFF 7CFFD8 334364 CF6679'],
+  slatec:['Slate Cyan','1A1F24 232930 3D4854 E8F0F5 B8CAD6 00D9FF 1A1F24 00A8CC 1A1F24 2A333D 6BA5B8 4D5A66 CF6679'],
+  lcars:['LCARS Amber','120C1C 1C132A 3D1F5C F3E9FF D0B3E6 F2A65A 120C1C CC7A2B 120C1C A485F7 C5678D 4D2F5C CF6679'],
+  amber:['Midnight Amber','0C1824 15202E 253447 E8EEF5 B8C5D6 FFBF00 0C1824 CC9900 0C1824 D4A76A D4A76A 3D4854 CF6679'],
+  royalb:['Royal Bronze','1A0A30 220D40 3D1F5C F0E6FF D0B3E6 CD7F32 1A0A30 975929 F0E6FF 2D1550 9B7A5F 4D2F5C CF6679'],
+  forest:['Forest Copper','0D1F0D 152915 2A4D2A E8F5E8 B8D9B8 B87333 0D1F0D 935E29 E8F5E8 1A3D1A 8FA886 3D5A3D CF6679'],
+  crimson:['Obsidian Crimson','0A0A0A 141414 2D2D2D F5F5F5 D0D0D0 DC143C F5F5F5 B00F30 F5F5F5 A8505A A8505A 3D3D3D FF6B6B'],
+  navy:['Navy Gold','0A1630 1A2645 2A3655 E8E3D8 C9C4B9 D4AF37 0A1630 715f33 E8E3D8 4A90E2 9C8970 44483E CF6679'],
+  deco:['Art Deco','0B0A0A 141314 232124 F3E8D0 C9BDA2 D4AF37 0B0A0A 977b2f 0B0A0A F4E7CF B8A17A 4B4332 FFB4AB'],
+  emerald:['Emerald Silver','0D3B2E 1A5544 2A6554 E8F5E8 C9E4D9 C0C0C0 0D3B2E 505050 E8F5E8 50C878 8BA888 3E4E44 CF6679'],
+  royals:['Royal Silver','1A1535 211A40 3D2F5C F0EBFF C8BFE6 C0C0C0 1A1535 9A9A9A 1A1535 2A1F50 A89BC9 4D3F66 CF6679'],
+  deep:['Deep Purple Platinum','1A0F2E 24153D 3D2A5C F0EBFF D0C0E6 E5E4E2 1A0F2E B8B7B5 1A0F2E 2E1A50 C8BFE0 4D3F6D CF6679'],
+  charcoal:['Charcoal Champagne','1F1F1F 2A2A2A 3D3D3D F5F5F5 D0D0D0 F7E7CE 1F1F1F C5B8A5 1F1F1F 3D3D3D D4C4A8 4D4D4D CF6679'],
+  slateg:['Slate Gunmetal','1A2029 232C38 3D4854 E6ECF2 B8C5D6 8F9CA8 1A2029 7d8a94 1A2029 2D3844 9DAAB6 4D5A66 CF6679'],
+  rose:['Rose Gold','3D1F2B 4D2F3B 5D3F4B F5E5E8 E5D5D8 c1818b 3D1F2B 7D4A52 F5E5E8 D4A5A5 C9A9A9 4E3A3E FFB4AB'],
+  burgundy:['Burgundy Rose Gold','2D0F1A 3D1525 5C2A3D FFE6ED E6C0CC B76E79 2D0F1A 93575F FFE6ED 4D1A2A C99BA5 6D3F4D FFB4AB'],
+  aero:['Frutiger Aero','EAF7FF F7FCFF DDF1FF 173A52 34566E 39B6F0 173A52 A9E6FF 173A52 79D87E 0A6FA0 A9C7DA BA1A1A',1],
+  paper:['Paper & Ink','F0F0EB FAF9F6 EBEAE4 2C2C2C 454545 2C2C2C F0F0EB EBEAE4 2C2C2C 595959 6B6B6B C9C9C9 BA1A1A',1],
+  nouveau:['Art Nouveau','F6F0E6 FFF8EE E7D8C7 2C2218 584638 7B5737 F6F0E6 D9C2A9 2C2218 769762 C57C52 CBB8A5 BA1A1A',1],
+  calm:['Calm Clinical','F5FAFD FFFFFF E5EEF4 1F394B 445F72 38779e F5FAFD C4DFF2 1F394B 61b48b 7D9AB2 B5C8D5 BA1A1A',1],
+  solarpunk:['Solarpunk Civic','F2FBF4 FBFFFC E2F2E8 1E3A27 456355 38B56A 1E3A27 BFEFD0 1E3A27 4FAEEA F2C46C B3D0BF BA1A1A',1],
+};
+const KEYS = 'bg surf surf2 ink ink2 pri onpri priC onpriC sec sec2 outv err'.split(' ');
+const FAMILIES = [
+  ['TERMINAL & NEON',['ink','noir','metro','aurora','slatec']],
+  ['CONSOLE & AMBER',['lcars','amber','royalb','forest','crimson']],
+  ['METAL & JEWEL',['navy','deco','emerald','royals','deep','charcoal','slateg','rose','burgundy']],
+  ['DAYLIGHT',['aero','paper','nouveau','calm','solarpunk']],
+];
+const CFMETAL = { // CFTokens.kt (verbatim)
+  navy:['#7A5B1E','#D4AF37','#FFE680','#FFFCE0'], rose:['#8C4F4A','#E6B0A2','#F5D4C8','#FFEDE5'],
+  emerald:['#6E7478','#B8BEC2','#E5E9EC','#FFFFFF'], amber:['#8C5A1F','#FFA94D','#FFCB80','#FFE6BF'],
+  paper:['#454545','#9A9A9A','#D6D6D6','#FFFFFF'], noir:['#6B0E66','#FF2EAA','#FF80D4','#00F0FF'],
+  lcars:['#A85C2E','#F2A65A','#FFCB80','#FFE6BF'], metro:['#4A4A48','#878681','#BDBBB8','#D0CFCC'],
+};
+const LAYOUTS = {
+  compose:{name:'Compose',nav:'tabs',navSpec:'bar → rail',fontName:'Roboto',ff:'Roboto,system-ui,sans-serif',dff:'Roboto,system-ui,sans-serif',lf:'Roboto,system-ui,sans-serif',rl:18,rp:14,rt:12,rc:6,rs:999,ri:10,ra:20,tt:'none',htls:'-.01em',tw:700,card:'compose',qgap:'8px',note:'Today\'s modern surface: MD3 roles, 18/14/12 rounding, pill metal CTAs, NavigationBar on phones and NavigationRail on tablets.'},
+  terminal:{name:'Ink Terminal',nav:'tabs',navSpec:'tabs → rail',fontName:'JetBrains Mono',ff:'"JetBrains Mono",monospace',dff:'"JetBrains Mono",monospace',lf:'"JetBrains Mono",monospace',rl:8,rp:4,rt:4,rc:2,rs:4,ri:4,ra:4,tt:'uppercase',htls:'.18em',tw:700,card:'box',qgap:'9px',note:'Dense grid, mono type, 4px corners, boxed cards with hairline outlines, tracked uppercase titles.'},
+  sweep:{name:'Sweep Console',nav:'sweep',navSpec:'sweep → sweep',fontName:'Antonio',ff:'"Nunito Sans",sans-serif',dff:'Antonio,sans-serif',lf:'Antonio,sans-serif',rl:28,rp:22,rt:0,rc:6,rs:999,ri:999,ra:28,tt:'uppercase',htls:'.12em',tw:600,card:'cap',qgap:'6px',note:'LCARS rule: the elbow (bar → curve → rail) is the frame; rail segments are the nav; the content corner is concentric with the elbow arc at a uniform gap; titles sit bottom-right in the bar; headers follow cap → bar → title → bar → end cap; rounded caps end every bar; fills only, with no borders or gradients.'},
+  tiles:{name:'Metro Tiles',nav:'tiles',navSpec:'tiles → rail',fontName:'Open Sans',ff:'"Open Sans",sans-serif',dff:'"Open Sans",sans-serif',lf:'"Open Sans",sans-serif',rl:0,rp:0,rt:0,rc:0,rs:0,ri:0,ra:0,tt:'lowercase',htls:'0',tw:300,card:'flat',qgap:'4px',note:'Zero radius, light lowercase pivot titles, solid accent tiles, a tile strip for navigation.'},
+  glass:{name:'Aero Glass',nav:'tabs',navSpec:'tabs → rail',fontName:'Nunito Sans',ff:'"Nunito Sans",sans-serif',dff:'"Nunito Sans",sans-serif',lf:'"Nunito Sans",sans-serif',rl:18,rp:16,rt:12,rc:8,rs:12,ri:12,ra:22,tt:'none',htls:'0',tw:800,card:'soft',qgap:'11px',note:'Glossy soft panels with an inset top highlight, 12–18px rounding, comfortable 1.1 spacing.'},
+  rules:{name:'Rule & Rail',nav:'tabs',navSpec:'tabs → rail',fontName:'Jost',ff:'Jost,sans-serif',dff:'Jost,sans-serif',lf:'Jost,sans-serif',rl:0,rp:0,rt:0,rc:0,rs:0,ri:0,ra:0,tt:'uppercase',htls:'.3em',tw:500,card:'rule',qgap:'0px',note:'Deco discipline: hairline rules instead of fills, sharp corners, 0.3em tracking, stepped rail on tablets.'},
+  press:{name:'Press',nav:'tabs',navSpec:'tabs → rail',fontName:'Source Serif 4 + Jost',ff:'"Source Serif 4",Georgia,serif',dff:'"Source Serif 4",Georgia,serif',lf:'Jost,sans-serif',rl:6,rp:3,rt:2,rc:2,rs:2,ri:2,ra:4,tt:'none',htls:'0',tw:700,card:'quiet',qgap:'0px',note:'Editorial: serif body, 2px corners, quiet underlined rows, generous leading. The legibility layout for large type.'},
+};
+const EFFECTS = {
+  flat:{name:'Flat',cta:0,s:['Solid primary','Solid','None','Primary tint','Solid outline','None']},
+  sheen:{name:'Sheen',cta:1,s:['Metal brush','Solid','None','Primary tint','Solid outline','None']},
+  shimmer:{name:'Shimmer',cta:1,shimmer:1,s:['Metal + sweep','Solid','None','Primary tint','Solid outline','Shimmer 2.8s']},
+  neon:{name:'Neon',cta:0,glow:1,s:['Solid + glow','Glow halo','None','Outer glow','Solid outline','None']},
+  glass:{name:'Glass',cta:1,glass:1,bg:'aurora',s:['Metal brush','Blur 14 · sat 180%','Aurora wash','Primary tint','Solid outline','None']},
+  architect:{name:'Architect',cta:1,shimmer:1,glow:1,pulse:1,bg:'pattern',s:['Metal + sweep','Solid + glow','Geometric lattice','Crystal pulse','Solid outline','Shimmer + pulse']},
+  grain:{name:'Grain',cta:1,bg:'noise',s:['Metal brush','Solid','Noise grain','Primary tint','Solid outline','None']},
+  prism:{name:'Prism',cta:1,gborder:1,pulse:1,s:['Metal brush','Solid','None','Crystal pulse','Metal gradient','Pulse 2.4s']},
+};
+const QUICK = [['qr_code_scanner','Scan'],['file_download','Import'],['public','OPDS'],['cast','Plex'],['download','Offline'],['query_stats','Stats']];
+const ITEMS = [
+  {title:'The Three-Body Problem',author:'Liu Cixin',kind:'Book',hue:'#1B3A5C',p:.42,subtitle:'Ch. 7 · 4h 12m left'},
+  {title:'Project Hail Mary',author:'Andy Weir',kind:'Audiobook',hue:'#5C2E1B',p:.71,subtitle:'12h 04m · 1.2×'},
+  {title:'Hard Fork · Ep. 184',author:'NYT',kind:'Podcast',hue:'#2E1B5C',p:.18,subtitle:'23:14 / 1:18:02'},
+  {title:'Saga · Vol. 11',author:'Vaughan / Staples',kind:'Comic',hue:'#1B5C3E',p:.55,subtitle:'p. 87 / 156'},
+];
+const FORMATS = [['Books',412],['Audiobooks',47],['Podcasts',18],['Comics',84],['Movies',132],['TV',24],['Music',2841],['Radio',12],['Web Fiction',8],['Manga',36],['Video',67],['Fanfiction',15]];
+const SOURCES = [['Calibre Library','OPDS · 412 books · synced 2m ago','on'],['Plex · Living Room','Beta · 84 movies · 12 series','on'],['r/HFY','Reddit · 8 new chapters this week','sync'],['Local · Internal','2,841 files · 47.3 GB','on']];
+const SETTINGS = [
+  ['LIBRARY',[['library_books','Manage libraries','Calibre · OPDS · local · cloud'],['swap_vert','Import & export','Bring in or back up your collection'],['folder','Storage organizer','Auto-sort downloads by format']]],
+  ['PLAYBACK & READING',[['menu_book','Reader','Fonts, layout, TTS'],['graphic_eq','Audio effects','EQ · spatial · DSP'],['headphones','Audio profiles','Per-headphone presets']]],
+];
+const NAV = [['home','Home'],['library_books','Library'],['explore','Discover'],['download','Downloads'],['settings','Settings']];
+
+const hx = h => { h = h.replace('#',''); return [0,2,4].map(i => parseInt(h.slice(i,i+2),16)); };
+const toHex = a => '#' + a.map(v => Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0')).join('');
+const mix = (a,b,t) => { const A = hx(a), B = hx(b); return toHex(A.map((v,i) => v + (B[i]-v)*t)); };
+const rgba = (h,a) => { const [r,g,b] = hx(h); return `rgba(${r},${g},${b},${a})`; };
+const lum = h => { const f = v => { v/=255; return v <= .03928 ? v/12.92 : Math.pow((v+.055)/1.055,2.4); }; const [r,g,b] = hx(h); return .2126*f(r)+.7152*f(g)+.0722*f(b); };
+const ratio = (a,b) => { const x = lum(a), y = lum(b); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05); };
+const pickInk = (bg,c) => c.concat(['#FFFFFF','#000000']).reduce((best,x) => ratio(bg,x) > ratio(bg,best) ? x : best, c[0]);
+const fmtCount = n => n >= 1000 ? (n/1000).toFixed(1).replace(/\.0$/,'') + 'k' : String(n);
+const slug = s => s.toLowerCase().replace(/&/g,'').replace(/[^a-z0-9]+/g,'-').replace(/-+$/,'');
+
+function pal(id) {
+  const [name, s, light] = PK[id];
+  const c = {}; s.split(' ').forEach((v,i) => c[KEYS[i]] = '#' + v.toUpperCase());
+  const m = CFMETAL[id] || [mix(c.pri,'#000000',.45), c.pri, mix(c.pri,'#FFFFFF',.4), mix(c.pri,'#FFFFFF',.78)];
+  const reader = {
+    day: light ? {bg:c.surf, ink:c.ink} : {bg:mix('#FBF8F1',c.pri,.04), ink:'#1F1F1F'},
+    sepia: {bg:mix('#F1E4C8',c.pri,.08), ink:'#4A3826'},
+    night: light ? {bg:mix('#121212',c.pri,.06), ink:'#D9D4CA'} : {bg:c.bg, ink:c.ink},
+  };
+  return {id, name, light:!!light, c, metal:m, metalSrc: CFMETAL[id] ? 'CFTokens.kt' : 'derived from primary', reader};
+}
+
+class Component extends DCLogic {
+  state = { layout:'compose', palette:'navy', effect:'sheen', motion:'system', reader:'sepia', device:'phone' };
+
+  renderVals() {
+    const S = this.state, L = LAYOUTS[S.layout], P = pal(S.palette), E = EFFECTS[S.effect], c = P.c;
+    const set = (k,v) => () => this.setState({[k]:v});
+    const reduced = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const motionOn = S.motion === 'on' || (S.motion === 'system' && !reduced);
+    const px = v => v === 999 ? '999px' : v + 'px';
+
+    const grad = `linear-gradient(135deg, ${P.metal[0]} 0%, ${P.metal[1]} 45%, ${P.metal[2]} 85%, ${P.metal[3]} 100%)`;
+    const metal = E.cta ? grad : `linear-gradient(${c.pri}, ${c.pri})`;
+    const ctaBase = E.cta ? P.metal[1] : c.pri;
+    const ctafg = pickInk(ctaBase, [c.onpri, c.ink, c.bg]);
+    const glowC = rgba(c.pri, .55);
+
+    // card look (linkpoint look.js) → per-side vars
+    const hair = `1px solid ${c.outv}`;
+    let cb = {t:'none',r:'none',b:'none',l:'none'}, cbg = c.surf, csh = 'none';
+    if (L.card === 'compose' || L.card === 'box') cb = {t:hair,r:hair,b:hair,l:hair};
+    if (L.card === 'cap') cb.l = `9px solid ${c.sec2}`;
+    if (L.card === 'flat') cb.l = '4px solid transparent';
+    if (L.card === 'soft') csh = '0 3px 12px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.16)';
+    if (L.card === 'rule') { cb.t = hair; cbg = 'transparent'; }
+    if (L.card === 'quiet') { cb.b = hair; cbg = 'transparent'; }
+    const filled = cbg !== 'transparent';
+    let surfC = c.surf;
+    if (E.glass && filled) { surfC = rgba(c.surf, .6); cbg = surfC; }
+    if (E.gborder && filled) {
+      const w = L.card === 'cap' ? '9px' : '1px';
+      cb = {t:'1px solid transparent',r:'1px solid transparent',b:'1px solid transparent',l:`${w} solid transparent`};
+      cbg = `linear-gradient(${surfC}, ${surfC}) padding-box, ${grad} border-box`;
+    }
+    if (E.glow) csh = (csh === 'none' ? '' : csh + ', ') + `0 0 14px ${rgba(c.pri,.28)}`;
+    const herobg = L.card === 'compose' && !E.gborder ? `linear-gradient(135deg, ${E.glass ? rgba(c.surf2,.6) : c.surf2}, ${surfC})` : cbg;
+    const fbg = L.card === 'compose' && !E.gborder ? `linear-gradient(135deg, ${E.glass ? rgba(c.surf2,.6) : c.surf2}, ${surfC})` : cbg;
+
+    // quick-action tiles: metro = solid accent tiles
+    const metroTiles = S.layout === 'tiles';
+    const qfgOnPri = pickInk(c.pri, [c.onpri, c.ink, c.bg]);
+
+    let bgimg = '';
+    const dot = P.light ? 'rgba(0,0,0,.07)' : 'rgba(255,255,255,.06)';
+    if (E.bg === 'aurora') bgimg = `radial-gradient(120% 55% at 0% 0%, ${rgba(c.sec,.32)}, transparent 62%), radial-gradient(90% 50% at 100% 35%, ${rgba(c.pri,.22)}, transparent 60%), `;
+    if (E.bg === 'pattern') bgimg = `repeating-linear-gradient(45deg, ${rgba(c.pri,.08)} 0 1px, transparent 1px 18px), repeating-linear-gradient(-45deg, ${rgba(c.pri,.08)} 0 1px, transparent 1px 18px), `;
+    if (E.bg === 'noise') bgimg = `radial-gradient(${dot} 1px, transparent 1.3px) 0 0/4px 4px, `;
+
+    const R = P.reader[S.reader];
+    const vars = {
+      '--bg':c.bg,'--surf':c.surf,'--surf2':c.surf2,'--ink':c.ink,'--ink2':c.ink2,'--pri':c.pri,'--onpri':c.onpri,'--outv':c.outv,
+      '--pbg': bgimg + c.bg, '--metal': metal, '--ctafg': ctafg,
+      '--ctash': E.glow ? `0 0 18px ${glowC}` : 'none',
+      '--wglow': E.glow ? `drop-shadow(0 0 6px ${rgba(c.pri,.6)})` : 'none',
+      '--shim': motionOn && E.shimmer ? 'cfShimmer 2.8s linear infinite' : 'none',
+      '--shimo': E.shimmer ? 1 : 0,
+      '--pulse': motionOn && E.pulse ? 'cfPulse 2.4s ease-in-out infinite' : 'none',
+      '--bf': E.glass ? 'blur(14px) saturate(180%)' : 'none',
+      '--ff':L.ff,'--dff':L.dff,'--lf':L.lf,'--tt':L.tt,'--htls':L.htls,'--tw':L.tw,
+      '--rl':px(L.rl),'--rp':L.card === 'cap' ? `0 ${px(L.rp)} ${px(L.rp)} 0` : px(L.rp),'--rt':L.card === 'cap' ? `0 ${px(L.rp)} ${px(L.rp)} 0` : px(L.rt),'--rc':px(L.rc),'--rs':px(L.rs),'--ri':px(L.ri),'--ra':px(L.ra),
+      '--cbt':cb.t,'--cbr':cb.r,'--cbb':cb.b,'--cbl':cb.l,'--cbg':cbg,'--csh':csh,'--herobg':herobg,'--fbg':fbg,
+      '--qbg': metroTiles ? c.pri : fbg, '--qfg': metroTiles ? qfgOnPri : c.ink, '--qic': metroTiles ? qfgOnPri : c.pri,
+      '--qbt': metroTiles ? 'none' : cb.t, '--qbr': metroTiles ? 'none' : cb.r, '--qbb': metroTiles ? 'none' : cb.b, '--qbl': metroTiles ? 'none' : cb.l,
+      '--qsh': metroTiles && E.glow ? `0 0 16px ${glowC}, inset 0 0 12px ${rgba('#FFFFFF',.18)}` : csh,
+      '--qalign': metroTiles ? 'flex-start' : 'center', '--qjust': metroTiles ? 'space-between' : 'center', '--qgap': L.qgap,
+      '--track': rgba(c.ink,.12), '--mpbg': E.glass ? rgba(c.surf,.7) : c.surf,
+      '--navbg': E.glass ? rgba(c.surf,.65) : c.surf, '--navbt': L.card === 'rule' || L.card === 'quiet' ? hair : 'none', '--navbr': L.card === 'rule' || L.card === 'quiet' ? hair : 'none',
+      '--sec':c.sec,'--sec2':c.sec2,'--priC':c.priC,'--onpriL':pickInk(c.pri,[c.bg,c.onpri,c.ink]),'--onsec2L':pickInk(c.sec2,[c.bg,c.ink]),'--onsecL':pickInk(c.sec,[c.bg,c.ink]),
+      '--rpbg':R.bg,'--rpink':R.ink,'--rpmuted':mix(R.ink,R.bg,.35),'--rff': S.layout === 'terminal' ? '"JetBrains Mono",monospace' : '"Source Serif 4",Georgia,serif',
+    };
+
+    const selSt = on => ({padding:'8px 10px',borderRadius:'6px',cursor:'pointer',font:'500 12px/1.2 Inter,sans-serif',textAlign:'center',
+      background: on ? '#4f46e520' : '#22252f', border: on ? '1px solid #818cf8' : '1px solid #2e3140', color: on ? '#e4e4e7' : '#9ca3af'});
+    const rowSt = (on, cols) => ({display:'grid',gridTemplateColumns:cols,gap:'12px',padding:'12px 16px',borderTop:'1px solid #2e3140',
+      font:'400 13px/1.45 Inter,sans-serif',color:'#9ca3af',alignItems:'start',background: on ? '#4f46e514' : 'transparent',boxShadow: on ? 'inset 3px 0 0 #818cf8' : 'none'});
+
+    const layoutList = Object.entries(LAYOUTS).map(([id,l]) => ({ id, name:l.name, navSpec:l.navSpec, fontName:l.fontName, note:l.note,
+      radii:[l.rl,l.rp,l.rt,l.rs].map(v => v === 999 ? 'pill' : v).join(' / '),
+      pick:set('layout',id), st:selSt(S.layout === id), row:rowSt(S.layout === id,'150px 110px 150px 190px minmax(0,1fr)') }));
+    const families = FAMILIES.map(([name,keys]) => ({ name, items: keys.map(k => { const p = pal(k); const on = S.palette === k; return {
+      name:p.name, pick:set('palette',k),
+      st:{width:'30px',height:'30px',borderRadius:'7px',background:p.c.bg,border: on ? '2px solid #818cf8' : '1px solid #3b3f50',boxShadow: on ? '0 0 0 2px #4f46e540' : 'none',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',boxSizing:'border-box'},
+      dot:{width:'12px',height:'12px',borderRadius:'50%',background:`linear-gradient(135deg, ${p.metal[0]}, ${p.metal[1]} 45%, ${p.metal[2]})`} }; }) }));
+    const effectList = Object.entries(EFFECTS).map(([id,e]) => ({ id, name:e.name, pick:set('effect',id), st:selSt(S.effect === id),
+      row:rowSt(S.effect === id,'130px repeat(6,minmax(0,1fr))'), s1:e.s[0], s2:e.s[1], s3:e.s[2], s4:e.s[3], s5:e.s[4], s6:e.s[5] }));
+    const mk = (k, arr) => arr.map(([id,name]) => ({ name, pick:set(k,id), st:{...selSt(S[k] === id), flex:1} }));
+
+    const items = ITEMS.map(it => {
+      const cov = rgba(it.hue,.6);
+      return { ...it, kindU: it.kind.toUpperCase(),
+        cover196:{width:'136px',height:'196px',borderRadius:'var(--rc)',background:`linear-gradient(135deg, ${it.hue}, ${cov})`,display:'flex',alignItems:'center',justifyContent:'center'},
+        cover88:{width:'88px',height: (it.kind === 'Audiobook' || it.kind === 'Podcast') ? '88px' : '132px',flex:'none',borderRadius:'var(--rc)',background:`linear-gradient(135deg, ${it.hue}, ${cov})`},
+        bar:{width:(it.p*100)+'%',height:'100%',background:c.pri}, pct:Math.round(it.p*100)+'%',
+        cap:{width:'30px',flex:'none',background:it.hue,borderRadius:'999px 0 0 999px'} };
+    });
+
+    const navOnBg = c.priC, navOnFg = pickInk(c.priC,[c.onpriC,c.ink,c.bg]);
+    const navItem = (n,i) => { const on = i === 1; return { glyph:n[0], label:n[1],
+      pill:{width:'64px',height:'32px',borderRadius: S.layout === 'compose' ? '16px' : 'var(--rs)',display:'flex',alignItems:'center',justifyContent:'center',background: on ? navOnBg : 'transparent',boxShadow: on ? 'var(--ctash)' : 'none',animation: on ? 'var(--pulse)' : 'none'},
+      icon:{fontFamily:"'Material Symbols Outlined'",fontSize:'24px',fontVariationSettings: on ? "'FILL' 1" : "'FILL' 0",color: on ? navOnFg : c.ink2},
+      lab:{font:`${on ? 700 : 500} 12px/1 ${L.lf}`,letterSpacing: L.tt === 'uppercase' ? '.1em' : '0',textTransform:L.tt,color: on ? c.ink : c.ink2},
+      tile:{flex:1,display:'flex',flexDirection:'column',justifyContent:'space-between',padding:'8px',background: on ? c.pri : c.surf2,color: on ? qfgOnPri : c.ink,boxShadow: on ? (E.glow ? `0 0 16px ${glowC}` : 'none') : 'none',animation: on ? 'var(--pulse)' : 'none'} }; };
+    const navItems = NAV.slice(0,4).map(navItem);
+    const railItems = NAV.map(navItem);
+
+    const segCols = [c.pri, c.sec2, c.sec, c.priC, c.sec2];
+    const seg = (h, fs) => (n,i) => { const bg = segCols[i]; const on = i === 1; return { label: n[1].toUpperCase(),
+      st:{height:h,background: on ? mix(bg,'#FFFFFF',.18) : bg,color:pickInk(bg,[c.bg,c.ink]),display:'flex',alignItems:'flex-end',justifyContent:'flex-end',padding:'0 6px 5px 0',boxSizing:'border-box',font:`600 ${fs}/1 Antonio,sans-serif`,letterSpacing:'.08em',boxShadow: on ? 'var(--ctash)' : 'none',animation: on ? 'var(--pulse)' : 'none'} }; };
+    const RAIL = ['HOME','LIBRARY','DISCOVER','DOWNLOADS','SEARCH','CAST','SETTINGS'];
+    const tint = [c.sec2,c.surf2,c.sec,c.surf2,c.sec2,c.sec,c.surf2];
+    const lcRail = (hs,fs,w) => RAIL.map((label,i) => { const on = i === 1; const bg = on ? c.pri : tint[i]; return { label, code:'0'+(i+1)+'-'+(4471+i*17),
+      st:{position:'relative',flex:'none',boxSizing:'border-box',height:hs[i]+'px',width:w+'px',background:bg,color:pickInk(bg,[c.bg,c.onpri,c.ink]),display:'flex',alignItems:'flex-end',justifyContent:'flex-end',padding:'0 8px 5px 0',cursor:'pointer',font:`700 ${fs}px/1 Antonio,sans-serif`,letterSpacing:'.1em',boxShadow: on ? 'var(--ctash)' : 'none',animation: on ? 'var(--pulse)' : 'none'},
+      cs:{position:'absolute',left:'8px',top:'5px',font:'500 8px/1 Antonio,sans-serif',opacity:.6} }; });
+    const lcRailP = lcRail([58,46,52,46,48,46,50],10,76), lcRailT = lcRail([94,56,70,46,58,46,52],11,120);
+    const sweepSegs = NAV.slice(0,4).map(seg('58px','11px'));
+    const sweepSegsT = NAV.map(seg('64px','13px'));
+
+    const readerOpts = [['day','Day'],['sepia','Sepia'],['night','Night']];
+    const readerPills = readerOpts.map(([id,name]) => { const on = S.reader === id; return { name, pick:set('reader',id),
+      st:{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:'6px',padding:'7px 0',borderRadius:'var(--rs)',cursor:'pointer',font:`600 11px/1 ${L.lf}`,letterSpacing:'.08em',background: on ? c.surf : 'transparent',color: on ? c.ink : c.ink2,boxShadow: on ? `0 0 0 1px ${c.outv}` : 'none'},
+      sw:{width:'10px',height:'10px',borderRadius:'50%',background:P.reader[id].bg,boxShadow:`0 0 0 1px ${c.outv}`} }; });
+
+    const settingsGroups = SETTINGS.map(([title,rows]) => ({ title, rows: rows.map((r,i) => ({ icon:r[0], title:r[1], sub:r[2],
+      st:{display:'flex',alignItems:'center',gap:'12px',padding:'12px 16px',borderTop: i ? `1px solid ${rgba(c.outv,.9)}` : 'none',marginLeft: i ? '0' : '0'} })) }));
+
+    const roleDefs = [['bg','background'],['surf','surface'],['surf2','surfaceVariant'],['ink','onSurface'],['ink2','onSurfaceVariant'],['pri','primary'],['onpri','onPrimary'],['priC','primaryContainer'],['sec','secondary'],['sec2','tertiary'],['outv','outlineVariant'],['err','error']];
+    const roles = roleDefs.map(([k,label]) => { const fg = pickInk(c[k],[c.ink,c.bg]); return { label, hex:c[k],
+      ratio: ['ink','ink2','pri','sec','sec2','err'].includes(k) ? ratio(c[k], c.bg).toFixed(1) + ':1 on bg' : ratio(fg, c[k]).toFixed(1) + ':1 ink',
+      sample:'Aa', sw:{height:'54px',background:c[k],color:fg,display:'flex',alignItems:'center',padding:'0 12px',font:'700 16px/1 Inter,sans-serif'} }; });
+    const readerSw = readerOpts.map(([id,name]) => ({ name, ratio: ratio(P.reader[id].bg,P.reader[id].ink).toFixed(1),
+      st:{flex:1,height:'64px',borderRadius:'6px',background:P.reader[id].bg,color:P.reader[id].ink,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'6px',border: S.reader === id ? '2px solid #818cf8' : '1px solid #2e3140'} }));
+
+    const tvNav = NAV.slice(0,4).concat([['','Settings']]).slice(0,5).map((n,i) => ({ label: n[1],
+      st:{font:`${i === 0 ? 700 : 500} 20px/1 ${L.lf}`,textTransform:L.tt,letterSpacing: L.tt === 'uppercase' ? '.1em' : '0',color: i === 0 ? c.ink : c.ink2,paddingBottom:'8px',borderBottom: i === 0 ? `3px solid ${c.pri}` : '3px solid transparent'} })).filter((n,i,a) => a.findIndex(x => x.label === n.label) === i);
+    const tvItems = ITEMS.concat(ITEMS[0]).map((it,i) => ({ title: it.title,
+      st:{width:'150px',height:'206px',flex:'none',borderRadius:'var(--rc)',background:`linear-gradient(135deg, ${it.hue}, ${rgba(it.hue,.6)})`,display:'flex',alignItems:'center',justifyContent:'center',
+        transform: i === 1 ? 'scale(1.06)' : 'none', outline: i === 1 ? `3px solid ${c.ink}` : 'none', outlineOffset:'4px', boxShadow: i === 1 ? (E.glow ? `0 0 26px ${glowC}` : '0 10px 30px rgba(0,0,0,.4)') : 'none'} }));
+
+    const themeName = `${L.name} / ${P.name}`;
+    const themeId = `${S.layout}__${slug(P.name)}__${S.effect}`;
+    const json = JSON.stringify({
+      id: themeId, name: themeName,
+      layout: { id:S.layout, nav:L.nav, font:L.fontName, radius:{large:L.rl,panel:L.rp,tile:L.rt,control:L.rs === 999 ? 'pill' : L.rs}, card:L.card, titleCase:L.tt },
+      colour: { id:slug(P.name), darkMode:!P.light, colorScheme:Object.fromEntries(roleDefs.map(([k,l]) => [l,c[k]])),
+        metal:{shadow:P.metal[0],base:P.metal[1],highlight:P.metal[2],shimmer:P.metal[3]}, reader:P.reader },
+      effects: { id:S.effect, slots:{ cta:E.cta ? 'metal' : 'solid', shimmer:!!E.shimmer, glow:!!E.glow, glass:!!E.glass, background:E.bg || 'none', gradientBorder:!!E.gborder, crystalPulse:!!E.pulse } },
+      motion: S.motion, readerPage: S.reader,
+    }, null, 2);
+
+    return {
+      vars, themeName, themeId, effectName:E.name, palName:P.name, readerName:S.reader,
+      motionLabel: S.motion === 'system' ? (reduced ? 'system · reduced' : 'system') : S.motion,
+      layoutList, families, effectList,
+      motionList: mk('motion',[['system','System'],['on','On'],['off','Off']]),
+      readerList: mk('reader',readerOpts),
+      deviceList: mk('device',[['phone','Phone'],['tablet','Tablet'],['tv','TV']]),
+      isPhone:S.device === 'phone', isTablet:S.device === 'tablet', isTV:S.device === 'tv',
+      navSweep:L.nav === 'sweep', navNotSweep:L.nav !== 'sweep', navTabs:L.nav === 'tabs', navTiles:L.nav === 'tiles',
+      navLabel: L.nav === 'sweep' ? 'sweep rail' : L.nav === 'tiles' ? 'tile strip' : 'navigation bar',
+      navLabelT: L.nav === 'sweep' ? 'sweep rail' : 'navigation rail',
+      quick: QUICK.map(([icon,label]) => ({icon,label})), items,
+      formats: FORMATS.map(([name,n]) => ({name, count:fmtCount(n)})),
+      fmtGrid:{display:'grid',gridTemplateColumns: L.nav === 'sweep' ? 'repeat(3,minmax(0,1fr))' : 'repeat(4,minmax(0,1fr))',gap:L.qgap},
+      sources: SOURCES.map(([label,desc,st]) => ({label, desc, stateU: st === 'on' ? 'ONLINE' : 'SYNCING', blk:{width:'14px',height:'24px',flex:'none',background: st === 'on' ? '#5BD68E' : c.pri}, dot:{width:'8px',height:'8px',flex:'none',borderRadius:'50%',background: st === 'on' ? '#5BD68E' : c.pri}})),
+      navItems, railItems, sweepSegs, sweepSegsT, lcRailP, lcRailT, readerPills, settingsGroups, roles, readerSw, tvNav, tvItems,
+      metalBar:{height:'44px',borderRadius:'6px',background:grad},
+      metalHex: P.metal.join(' · '), metalSrc: P.metalSrc, json,
+    };
+  }
+}
+</script>
+</body>
+</html>
