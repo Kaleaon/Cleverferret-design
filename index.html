@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Cleverferret — your ideas, finally in one place." />
+    <title>Cleverferret — Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <svg class="svg-defs" aria-hidden="true">
+      <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></symbol>
+      <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 4.8A1.8 1.8 0 0 1 7.8 3h8.4A1.8 1.8 0 0 1 18 4.8V21l-6-4-6 4V4.8Z"/></symbol>
+      <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></symbol>
+      <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H10l2 2h6.5A2.5 2.5 0 0 1 21 9.5v8a2.5 2.5 0 0 1-2.5 2h-13a2.5 2.5 0 0 1-2.5-2v-10Z"/></symbol>
+      <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 20v-1.5a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4V20M9 10.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM17 11a3 3 0 1 0 0-6M16 14.5h1a5 5 0 0 1 5 5V20"/></symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+      <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+      <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    </svg>
+
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="Cleverferret home">
+        <span class="brand-mark"><span></span><span></span><span></span></span>
+        <span>Clever<span>ferret</span></span>
+      </a>
+
+      <nav class="primary-nav" aria-label="Main navigation">
+        <a class="nav-item active" href="#"><svg><use href="#i-grid"/></svg>Library</a>
+        <a class="nav-item" href="#"><svg><use href="#i-bookmark"/></svg>Saved</a>
+        <a class="nav-item" href="#"><svg><use href="#i-star"/></svg>Favorites</a>
+        <a class="nav-item" href="#"><svg><use href="#i-clock"/></svg>Recently viewed</a>
+      </nav>
+
+      <div class="nav-section">
+        <div class="nav-heading"><span>Spaces</span><button aria-label="Add space"><svg><use href="#i-plus"/></svg></button></div>
+        <a class="nav-item" href="#"><span class="space-dot dot-purple"></span>Design inspiration <small>18</small></a>
+        <a class="nav-item" href="#"><span class="space-dot dot-orange"></span>Product thinking <small>12</small></a>
+        <a class="nav-item" href="#"><span class="space-dot dot-green"></span>Research <small>7</small></a>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="storage-copy"><span>Storage</span><strong>62% used</strong></div>
+        <div class="storage-bar"><span></span></div>
+        <button class="profile">
+          <span class="avatar">AK</span><span><strong>Alex Kim</strong><small>alex@cleverferret.io</small></span><svg><use href="#i-more"/></svg>
+        </button>
+      </div>
+    </aside>
+    <div class="sidebar-scrim" id="scrim"></div>
+
+    <main class="main-shell">
+      <header class="topbar">
+        <button class="icon-button menu-button" id="menuButton" aria-label="Open menu"><svg><use href="#i-menu"/></svg></button>
+        <label class="search-box">
+          <svg><use href="#i-search"/></svg>
+          <input id="searchInput" type="search" placeholder="Search anything in your library..." autocomplete="off" />
+          <kbd>⌘ K</kbd>
+        </label>
+        <button class="icon-button notification" aria-label="Notifications"><svg><use href="#i-bell"/></svg><span></span></button>
+        <button class="add-button" id="addButton"><svg><use href="#i-plus"/></svg><span>Add to library</span></button>
+      </header>
+
+      <div class="content">
+        <section class="welcome">
+          <div>
+            <p class="eyebrow">MY LIBRARY</p>
+            <h1>Good morning, Alex <span>✦</span></h1>
+            <p>Your ideas, references, and discoveries—all in one place.</p>
+          </div>
+          <div class="stats" aria-label="Library stats">
+            <div><strong>43</strong><span>Saved items</span></div>
+            <div><strong>7</strong><span>Spaces</span></div>
+            <div><strong>12</strong><span>This week</span></div>
+          </div>
+        </section>
+
+        <section class="library-section">
+          <div class="section-title-row">
+            <div><h2>All saved items</h2><span class="result-count" id="resultCount">8 items</span></div>
+            <div class="view-controls" role="group" aria-label="View options">
+              <button class="active" data-view="grid" aria-label="Grid view"><svg><use href="#i-grid"/></svg></button>
+              <button data-view="list" aria-label="List view"><svg><use href="#i-list"/></svg></button>
+            </div>
+          </div>
+
+          <div class="filter-row" aria-label="Filter saved items">
+            <button class="filter active" data-filter="all">All <span>8</span></button>
+            <button class="filter" data-filter="article">Articles <span>3</span></button>
+            <button class="filter" data-filter="video">Videos <span>2</span></button>
+            <button class="filter" data-filter="website">Websites <span>2</span></button>
+            <button class="filter" data-filter="document">Documents <span>1</span></button>
+          </div>
+
+          <div class="card-grid" id="cardGrid">
+            <article class="content-card" data-type="article" data-search="building a design system from scratch interface weekly design systems ui">
+              <div class="card-visual visual-coral"><span class="abstract-shape orb"></span><span class="abstract-shape ring"></span><span class="type-pill">Article</span></div>
+              <div class="card-body"><div class="source"><span class="source-icon coral">I</span>Interface Weekly<span>· 8 min read</span></div><h3>Building a design system from scratch</h3><p>A practical guide to creating scalable foundations for products and teams.</p><div class="card-bottom"><div class="tags"><span>Design systems</span><span>UI</span></div><button class="star-button" aria-label="Add to favorites"><svg><use href="#i-star"/></svg></button></div></div>
+            </article>
+            <article class="content-card" data-type="website" data-search="the psychology of color in digital products prism design psychology branding">
+              <div class="card-visual visual-indigo"><span class="swatch swatch-1"></span><span class="swatch swatch-2"></span><span class="swatch swatch-3"></span><span class="type-pill">Website</span></div>
+              <div class="card-body"><div class="source"><span class="source-icon indigo">P</span>Prism<span>· Saved yesterday</span></div><h3>The psychology of color in digital products</h3><p>How thoughtful color choices shape perception, emotion, and user behavior.</p><div class="card-bottom"><div class="tags"><span>Psychology</span><span>Branding</span></div><button class="star-button active" aria-label="Remove from favorites"><svg><use href="#i-star"/></svg></button></div></div>
+            </article>
+            <article class="content-card" data-type="video" data-search="why great products feel inevitable form youtube product strategy">
+              <div class="card-visual visual-dark"><span class="big-letter">Aa</span><span class="play-button">▶</span><span class="type-pill">Video</span></div>
+              <div class="card-body"><div class="source"><span class="source-icon red">▶</span>Form / YouTube<span>· 14 min</span></div><h3>Why great products feel inevitable</h3><p>A conversation about focus, constraints, and the details users remember.</p><div class="card-bottom"><div class="tags"><span>Product</span><span>Strategy</span></div><button class="star-button" aria-label="Add to favorites"><svg><use href="#i-star"/></svg></button></div></div>
+            </article>
+            <article class="content-card" data-type="article" data-search="the quiet power of good typography notes on type typography editorial">
+              <div class="card-visual visual-cream"><span class="type-display">Ag</span><span class="type-lines"></span><span class="type-pill">Article</span></div>
+              <div class="card-body"><div class="source"><span class="source-icon black">N</span>Notes on Type<span>· 5 min read</span></div><h3>The quiet power of good typography</h3><p>Small typographic decisions that make interfaces feel more considered.</p><div class="card-bottom"><div class="tags"><span>Typography</span><span>Editorial</span></div><button class="star-button" aria-label="Add to favorites"><svg><use href="#i-star"/></svg></button></div></div>
+            </article>
+            <article class="content-card" data-type="website" data-search="a field guide to creative research observatory research process">
+              <div class="card-visual visual-green"><span class="leaf leaf-1"></span><span class="leaf leaf-2"></span><span class="type-pill">Website</span></div>
+              <div class="card-body"><div class="source"><span class="source-icon green">O</span>Observatory<span>· Saved Sep 21</span></div><h3>A field guide to creative research</h3><p>Simple methods for collecting references without losing the original spark.</p><div class="card-bottom"><div class="tags"><span>Research</span><span>Process</span></div><button class="star-button" aria-label="Add to favorites"><svg><use href="#i-star"/></svg></button></div></div>
+            </article>
+            <article class="content-card" data-type="document" data-search="2026 product trends report arc studio trends futures">
+              <div class="card-visual visual-blue"><span class="trend-line"></span><span class="trend-circle"></span><span class="type-pill">Document</span></div>
+              <div class="card-body"><div class="source"><span class="source-icon blue">A</span>Arc Studio<span>· 32 pages</span></div><h3>2026 product trends report</h3><p>Signals shaping the next generation of thoughtful digital experiences.</p><div class="card-bottom"><div class="tags"><span>Trends</span><span>Futures</span></div><button class="star-button" aria-label="Add to favorites"><svg><use href="#i-star"/></svg></button></div></div>
+            </article>
+            <article class="content-card" data-type="video" data-search="crafting memorable microinteractions motion lab interaction motion">
+              <div class="card-visual visual-violet"><span class="motion-dot"></span><span class="motion-trail"></span><span class="play-button">▶</span><span class="type-pill">Video</span></div>
+              <div class="card-body"><div class="source"><span class="source-icon violet">M</span>Motion Lab<span>· 11 min</span></div><h3>Crafting memorable microinteractions</h3><p>Using motion with purpose to make everyday actions feel rewarding.</p><div class="card-bottom"><div class="tags"><span>Interaction</span><span>Motion</span></div><button class="star-button" aria-label="Add to favorites"><svg><use href="#i-star"/></svg></button></div></div>
+            </article>
+            <article class="content-card" data-type="article" data-search="the case for slower software humane tech essay culture">
+              <div class="card-visual visual-yellow"><span class="sun"></span><span class="horizon"></span><span class="type-pill">Article</span></div>
+              <div class="card-body"><div class="source"><span class="source-icon yellow">H</span>Humane Tech<span>· 6 min read</span></div><h3>The case for slower software</h3><p>What we gain when our tools respect attention instead of competing for it.</p><div class="card-bottom"><div class="tags"><span>Essay</span><span>Culture</span></div><button class="star-button" aria-label="Add to favorites"><svg><use href="#i-star"/></svg></button></div></div>
+            </article>
+          </div>
+          <div class="empty-state" id="emptyState"><span>⌕</span><h3>Nothing found</h3><p>Try another search or clear the current filter.</p></div>
+        </section>
+      </div>
+    </main>
+
+    <dialog id="addDialog">
+      <form id="addForm" method="dialog">
+        <div class="dialog-header"><div><p class="eyebrow">NEW REFERENCE</p><h2>Add to your library</h2></div><button type="button" class="icon-button" id="closeDialog" aria-label="Close"><svg><use href="#i-close"/></svg></button></div>
+        <label>Link<input id="newLink" type="url" placeholder="https://example.com/article" required /></label>
+        <label>Title<input id="newTitle" type="text" placeholder="What did you find?" required /></label>
+        <label>Type<select id="newType"><option value="article">Article</option><option value="video">Video</option><option value="website">Website</option><option value="document">Document</option></select></label>
+        <div class="dialog-actions"><button type="button" class="cancel-button" id="cancelDialog">Cancel</button><button class="submit-button" type="submit">Save to library</button></div>
+      </form>
+    </dialog>
+    <div class="toast" id="toast" role="status">Saved to your library</div>
+    <script src="app.js"></script>
+  </body>
+</html>
