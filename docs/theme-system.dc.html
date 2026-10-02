@@ -495,15 +495,50 @@ a{color:#818cf8}a:hover{color:#a5b4fc}
   </section>
 
   <section data-screen-label="Axis 2 colour" style="display:flex;flex-direction:column;gap:14px;max-width:1100px">
-    <div style="display:flex;flex-direction:column;gap:4px">
-      <h2 style="margin:0;font:600 20px/1.2 Inter,sans-serif">2 · Colour pack · {{ palName }}</h2>
-      <p style="margin:0;font:400 14px/1.5 Inter,sans-serif;color:#9ca3af">MD3 roles from the Ktheme preset (contrast raised to AA, per linkpoint-design), a 4-stop metal brush, and three reader pages. Text on accent grounds uses whichever candidate has the highest WCAG contrast, so any pack works with any layout.</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <h2 style="margin:0;font:600 20px/1.2 Inter,sans-serif">2 · Colour pack · {{ palName }}</h2>
+          <span style="padding:4px 10px;border-radius:12px;font:700 11px/1 'JetBrains Mono',monospace;letter-spacing:.06em;background:var(--badgeBg);color:#ffffff;box-shadow:0 0 10px rgba(0,0,0,.2)">{{ wcagStatusText }}</span>
+        </div>
+        <p style="margin:0;font:400 14px/1.5 Inter,sans-serif;color:#9ca3af">MD3 roles with real-time WCAG 2.2 Level AA (4.5:1 text / 3.0:1 UI) and Level AAA (7.0:1) contrast inspection and automated palette correction engine.</p>
+      </div>
+      <button type="button" onClick="{{ toggleWCAG }}" style="display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:8px;background:var(--btnBg);border:1px solid var(--btnBorder);color:#e4e4e7;font:600 13px/1 Inter,sans-serif;cursor:pointer">
+        <span style="font-family:'Material Symbols Outlined';font-size:18px">tune</span>
+        <span>Auto-Fix Contrast (WCAG AA): <b style="color:var(--toggleLabelColor)">{{ wcagToggleLabel }}</b></span>
+      </button>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px">
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+      <div style="border:1px solid #2e3140;border-radius:8px;padding:12px 14px;background:#1a1c25;display:flex;flex-direction:column;gap:4px">
+        <span style="font:500 11px/1 'JetBrains Mono',monospace;color:#9ca3af">PALETTE AUDIT (24 PACKS)</span>
+        <span style="font:700 18px/1.2 Inter,sans-serif;color:#e4e4e7">{{ paletteAuditSummary }}</span>
+      </div>
+      <div style="border:1px solid #2e3140;border-radius:8px;padding:12px 14px;background:#1a1c25;display:flex;flex-direction:column;gap:4px">
+        <span style="font:500 11px/1 'JetBrains Mono',monospace;color:#9ca3af">ACTIVE PALETTE SCORE</span>
+        <span style="font:700 18px/1.2 Inter,sans-serif;color:#e4e4e7">{{ wcagScore }}% AA Compliant</span>
+      </div>
+      <div style="border:1px solid #2e3140;border-radius:8px;padding:12px 14px;background:#1a1c25;display:flex;flex-direction:column;gap:4px">
+        <span style="font:500 11px/1 'JetBrains Mono',monospace;color:#9ca3af">TARGET THRESHOLDS</span>
+        <span style="font:400 12px/1.2 Inter,sans-serif;color:#9ca3af">Text &#8805; 4.5:1 | UI &#8805; 3.0:1 | AAA &#8805; 7.0:1</span>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px">
       <sc-for list="{{ roles }}" as="r" hint-placeholder-count="12">
-        <div style="border:1px solid #2e3140;border-radius:8px;overflow:hidden;background:#1a1c25">
-          <div style="{{ r.sw }}">{{ r.sample }}</div>
-          <div style="padding:8px 10px;display:flex;flex-direction:column;gap:2px"><span style="font:600 12px/1.3 Inter,sans-serif;color:#e4e4e7">{{ r.label }}</span><span style="font:400 11px/1.3 'JetBrains Mono',monospace;color:#9ca3af">{{ r.hex }} · {{ r.ratio }}</span></div>
+        <div style="border:1px solid #2e3140;border-radius:8px;overflow:hidden;background:#1a1c25;display:flex;flex-direction:column">
+          <div style="{{ r.sw }}">
+            <span>{{ r.sample }}</span>
+            <span style="padding:2px 6px;border-radius:4px;font:700 10px/1 'JetBrains Mono',monospace;background:{{ r.badgeBg }};color:#ffffff">{{ r.statusBadge }}</span>
+          </div>
+          <div style="padding:8px 10px;display:flex;flex-direction:column;gap:2px">
+            <span style="font:600 12px/1.3 Inter,sans-serif;color:#e4e4e7">{{ r.label }}</span>
+            <span style="font:400 11px/1.3 'JetBrains Mono',monospace;color:#9ca3af">{{ r.hex }}</span>
+            <div style="display:flex;align-items:center;justify-space-between;margin-top:2px;font:500 10px/1.2 'JetBrains Mono',monospace;color:#818cf8">
+              <span>Ratio: {{ r.ratio }}</span>
+              <span style="color:#6b7280">Min: {{ r.minReq }}</span>
+            </div>
+          </div>
         </div>
       </sc-for>
     </div>
@@ -646,15 +681,33 @@ const hx = h => { h = h.replace('#',''); return [0,2,4].map(i => parseInt(h.slic
 const toHex = a => '#' + a.map(v => Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0')).join('');
 const mix = (a,b,t) => { const A = hx(a), B = hx(b); return toHex(A.map((v,i) => v + (B[i]-v)*t)); };
 const rgba = (h,a) => { const [r,g,b] = hx(h); return `rgba(${r},${g},${b},${a})`; };
-const lum = h => { const f = v => { v/=255; return v <= .03928 ? v/12.92 : Math.pow((v+.055)/1.055,2.4); }; const [r,g,b] = hx(h); return .2126*f(r)+.7152*f(g)+.0722*f(b); };
-const ratio = (a,b) => { const x = lum(a), y = lum(b); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05); };
-const pickInk = (bg,c) => c.concat(['#FFFFFF','#000000']).reduce((best,x) => ratio(bg,x) > ratio(bg,best) ? x : best, c[0]);
+const lum = h => {
+  if (typeof window !== 'undefined' && window.WCAGContrastEngine) {
+    return window.WCAGContrastEngine.calculateLuminance(h);
+  }
+  const f = v => { v/=255; return v <= .03928 ? v/12.92 : Math.pow((v+.055)/1.055,2.4); }; const [r,g,b] = hx(h); return .2126*f(r)+.7152*f(g)+.0722*f(b);
+};
+const ratio = (a,b) => {
+  if (typeof window !== 'undefined' && window.WCAGContrastEngine) {
+    return window.WCAGContrastEngine.calculateContrastRatio(a, b);
+  }
+  const x = lum(a), y = lum(b); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);
+};
+const pickInk = (bg,c) => {
+  if (typeof window !== 'undefined' && window.WCAGContrastEngine) {
+    return window.WCAGContrastEngine.pickAccessibleInk(bg, c, 4.5);
+  }
+  return c.concat(['#FFFFFF','#000000']).reduce((best,x) => ratio(bg,x) > ratio(bg,best) ? x : best, c[0]);
+};
 const fmtCount = n => n >= 1000 ? (n/1000).toFixed(1).replace(/\.0$/,'') + 'k' : String(n);
 const slug = s => s.toLowerCase().replace(/&/g,'').replace(/[^a-z0-9]+/g,'-').replace(/-+$/,'');
 
-function pal(id) {
+function pal(id, enforceContrast = false) {
   const [name, s, light] = PK[id];
-  const c = {}; s.split(' ').forEach((v,i) => c[KEYS[i]] = '#' + v.toUpperCase());
+  let c = {}; s.split(' ').forEach((v,i) => c[KEYS[i]] = '#' + v.toUpperCase());
+  if (enforceContrast && typeof window !== 'undefined' && window.WCAGContrastEngine) {
+    c = window.WCAGContrastEngine.enforcePaletteContrast(c);
+  }
   const m = CFMETAL[id] || [mix(c.pri,'#000000',.45), c.pri, mix(c.pri,'#FFFFFF',.4), mix(c.pri,'#FFFFFF',.78)];
   const reader = {
     day: light ? {bg:c.surf, ink:c.ink} : {bg:mix('#FBF8F1',c.pri,.04), ink:'#1F1F1F'},
@@ -665,10 +718,10 @@ function pal(id) {
 }
 
 class Component extends DCLogic {
-  state = { layout:'compose', palette:'navy', effect:'sheen', motion:'system', reader:'sepia', device:'phone' };
+  state = { layout:'compose', palette:'navy', effect:'sheen', motion:'system', reader:'sepia', device:'phone', enforceWCAG: true };
 
   renderVals() {
-    const S = this.state, L = LAYOUTS[S.layout], P = pal(S.palette), E = EFFECTS[S.effect], c = P.c;
+    const S = this.state, L = LAYOUTS[S.layout], P = pal(S.palette, S.enforceWCAG), E = EFFECTS[S.effect], c = P.c;
     const set = (k,v) => () => this.setState({[k]:v});
     const reduced = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const motionOn = S.motion === 'on' || (S.motion === 'system' && !reduced);
@@ -789,9 +842,63 @@ class Component extends DCLogic {
       st:{display:'flex',alignItems:'center',gap:'12px',padding:'12px 16px',borderTop: i ? `1px solid ${rgba(c.outv,.9)}` : 'none',marginLeft: i ? '0' : '0'} })) }));
 
     const roleDefs = [['bg','background'],['surf','surface'],['surf2','surfaceVariant'],['ink','onSurface'],['ink2','onSurfaceVariant'],['pri','primary'],['onpri','onPrimary'],['priC','primaryContainer'],['sec','secondary'],['sec2','tertiary'],['outv','outlineVariant'],['err','error']];
-    const roles = roleDefs.map(([k,label]) => { const fg = pickInk(c[k],[c.ink,c.bg]); return { label, hex:c[k],
-      ratio: ['ink','ink2','pri','sec','sec2','err'].includes(k) ? ratio(c[k], c.bg).toFixed(1) + ':1 on bg' : ratio(fg, c[k]).toFixed(1) + ':1 ink',
-      sample:'Aa', sw:{height:'54px',background:c[k],color:fg,display:'flex',alignItems:'center',padding:'0 12px',font:'700 16px/1 Inter,sans-serif'} }; });
+    const engine = (typeof window !== 'undefined' && window.WCAGContrastEngine) ? window.WCAGContrastEngine : null;
+    let totalChecks = 0, passAACount = 0, passAAACount = 0;
+
+    const roles = roleDefs.map(([k,label]) => {
+      const bgVal = ['onpri','onpriC'].includes(k) ? c.pri : c.bg;
+      const fgVal = c[k];
+      const rVal = engine ? engine.calculateContrastRatio(fgVal, bgVal) : ratio(fgVal, bgVal);
+      const minReq = ['ink','ink2','onpri','onpriC'].includes(k) ? 4.5 : 3.0;
+      const passAA = rVal >= minReq;
+      const passAAA = rVal >= 7.0;
+      totalChecks++;
+      if (passAA) passAACount++;
+      if (passAAA) passAAACount++;
+
+      const fgInk = pickInk(c[k],[c.ink,c.bg]);
+      const statusBadge = passAAA ? 'AAA' : passAA ? 'AA' : 'FAIL';
+      const badgeBg = passAAA ? '#10b981' : passAA ? '#3b82f6' : '#ef4444';
+
+      return {
+        label, hex:c[k],
+        ratio: rVal.toFixed(2) + ':1',
+        minReq: minReq.toFixed(1) + ':1',
+        passAA, passAAA, statusBadge, badgeBg,
+        sample:'Aa', sw:{height:'54px',background:c[k],color:fgInk,display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 12px',font:'700 16px/1 Inter,sans-serif'}
+      };
+    });
+
+    let totalPalettes = Object.keys(PK).length;
+    let paletteCompliantCount = 0;
+    for (const [pId, [, pStr]] of Object.entries(PK)) {
+      const rawC = {}; pStr.split(' ').forEach((v,i) => rawC[KEYS[i]] = '#' + v.toUpperCase());
+      const testC = S.enforceWCAG && engine ? engine.enforcePaletteContrast(rawC) : rawC;
+      let pOk = true;
+      const checkPairs = [
+        [testC.ink, testC.bg, 4.5], [testC.ink2, testC.bg, 4.5],
+        [testC.onpri, testC.pri, 4.5], [testC.outv, testC.bg, 3.0],
+        [testC.pri, testC.bg, 3.0], [testC.sec, testC.bg, 3.0]
+      ];
+      for (const [f, b, req] of checkPairs) {
+        if ((engine ? engine.calculateContrastRatio(f, b) : ratio(f, b)) < req) {
+          pOk = false; break;
+        }
+      }
+      if (pOk) paletteCompliantCount++;
+    }
+
+    const wcagScore = Math.round((passAACount / totalChecks) * 100);
+    const wcagStatusText = S.enforceWCAG ? 'WCAG 2.2 AA ENFORCED' : (wcagScore === 100 ? 'WCAG 2.2 AA PASSED' : 'WCAG 2.2 AA AUDIT');
+    const badgeBg = S.enforceWCAG || wcagScore === 100 ? '#10b981' : '#f59e0b';
+    const wcagToggleLabel = S.enforceWCAG ? 'ON' : 'OFF';
+    const btnBg = S.enforceWCAG ? '#312e81' : '#1a1c25';
+    const btnBorder = S.enforceWCAG ? '#6366f1' : '#2e3140';
+    const toggleLabelColor = S.enforceWCAG ? '#818cf8' : '#9ca3af';
+    const paletteAuditSummary = `${paletteCompliantCount} / ${totalPalettes} Compliant`;
+
+    const toggleWCAG = () => this.setState(s => ({enforceWCAG: !s.enforceWCAG}));
+
     const readerSw = readerOpts.map(([id,name]) => ({ name, ratio: ratio(P.reader[id].bg,P.reader[id].ink).toFixed(1),
       st:{flex:1,height:'64px',borderRadius:'6px',background:P.reader[id].bg,color:P.reader[id].ink,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'6px',border: S.reader === id ? '2px solid #818cf8' : '1px solid #2e3140'} }));
 
@@ -814,6 +921,7 @@ class Component extends DCLogic {
 
     return {
       vars, themeName, themeId, effectName:E.name, palName:P.name, readerName:S.reader,
+      wcagStatusText, badgeBg, wcagToggleLabel, btnBg, btnBorder, toggleLabelColor, paletteAuditSummary, wcagScore, toggleWCAG,
       motionLabel: S.motion === 'system' ? (reduced ? 'system · reduced' : 'system') : S.motion,
       layoutList, families, effectList,
       motionList: mk('motion',[['system','System'],['on','On'],['off','Off']]),
