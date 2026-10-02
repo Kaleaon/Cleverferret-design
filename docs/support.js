@@ -440,6 +440,123 @@
       }
       propGetters.push([key, compileAttr(value)]);
     }
+
+    if (kind === "dom") {
+      const roleAttr = node.getAttribute("role");
+      const tabindexAttr = node.getAttribute("tabindex");
+      const hasOnClick = propGetters.some(([k]) => k === "onClick");
+
+      const getPropVal = (key, vals) => {
+        const entry = propGetters.find(([k]) => k === key);
+        return entry ? entry[1](vals) : undefined;
+      };
+
+      const existingOnKeyDownIdx = propGetters.findIndex(([k]) => k === "onKeyDown");
+      const existingOnKeyDownGetter = existingOnKeyDownIdx !== -1 ? propGetters[existingOnKeyDownIdx][1] : null;
+
+      const isButtonOrTabOrTabindex = (roleAttr === "button" || roleAttr === "tab" || tabindexAttr !== null) && hasOnClick;
+      const isSlider = roleAttr === "slider";
+
+      if (isButtonOrTabOrTabindex || isSlider) {
+        const syntheticOnKeyDownGetter = (vals) => (e) => {
+          const explicitOnKeyDown = existingOnKeyDownGetter ? existingOnKeyDownGetter(vals) : undefined;
+          if (typeof explicitOnKeyDown === "function") {
+            explicitOnKeyDown(e);
+          }
+          if (e.defaultPrevented) return;
+
+          const keyName = e.key;
+          const keyCode = e.keyCode;
+
+          if (isButtonOrTabOrTabindex && (keyName === "Enter" || keyName === " " || keyName === "Spacebar" || keyCode === 13 || keyCode === 32)) {
+            e.preventDefault();
+            const existingOnClick = getPropVal("onClick", vals);
+            if (typeof existingOnClick === "function") {
+              existingOnClick(e);
+            }
+          }
+
+          if (isSlider && (keyName === "ArrowLeft" || keyName === "ArrowDown" || keyName === "ArrowRight" || keyName === "ArrowUp" || keyName === "Home" || keyName === "End" || keyCode === 37 || keyCode === 38 || keyCode === 39 || keyCode === 40 || keyCode === 36 || keyCode === 35)) {
+            e.preventDefault();
+
+            const currentDomVal = e.currentTarget && typeof e.currentTarget.getAttribute === "function" ? e.currentTarget.getAttribute("aria-valuenow") : null;
+            const rawVal = currentDomVal ?? getPropVal("aria-valuenow", vals) ?? getPropVal("ariaValuenow", vals) ?? node.getAttribute("aria-valuenow") ?? 0;
+            let min = parseFloat(getPropVal("aria-valuemin", vals) ?? getPropVal("ariaValuemin", vals) ?? node.getAttribute("aria-valuemin") ?? 0);
+            let max = parseFloat(getPropVal("aria-valuemax", vals) ?? getPropVal("ariaValuemax", vals) ?? node.getAttribute("aria-valuemax") ?? 100);
+            if (isNaN(min)) min = 0;
+            if (isNaN(max)) max = 100;
+
+            let curVal = parseFloat(rawVal);
+            if (isNaN(curVal)) curVal = min;
+
+            let step = parseFloat(node.getAttribute("aria-valuestep") || node.getAttribute("step") || "1");
+            if (isNaN(step) || step <= 0) step = 1;
+
+            let newVal = curVal;
+            if (keyName === "ArrowLeft" || keyName === "ArrowDown" || keyCode === 37 || keyCode === 40) {
+              newVal = curVal - step;
+            } else if (keyName === "ArrowRight" || keyName === "ArrowUp" || keyCode === 39 || keyCode === 38) {
+              newVal = curVal + step;
+            } else if (keyName === "Home" || keyCode === 36) {
+              newVal = min;
+            } else if (keyName === "End" || keyCode === 35) {
+              newVal = max;
+            }
+
+            newVal = Math.max(min, Math.min(max, newVal));
+
+            if (e.currentTarget && typeof e.currentTarget.setAttribute === "function") {
+              e.currentTarget.setAttribute("aria-valuenow", String(newVal));
+            }
+
+            const onChangeFn = getPropVal("onChange", vals);
+            const onInputFn = getPropVal("onInput", vals);
+            const onClickFn = getPropVal("onClick", vals);
+
+            if (typeof onChangeFn === "function") {
+              onChangeFn({ target: { value: newVal }, value: newVal, preventDefault: () => e.preventDefault() });
+            }
+            if (typeof onInputFn === "function") {
+              onInputFn({ target: { value: newVal }, value: newVal, preventDefault: () => e.preventDefault() });
+            }
+            if (typeof onClickFn === "function") {
+              const range = max - min;
+              const pct = range > 0 ? (newVal - min) / range : 0;
+              const rect = e.currentTarget && typeof e.currentTarget.getBoundingClientRect === "function"
+                ? e.currentTarget.getBoundingClientRect()
+                : { left: 0, width: 100 };
+              const synthEvt = {
+                ...e,
+                clientX: rect.left + rect.width * pct,
+                target: e.target,
+                currentTarget: e.currentTarget,
+                preventDefault: () => e.preventDefault()
+              };
+              onClickFn(synthEvt);
+            }
+          }
+        };
+
+        if (existingOnKeyDownIdx !== -1) {
+          propGetters[existingOnKeyDownIdx][1] = syntheticOnKeyDownGetter;
+        } else {
+          propGetters.push(["onKeyDown", syntheticOnKeyDownGetter]);
+        }
+      }
+
+      if (roleAttr === "tab" && !node.hasAttribute("aria-selected") && !propGetters.some(([k]) => k === "aria-selected" || k === "ariaSelected")) {
+        propGetters.push(["aria-selected", () => "false"]);
+      }
+      if (roleAttr === "slider") {
+        if (!node.hasAttribute("aria-valuemin") && !propGetters.some(([k]) => k === "aria-valuemin" || k === "ariaValuemin")) {
+          propGetters.push(["aria-valuemin", () => "0"]);
+        }
+        if (!node.hasAttribute("aria-valuemax") && !propGetters.some(([k]) => k === "aria-valuemax" || k === "ariaValuemax")) {
+          propGetters.push(["aria-valuemax", () => "100"]);
+        }
+      }
+    }
+
     return { propGetters, pseudoClasses, hintSize };
   }
   var HOST_STYLE_PROPS = /* @__PURE__ */ new Set([
