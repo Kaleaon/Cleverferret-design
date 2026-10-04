@@ -1,0 +1,54 @@
+name: Reusable Validation Workflow
+
+on:
+  workflow_call:
+    inputs:
+      target-flags:
+        description: 'Target flags to pass to tools/ci-runner.mjs (e.g. --unit, --a11y, --visual)'
+        required: false
+        type: string
+        default: ''
+      node-version:
+        description: 'Node.js version to set up'
+        required: false
+        type: string
+        default: '22'
+
+jobs:
+  validate:
+    name: Run Unified Validation CLI
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: |
+          if [ -f "package.json" ]; then
+            npm ci || npm install
+          fi
+          if [ -d "docs/react" ]; then
+            cd docs/react && (npm ci || npm install) && cd ../..
+          fi
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Unified Validation CLI
+        run: node tools/ci-runner.mjs ${{ inputs.target-flags }}
+
+      - name: Upload Visual Diff Artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs
+          path: docs/screenshots/diffs/
+          if-no-files-found: ignore
