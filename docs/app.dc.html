@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -38,6 +38,7 @@ a{color:#818cf8}a:hover{color:#a5b4fc}
 @keyframes cfIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media(max-width:860px){.prototype-shell{grid-template-columns:1fr;padding-top:20px}.prototype-panel{position:static;max-width:424px;margin:auto}.device-stage{margin:auto}.device-stage:after{display:none}}
 @media(max-width:460px){.prototype-shell{padding:12px 0 36px;gap:18px}.prototype-panel{margin:0 12px;width:auto}.device-stage{padding:0;border:0;border-radius:0;background:none;width:100%;overflow:hidden}.phone-frame{width:min(380px,100vw);height:min(780px,calc(100vh - 16px));min-height:680px;margin:auto;border-width:0;border-radius:0;box-shadow:none}.phone-frame:before{display:none}}
+:focus-visible{outline:2px solid var(--focus-ring-color, #2563eb);outline-offset:2px}
 </style>
 </helmet>
 
@@ -358,7 +359,7 @@ a{color:#818cf8}a:hover{color:#a5b4fc}
             <button type="button" aria-label="Back" onClick="{{ back }}" style="width:48px;height:48px;flex:none;display:var(--ptbd);align-items:center;justify-content:center;overflow:hidden;font-family:'Material Symbols Outlined';font-size:24px;color:var(--ink);cursor:pointer">arrow_back</button>
             <div style="flex:1;min-width:0;height:48px;display:flex;align-items:center;gap:8px;padding:0 12px;border-radius:var(--rs);background:var(--surf2)">
               <span style="width:22px;height:22px;flex:none;overflow:hidden;font-family:'Material Symbols Outlined';font-size:22px;line-height:22px;color:var(--ink2)">search</span>
-              <input value="{{ query }}" onChange="{{ onQuery }}" placeholder="Search everything" aria-label="Search everything" style="flex:1;min-width:0;border:none;outline:none;background:transparent;color:var(--ink);font:400 15px/1 var(--ff)">
+              <input value="{{ query }}" onChange="{{ onQuery }}" placeholder="Search everything" aria-label="Search everything" style="flex:1;min-width:0;border:none;background:transparent;color:var(--ink);font:400 15px/1 var(--ff)">
               <sc-if value="{{ hasQuery }}" hint-placeholder-val="{{ false }}"><button type="button" aria-label="Clear" onClick="{{ clearQuery }}" style="width:22px;height:22px;flex:none;overflow:hidden;font-family:'Material Symbols Outlined';font-size:22px;line-height:22px;color:var(--ink2);cursor:pointer">close</button></sc-if>
             </div>
           </div>
