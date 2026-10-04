@@ -1,110 +1,446 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<title>CleverFerret Design System</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="CleverFerret design system — interactive theme studio and phone app prototype for the CleverFerret media library.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap">
-<style>
-  :root{
-    --bg:#090b10; --panel:#151821; --border:#2b303d; --ink:#f4f4f5; --sub:#a1a1aa; --pri:#8b94ff; --pri-ink:#0f1117;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:radial-gradient(circle at 78% 5%,rgba(99,102,241,.16),transparent 30%),radial-gradient(circle at 4% 48%,rgba(45,212,191,.07),transparent 24%),var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.5}
-  a{color:var(--pri);text-decoration:none}
-  a:hover{color:#a5b4fc}
-  .wrap{max-width:1120px;margin:0 auto;padding:28px 24px 80px}
-  nav{display:flex;align-items:center;justify-content:space-between;padding:0 0 72px}.brand{display:flex;align-items:center;gap:10px;font:700 13px/1 Inter,sans-serif;color:var(--ink)}.mark{width:28px;height:28px;border-radius:9px 9px 9px 3px;background:linear-gradient(145deg,#a5b4fc,#5eead4);display:grid;place-items:center;color:#101218;font-size:15px}.nav-meta{font:600 10px/1 'JetBrains Mono',monospace;letter-spacing:.12em;color:var(--sub)}
-  header.hero{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:48px;align-items:end;margin-bottom:52px}
-  .hero-copy{display:flex;flex-direction:column;gap:16px}
-  .eyebrow{font:700 11px/1 'JetBrains Mono',monospace;letter-spacing:.16em;color:var(--pri);text-transform:uppercase}
-  h1{font:800 clamp(42px,7vw,72px)/1.02 Inter,sans-serif;margin:0;letter-spacing:-.055em;max-width:800px}
-  .lede{font:400 17px/1.65 Inter,sans-serif;color:var(--sub);max-width:680px;margin:0}
-  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{padding:16px;background:rgba(21,24,33,.7);border:1px solid var(--border);border-radius:12px}.stat b{display:block;font:700 24px/1 Inter,sans-serif;color:var(--ink)}.stat span{font:600 9px/1 'JetBrains Mono',monospace;letter-spacing:.1em;color:var(--sub);text-transform:uppercase}
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-bottom:56px}
-  .card{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(28,31,43,.96),rgba(18,20,28,.96));border:1px solid var(--border);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:15px;transition:border-color .2s,transform .2s,box-shadow .2s}
-  .card:hover{border-color:var(--pri);transform:translateY(-3px);box-shadow:0 24px 50px rgba(0,0,0,.24)}
-  .card h2{font:700 20px/1.3 Inter,sans-serif;margin:0;color:var(--ink)}
-  .card p{font:400 14px/1.55 Inter,sans-serif;color:var(--sub);margin:0;flex:1}
-  .btn{align-self:flex-start;font:700 13px/1 Inter,sans-serif;letter-spacing:.01em;color:var(--pri-ink);background:linear-gradient(135deg,#a5b4fc,#818cf8);padding:12px 17px;border-radius:10px;box-shadow:0 8px 24px rgba(99,102,241,.22)}
-  .btn:hover{background:#a5b4fc;color:var(--pri-ink)}
-  .tag{font:600 10px/1 'JetBrains Mono',monospace;letter-spacing:.1em;color:var(--sub);text-transform:uppercase}
-  .preview{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:top;border-radius:12px;border:1px solid var(--border);display:block;margin-top:4px}
-  section.map{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:32px}
-  section.map h2{font:700 18px/1.3 Inter,sans-serif;margin:0 0 16px}
-  table{width:100%;border-collapse:collapse;font-size:13px}
-  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border)}
-  th{color:var(--sub);font:600 11px/1 Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase}
-  td{color:var(--ink)}
-  td.src{color:var(--sub);font-family:'JetBrains Mono',monospace;font-size:12px}
-  footer{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--sub);font-size:13px;padding-top:24px;border-top:1px solid var(--border)}
-  @media(max-width:760px){nav{padding-bottom:48px}.nav-meta{display:none}header.hero{grid-template-columns:1fr;gap:28px}.stats{max-width:360px}section.map{overflow-x:auto}table{min-width:720px}}
-</style>
-</head>
-<body>
-<div class="wrap">
+  <head>
+    <meta charset="utf-8" />
+    <title>CleverFerret Design System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="CleverFerret design system — interactive theme studio and phone app prototype for the CleverFerret media library."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+    />
+    <style>
+      :root {
+        --bg: #090b10;
+        --panel: #151821;
+        --border: #2b303d;
+        --ink: #f4f4f5;
+        --sub: #a1a1aa;
+        --pri: #8b94ff;
+        --pri-ink: #0f1117;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: radial-gradient(
+            circle at 78% 5%,
+            rgba(99, 102, 241, 0.16),
+            transparent 30%
+          ),
+          radial-gradient(
+            circle at 4% 48%,
+            rgba(45, 212, 191, 0.07),
+            transparent 24%
+          ),
+          var(--bg);
+        color: var(--ink);
+        font-family: Inter, system-ui, sans-serif;
+        line-height: 1.5;
+      }
+      a {
+        color: var(--pri);
+        text-decoration: none;
+      }
+      a:hover {
+        color: #a5b4fc;
+      }
+      .wrap {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 28px 24px 80px;
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 0 72px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font:
+          700 13px/1 Inter,
+          sans-serif;
+        color: var(--ink);
+      }
+      .mark {
+        width: 28px;
+        height: 28px;
+        border-radius: 9px 9px 9px 3px;
+        background: linear-gradient(145deg, #a5b4fc, #5eead4);
+        display: grid;
+        place-items: center;
+        color: #101218;
+        font-size: 15px;
+      }
+      .nav-meta {
+        font:
+          600 10px/1 "JetBrains Mono",
+          monospace;
+        letter-spacing: 0.12em;
+        color: var(--sub);
+      }
+      header.hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 280px;
+        gap: 48px;
+        align-items: end;
+        margin-bottom: 52px;
+      }
+      .hero-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .eyebrow {
+        font:
+          700 11px/1 "JetBrains Mono",
+          monospace;
+        letter-spacing: 0.16em;
+        color: var(--pri);
+        text-transform: uppercase;
+      }
+      h1 {
+        font:
+          800 clamp(42px, 7vw, 72px) / 1.02 Inter,
+          sans-serif;
+        margin: 0;
+        letter-spacing: -0.055em;
+        max-width: 800px;
+      }
+      .lede {
+        font:
+          400 17px/1.65 Inter,
+          sans-serif;
+        color: var(--sub);
+        max-width: 680px;
+        margin: 0;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .stat {
+        padding: 16px;
+        background: rgba(21, 24, 33, 0.7);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+      }
+      .stat b {
+        display: block;
+        font:
+          700 24px/1 Inter,
+          sans-serif;
+        color: var(--ink);
+      }
+      .stat span {
+        font:
+          600 9px/1 "JetBrains Mono",
+          monospace;
+        letter-spacing: 0.1em;
+        color: var(--sub);
+        text-transform: uppercase;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-bottom: 56px;
+      }
+      .card {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(
+          145deg,
+          rgba(28, 31, 43, 0.96),
+          rgba(18, 20, 28, 0.96)
+        );
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        transition:
+          border-color 0.2s,
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .card:hover {
+        border-color: var(--pri);
+        transform: translateY(-3px);
+        box-shadow: 0 24px 50px rgba(0, 0, 0, 0.24);
+      }
+      .card h2 {
+        font:
+          700 20px/1.3 Inter,
+          sans-serif;
+        margin: 0;
+        color: var(--ink);
+      }
+      .card p {
+        font:
+          400 14px/1.55 Inter,
+          sans-serif;
+        color: var(--sub);
+        margin: 0;
+        flex: 1;
+      }
+      .btn {
+        align-self: flex-start;
+        font:
+          700 13px/1 Inter,
+          sans-serif;
+        letter-spacing: 0.01em;
+        color: var(--pri-ink);
+        background: linear-gradient(135deg, #a5b4fc, #818cf8);
+        padding: 12px 17px;
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.22);
+      }
+      .btn:hover {
+        background: #a5b4fc;
+        color: var(--pri-ink);
+      }
+      .tag {
+        font:
+          600 10px/1 "JetBrains Mono",
+          monospace;
+        letter-spacing: 0.1em;
+        color: var(--sub);
+        text-transform: uppercase;
+      }
+      .preview {
+        width: 100%;
+        aspect-ratio: 16/9;
+        object-fit: cover;
+        object-position: top;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        display: block;
+        margin-top: 4px;
+      }
+      section.map {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 28px;
+        margin-bottom: 32px;
+      }
+      section.map h2 {
+        font:
+          700 18px/1.3 Inter,
+          sans-serif;
+        margin: 0 0 16px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 8px 10px;
+        border-bottom: 1px solid var(--border);
+      }
+      th {
+        color: var(--sub);
+        font:
+          600 11px/1 Inter,
+          sans-serif;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      td {
+        color: var(--ink);
+      }
+      td.src {
+        color: var(--sub);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+      }
+      footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+        color: var(--sub);
+        font-size: 13px;
+        padding-top: 24px;
+        border-top: 1px solid var(--border);
+      }
+      @media (max-width: 760px) {
+        nav {
+          padding-bottom: 48px;
+        }
+        .nav-meta {
+          display: none;
+        }
+        header.hero {
+          grid-template-columns: 1fr;
+          gap: 28px;
+        }
+        .stats {
+          max-width: 360px;
+        }
+        section.map {
+          overflow-x: auto;
+        }
+        table {
+          min-width: 720px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <nav aria-label="Primary">
+        <div class="brand"><span class="mark">◆</span>CleverFerret</div>
+        <div class="nav-meta">DESIGN SYSTEM · INTERACTIVE PROTOTYPES</div>
+      </nav>
 
-  <nav aria-label="Primary">
-    <div class="brand"><span class="mark">◆</span>CleverFerret</div>
-    <div class="nav-meta">DESIGN SYSTEM · INTERACTIVE PROTOTYPES</div>
-  </nav>
+      <header class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">Rule &amp; Rail · Design system</div>
+          <h1>Your whole library,<br />beautifully composed.</h1>
+          <p class="lede">
+            A complete, themeable interface for books, audio, comics, podcasts
+            and more. Explore the working mobile app, then inspect the tokens
+            that make every layout feel distinctly CleverFerret.
+          </p>
+        </div>
+        <div class="stats" aria-label="Prototype summary">
+          <div class="stat"><b>9</b><span>App screens</span></div>
+          <div class="stat"><b>8</b><span>Layout packs</span></div>
+          <div class="stat"><b>24</b><span>Palettes</span></div>
+          <div class="stat"><b>1</b><span>Shared system</span></div>
+        </div>
+      </header>
 
-  <header class="hero">
-    <div class="hero-copy">
-      <div class="eyebrow">Rule &amp; Rail · Design system</div>
-      <h1>Your whole library,<br>beautifully composed.</h1>
-      <p class="lede">A complete, themeable interface for books, audio, comics, podcasts and more. Explore the working mobile app, then inspect the tokens that make every layout feel distinctly CleverFerret.</p>
+      <div class="cards">
+        <div class="card">
+          <span class="tag">01 · Live product</span>
+          <h2>Explore the complete app</h2>
+          <p>
+            Navigate Home, Library, Discover, Search, Player, Reader, Settings,
+            Downloads and Theme Studio. Playback, reader controls, filters and
+            themes are fully interactive.
+          </p>
+          <img
+            class="preview"
+            src="assets/theme-preview.webp"
+            alt="CleverFerret phone prototype and theme picker preview"
+            loading="lazy"
+          />
+          <a class="btn" href="app.dc.html">Launch app mockup →</a>
+        </div>
+        <div class="card">
+          <span class="tag">02 · System reference</span>
+          <h2>Build with the theme system</h2>
+          <p>
+            Inspect layout packs, colour families, effects, motion and reader
+            modes across phone, tablet and TV. Every choice maps back to
+            reusable product tokens.
+          </p>
+          <a class="btn" href="theme-system.dc.html">Open Theme System →</a>
+        </div>
+      </div>
+
+      <section class="map">
+        <h2>Screen map</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Project screen</th>
+              <th>Repo source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Home</td>
+              <td class="src">
+                ui/modern/home/ModernHomeScreen.kt,
+                ui/modern/components/Scaffolding.kt, SharedComponents.kt
+                (MiniPlayer)
+              </td>
+            </tr>
+            <tr>
+              <td>Library (phone / tablet)</td>
+              <td class="src">
+                ui/modern/library/ModernLibraryScreen.kt,
+                ui/modern/domain/Models.kt
+              </td>
+            </tr>
+            <tr>
+              <td>Discover</td>
+              <td class="src">ui/modern/discover/ModernDiscoverScreen.kt</td>
+            </tr>
+            <tr>
+              <td>Search</td>
+              <td class="src">ui/modern/search/ModernSearchScreen.kt</td>
+            </tr>
+            <tr>
+              <td>Audio player</td>
+              <td class="src">ui/modern/player/ModernAudioPlayerScreen.kt</td>
+            </tr>
+            <tr>
+              <td>Reader</td>
+              <td class="src">
+                ui/modern/reader/ModernReaderScreen.kt, docs/THEMING.md
+                (Day/Sepia/Night)
+              </td>
+            </tr>
+            <tr>
+              <td>Settings</td>
+              <td class="src">ui/modern/settings/ModernSettingsScreen.kt</td>
+            </tr>
+            <tr>
+              <td>Theme Studio</td>
+              <td class="src">
+                ui/modern/theme/ModernThemePickerScreen.kt (layout / colour /
+                effect tabs)
+              </td>
+            </tr>
+            <tr>
+              <td>Tokens / type</td>
+              <td class="src">
+                ui/modern/theme/CFTokens.kt, CFTheme.kt,
+                ui/theme/UnifiedThemeSystem.kt, MetallicColors.kt
+              </td>
+            </tr>
+            <tr>
+              <td>Downloads, TV preview</td>
+              <td class="src">new</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <footer>
+        Source app:
+        <a
+          href="https://github.com/Kaleaon/CleverFerret"
+          target="_blank"
+          rel="noopener"
+          >Kaleaon/CleverFerret</a
+        >
+        &nbsp;·&nbsp; Design repo:
+        <a
+          href="https://github.com/Kaleaon/Cleverferret-design"
+          target="_blank"
+          rel="noopener"
+          >Kaleaon/Cleverferret-design</a
+        >
+      </footer>
     </div>
-    <div class="stats" aria-label="Prototype summary">
-      <div class="stat"><b>9</b><span>App screens</span></div>
-      <div class="stat"><b>8</b><span>Layout packs</span></div>
-      <div class="stat"><b>24</b><span>Palettes</span></div>
-      <div class="stat"><b>1</b><span>Shared system</span></div>
-    </div>
-  </header>
-
-  <div class="cards">
-    <div class="card">
-      <span class="tag">01 · Live product</span>
-      <h2>Explore the complete app</h2>
-      <p>Navigate Home, Library, Discover, Search, Player, Reader, Settings, Downloads and Theme Studio. Playback, reader controls, filters and themes are fully interactive.</p>
-      <img class="preview" src="assets/theme-preview.webp" alt="CleverFerret phone prototype and theme picker preview" loading="lazy">
-      <a class="btn" href="app.dc.html">Launch app mockup →</a>
-    </div>
-    <div class="card">
-      <span class="tag">02 · System reference</span>
-      <h2>Build with the theme system</h2>
-      <p>Inspect layout packs, colour families, effects, motion and reader modes across phone, tablet and TV. Every choice maps back to reusable product tokens.</p>
-      <a class="btn" href="theme-system.dc.html">Open Theme System →</a>
-    </div>
-  </div>
-
-  <section class="map">
-    <h2>Screen map</h2>
-    <table>
-      <thead><tr><th>Project screen</th><th>Repo source</th></tr></thead>
-      <tbody>
-        <tr><td>Home</td><td class="src">ui/modern/home/ModernHomeScreen.kt, ui/modern/components/Scaffolding.kt, SharedComponents.kt (MiniPlayer)</td></tr>
-        <tr><td>Library (phone / tablet)</td><td class="src">ui/modern/library/ModernLibraryScreen.kt, ui/modern/domain/Models.kt</td></tr>
-        <tr><td>Discover</td><td class="src">ui/modern/discover/ModernDiscoverScreen.kt</td></tr>
-        <tr><td>Search</td><td class="src">ui/modern/search/ModernSearchScreen.kt</td></tr>
-        <tr><td>Audio player</td><td class="src">ui/modern/player/ModernAudioPlayerScreen.kt</td></tr>
-        <tr><td>Reader</td><td class="src">ui/modern/reader/ModernReaderScreen.kt, docs/THEMING.md (Day/Sepia/Night)</td></tr>
-        <tr><td>Settings</td><td class="src">ui/modern/settings/ModernSettingsScreen.kt</td></tr>
-        <tr><td>Theme Studio</td><td class="src">ui/modern/theme/ModernThemePickerScreen.kt (layout / colour / effect tabs)</td></tr>
-        <tr><td>Tokens / type</td><td class="src">ui/modern/theme/CFTokens.kt, CFTheme.kt, ui/theme/UnifiedThemeSystem.kt, MetallicColors.kt</td></tr>
-        <tr><td>Downloads, TV preview</td><td class="src">new</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <footer>
-    Source app: <a href="https://github.com/Kaleaon/CleverFerret" target="_blank" rel="noopener">Kaleaon/CleverFerret</a>
-    &nbsp;·&nbsp; Design repo: <a href="https://github.com/Kaleaon/Cleverferret-design" target="_blank" rel="noopener">Kaleaon/Cleverferret-design</a>
-  </footer>
-
-</div>
-</body>
+  </body>
 </html>
