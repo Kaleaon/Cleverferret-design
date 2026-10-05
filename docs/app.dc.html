@@ -615,14 +615,32 @@ const hx = h => { h = h.replace('#',''); return [0,2,4].map(i => parseInt(h.slic
 const toHex = a => '#' + a.map(v => Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0')).join('');
 const mix = (a,b,t) => { const A = hx(a), B = hx(b); return toHex(A.map((v,i) => v + (B[i]-v)*t)); };
 const rgba = (h,a) => { const [r,g,b] = hx(h); return `rgba(${r},${g},${b},${a})`; };
-const lum = h => { const f = v => { v/=255; return v <= .03928 ? v/12.92 : Math.pow((v+.055)/1.055,2.4); }; const [r,g,b] = hx(h); return .2126*f(r)+.7152*f(g)+.0722*f(b); };
-const ratio = (a,b) => { const x = lum(a), y = lum(b); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05); };
-const pickInk = (bg,c) => c.concat(['#FFFFFF','#000000']).reduce((best,x) => ratio(bg,x) > ratio(bg,best) ? x : best, c[0]);
+const lum = h => {
+  if (typeof window !== 'undefined' && window.WCAGContrastEngine) {
+    return window.WCAGContrastEngine.calculateLuminance(h);
+  }
+  const f = v => { v/=255; return v <= .03928 ? v/12.92 : Math.pow((v+.055)/1.055,2.4); }; const [r,g,b] = hx(h); return .2126*f(r)+.7152*f(g)+.0722*f(b);
+};
+const ratio = (a,b) => {
+  if (typeof window !== 'undefined' && window.WCAGContrastEngine) {
+    return window.WCAGContrastEngine.calculateContrastRatio(a, b);
+  }
+  const x = lum(a), y = lum(b); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);
+};
+const pickInk = (bg,c) => {
+  if (typeof window !== 'undefined' && window.WCAGContrastEngine) {
+    return window.WCAGContrastEngine.pickAccessibleInk(bg, c, 4.5);
+  }
+  return c.concat(['#FFFFFF','#000000']).reduce((best,x) => ratio(bg,x) > ratio(bg,best) ? x : best, c[0]);
+};
 const fmtCount = n => n >= 1000 ? (n/1000).toFixed(1).replace(/\.0$/,'') + 'k' : String(n);
 const hms = s => { s = Math.max(0, Math.round(s)); const h = Math.floor(s/3600), m = Math.floor(s%3600/60), x = s%60; return (h ? h + ':' + String(m).padStart(2,'0') : m) + ':' + String(x).padStart(2,'0'); };
 function pal(id) {
   const [name, s, light] = PK[id];
-  const c = {}; s.split(' ').forEach((v,i) => c[KEYS[i]] = '#' + v.toUpperCase());
+  let c = {}; s.split(' ').forEach((v,i) => c[KEYS[i]] = '#' + v.toUpperCase());
+  if (typeof window !== 'undefined' && window.WCAGContrastEngine) {
+    c = window.WCAGContrastEngine.enforcePaletteContrast(c);
+  }
   const m = CFMETAL[id] || [mix(c.pri,'#000000',.45), c.pri, mix(c.pri,'#FFFFFF',.4), mix(c.pri,'#FFFFFF',.78)];
   const reader = { day: light ? {bg:c.surf, ink:c.ink} : {bg:mix('#FBF8F1',c.pri,.04), ink:'#1F1F1F'}, sepia:{bg:mix('#F1E4C8',c.pri,.08), ink:'#4A3826'}, night: light ? {bg:mix('#121212',c.pri,.06), ink:'#D9D4CA'} : {bg:c.bg, ink:c.ink} };
   return {id, name, light:!!light, c, metal:m, reader};
