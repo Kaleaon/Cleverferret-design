@@ -3,6 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main, work]
+  pull_request:
+    branches: [main, work]
   workflow_dispatch:
 
 permissions:
@@ -13,7 +15,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate JS Syntax
+        run: node --check docs/support.js
+      - name: Validate HTML Markup
+        run: npx htmlhint docs/index.html docs/app.dc.html docs/theme-system.dc.html
+
   deploy:
+    needs: validate
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
