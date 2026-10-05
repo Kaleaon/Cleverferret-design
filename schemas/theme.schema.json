@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kaleaon.github.io/Ktheme/schemas/theme.schema.json",
+  "title": "Ktheme Theme Preset Schema",
+  "description": "Schema for Ktheme, Linkpoint, and CleverFerret application theme presets",
+  "type": "object",
+  "required": ["metadata", "colorScheme"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "type": "integer"
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "author": { "type": "string" },
+        "version": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "darkMode": {
+      "type": "boolean"
+    },
+    "colorScheme": {
+      "type": "object",
+      "properties": {
+        "primary": { "type": "string" },
+        "onPrimary": { "type": "string" },
+        "primaryContainer": { "type": "string" },
+        "onPrimaryContainer": { "type": "string" },
+        "secondary": { "type": "string" },
+        "onSecondary": { "type": "string" },
+        "secondaryContainer": { "type": "string" },
+        "onSecondaryContainer": { "type": "string" },
+        "tertiary": { "type": "string" },
+        "onTertiary": { "type": "string" },
+        "tertiaryContainer": { "type": "string" },
+        "onTertiaryContainer": { "type": "string" },
+        "error": { "type": "string" },
+        "onError": { "type": "string" },
+        "errorContainer": { "type": "string" },
+        "onErrorContainer": { "type": "string" },
+        "background": { "type": "string" },
+        "onBackground": { "type": "string" },
+        "surface": { "type": "string" },
+        "onSurface": { "type": "string" },
+        "surfaceVariant": { "type": "string" },
+        "onSurfaceVariant": { "type": "string" },
+        "outline": { "type": "string" },
+        "outlineVariant": { "type": "string" },
+        "scrim": { "type": "string" },
+        "inverseSurface": { "type": "string" },
+        "inverseOnSurface": { "type": "string" },
+        "inversePrimary": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "effects": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "typography": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "tokens": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "adaptation": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "accessibility": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
