@@ -39,6 +39,12 @@ for (const id of Object.keys(CF.PALETTES)) {
     }
     check(CF.ratio(R.onPriC, c.priC) >= 4.5, `${P.name}: nav pill label on primaryContainer`);
   }
+
+  // Material Design surface relative luminance audit (dark mode)
+  if (!P.light) {
+    check(CF.ratio(c.surf, '#000000') >= CF.ratio(c.bg, '#000000') - 1e-5, `${P.name}: surf luminance >= bg luminance`);
+    check(CF.ratio(c.surf2, '#000000') >= CF.ratio(c.surf, '#000000') - 1e-5, `${P.name}: surf2 luminance >= surf luminance`);
+  }
 }
 
 console.log(`Packs: ${Object.keys(CF.PALETTES).length} · checks: ${checks} · failures: ${failures}`);
