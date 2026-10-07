@@ -1521,13 +1521,35 @@
         canvasStyleEl = null;
       }
     }
+    let themeRafId = null;
     window.addEventListener("message", (e) => {
       const type = e.data && e.data.type;
       if (type === "__dc_theme") {
         const t = e.data.theme;
         if (t === "light" || t === "dark") {
           appTheme = t;
-          applyCanvasBg();
+          if (themeRafId !== null) cancelAnimationFrame(themeRafId);
+          themeRafId = requestAnimationFrame(() => {
+            themeRafId = null;
+            applyCanvasBg();
+          });
+        }
+        return;
+      }
+      if (type === "__dc_theme_vars" || type === "__dc_css_vars") {
+        const vars = e.data.vars || e.data.styles;
+        if (vars && typeof vars === "object") {
+          if (themeRafId !== null) cancelAnimationFrame(themeRafId);
+          themeRafId = requestAnimationFrame(() => {
+            themeRafId = null;
+            Object.entries(vars).forEach(([k, v]) => {
+              if (v !== undefined && v !== null) {
+                doc.documentElement.style.setProperty(k, String(v));
+              } else {
+                doc.documentElement.style.removeProperty(k);
+              }
+            });
+          });
         }
         return;
       }
