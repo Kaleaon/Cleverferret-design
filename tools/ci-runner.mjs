@@ -43,6 +43,9 @@ let runUnit = args.includes("--unit");
 let runCatalog = args.includes("--catalog");
 let runA11y = args.includes("--a11y");
 let runVisual = args.includes("--visual");
+let runContrast = args.includes("--contrast");
+let runLinks = args.includes("--links");
+let runSyntax = args.includes("--syntax");
 const updateSnapshots =
   args.includes("--update-snapshots") || args.includes("--update");
 const helpFlag = args.includes("--help") || args.includes("-h");
@@ -65,22 +68,28 @@ ${colors.bold}FLAGS:${colors.reset}
   --catalog           Run theme catalog parity checks
   --a11y              Run automated WCAG 2.1 AA accessibility auditing
   --visual            Run Playwright visual snapshot regression suite
+  --contrast          Run WCAG 2.2 AA palette contrast verification
+  --links             Run HTML link & static asset verification
+  --syntax            Run JS/MJS syntax validation
+  --all               Run all validation suites
   --update-snapshots  Update visual baseline snapshots
   --port <number>     Specify static server port override
   --help, -h          Show this help message
 
-  ${colors.gray}If no task flags (--unit, --catalog, --a11y, --visual) are specified,
-  all applicable validation tasks for the current repository will run.${colors.reset}
+  ${colors.gray}If no task flags are specified, all applicable validation tasks for the current repository will run.${colors.reset}
 `);
   process.exit(0);
 }
 
-// If no specific task flag was passed, run all tasks applicable to the current repo
-if (!runUnit && !runCatalog && !runA11y && !runVisual) {
+// If no specific task flag was passed (or --all was supplied), run all tasks applicable to the current repo
+if (args.includes('--all') || (!runUnit && !runCatalog && !runA11y && !runVisual && !runContrast && !runLinks && !runSyntax)) {
   runUnit = true;
   runCatalog = true;
   runA11y = true;
   runVisual = true;
+  runContrast = true;
+  runLinks = true;
+  runSyntax = true;
 }
 
 // Signal and process cleanup handler
@@ -696,6 +705,136 @@ async function taskVisualSuite() {
   }
 }
 
+// Helper: Scan directory for files with given extensions
+function findFiles(dir, extensions, fileList = []) {
+  if (!fs.existsSync(dir)) return fileList;
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (entry.name !== 'node_modules' && !entry.name.startsWith('.')) {
+        findFiles(fullPath, extensions, fileList);
+      }
+    } else if (entry.isFile()) {
+      if (extensions.some(ext => entry.name.endsWith(ext))) {
+        fileList.push(fullPath);
+      }
+    }
+  }
+  return fileList;
+}
+
+// TASK 5: WCAG Contrast Palette Audit
+async function taskContrastAudit() {
+  const testFile = path.join(cwd, 'tests/verify_contrast.js');
+  if (!fs.existsSync(testFile)) {
+    log('No tests/verify_contrast.js found in this repository. Skipped.', 'info');
+    return true;
+  }
+
+  log('Running WCAG Contrast Palette Audit...', 'header');
+  const res = spawnSync('node', [testFile], { cwd, stdio: 'inherit' });
+  if (res.status === 0) {
+    log('WCAG Contrast audit passed.', 'success');
+    return true;
+  } else {
+    log('WCAG Contrast audit failed.', 'error');
+    return false;
+  }
+}
+
+// TASK 6: HTML Link & Asset Verification
+async function taskLinkCheck() {
+  log('Running HTML Link & Asset Verification...', 'header');
+  const docsDir = path.join(cwd, 'docs');
+  const htmlFiles = findFiles(docsDir, ['.html']);
+
+  let totalLinks = 0;
+  let brokenLinks = 0;
+  const errors = [];
+  const linkRegex = /(?:href|src)=["']([^"']+)["']/gi;
+
+  for (const htmlFile of htmlFiles) {
+    const content = fs.readFileSync(htmlFile, 'utf8');
+    const relativeHtmlPath = path.relative(cwd, htmlFile);
+    let match;
+
+    while ((match = linkRegex.exec(content)) !== null) {
+      const link = match[1].trim();
+      if (!link) continue;
+      if (/^(https?:|mailto:|tel:|javascript:|data:|\/\/)/i.test(link)) continue;
+
+      totalLinks++;
+      const [urlPart, hashPart] = link.split('#');
+      const cleanPath = urlPart.split('?')[0];
+
+      if (!cleanPath) {
+        if (hashPart) {
+          const idPattern = new RegExp(`(?:id|name)=["']${hashPart}["']`, 'i');
+          if (!idPattern.test(content)) {
+            errors.push(`${relativeHtmlPath}: anchor '#${hashPart}' not found in document`);
+            brokenLinks++;
+          }
+        }
+        continue;
+      }
+
+      const targetPath = path.resolve(path.dirname(htmlFile), cleanPath);
+      if (!fs.existsSync(targetPath)) {
+        errors.push(`${relativeHtmlPath}: link target '${link}' not found (${path.relative(cwd, targetPath)})`);
+        brokenLinks++;
+      } else if (hashPart && (cleanPath.endsWith('.html') || cleanPath.endsWith('.dc.html'))) {
+        const targetContent = fs.readFileSync(targetPath, 'utf8');
+        const idPattern = new RegExp(`(?:id|name)=["']${hashPart}["']`, 'i');
+        if (!idPattern.test(targetContent)) {
+          errors.push(`${relativeHtmlPath}: anchor '#${hashPart}' not found in target ${cleanPath}`);
+          brokenLinks++;
+        }
+      }
+    }
+  }
+
+  if (brokenLinks === 0) {
+    log(`HTML link check passed (${htmlFiles.length} HTML files / ${totalLinks} local links verified).`, 'success');
+    return true;
+  } else {
+    log(`${brokenLinks} broken link(s) found across ${htmlFiles.length} HTML files:`, 'error');
+    errors.forEach(e => console.error(`  - ${e}`));
+    return false;
+  }
+}
+
+// TASK 7: JS Syntax Validation
+async function taskSyntaxCheck() {
+  log('Running JS/MJS Syntax Validation...', 'header');
+  const dirsToScan = ['docs', 'tests', 'tools'].map(d => path.join(cwd, d));
+  let jsFiles = [];
+  for (const dir of dirsToScan) {
+    findFiles(dir, ['.js', '.mjs'], jsFiles);
+  }
+
+  let syntaxFailures = 0;
+  const errors = [];
+
+  for (const jsFile of jsFiles) {
+    const relativePath = path.relative(cwd, jsFile);
+    const proc = spawnSync('node', ['--check', jsFile], { cwd, encoding: 'utf8' });
+    if (proc.status !== 0) {
+      syntaxFailures++;
+      errors.push(`Syntax error in ${relativePath}:\n${proc.stderr || proc.stdout}`);
+    }
+  }
+
+  if (syntaxFailures === 0) {
+    log(`JS syntax validation passed (${jsFiles.length} JS/MJS files verified).`, 'success');
+    return true;
+  } else {
+    log(`${syntaxFailures} file(s) failed syntax check:`, 'error');
+    errors.forEach(e => console.error(`  - ${e}`));
+    return false;
+  }
+}
+
 // MAIN RUNNER ORCHESTRATION
 async function main() {
   console.log(`
@@ -714,6 +853,9 @@ Active Tasks: ${[
     runCatalog && "Catalog",
     runA11y && "A11y",
     runVisual && "Visual",
+    runContrast && "Contrast",
+    runLinks && "Links",
+    runSyntax && "Syntax",
   ]
     .filter(Boolean)
     .join(", ")}
@@ -735,6 +877,18 @@ Active Tasks: ${[
 
   if (runVisual) {
     results.visual = await taskVisualSuite();
+  }
+
+  if (runContrast) {
+    results.contrast = await taskContrastAudit();
+  }
+
+  if (runLinks) {
+    results.links = await taskLinkCheck();
+  }
+
+  if (runSyntax) {
+    results.syntax = await taskSyntaxCheck();
   }
 
   console.log(`
