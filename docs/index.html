@@ -51,54 +51,56 @@
     <div class="nav-meta">DESIGN SYSTEM · INTERACTIVE PROTOTYPES</div>
   </nav>
 
-  <header class="hero">
-    <div class="hero-copy">
-      <div class="eyebrow">Rule &amp; Rail · Design system</div>
-      <h1>Your whole library,<br>beautifully composed.</h1>
-      <p class="lede">A complete, themeable interface for books, audio, comics, podcasts and more. Explore the working mobile app, then inspect the tokens that make every layout feel distinctly CleverFerret.</p>
-    </div>
-    <div class="stats" aria-label="Prototype summary">
-      <div class="stat"><b>9</b><span>App screens</span></div>
-      <div class="stat"><b>8</b><span>Layout packs</span></div>
-      <div class="stat"><b>24</b><span>Palettes</span></div>
-      <div class="stat"><b>1</b><span>Shared system</span></div>
-    </div>
-  </header>
+  <main>
+    <header class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">Rule &amp; Rail · Design system</div>
+        <h1>Your whole library,<br>beautifully composed.</h1>
+        <p class="lede">A complete, themeable interface for books, audio, comics, podcasts and more. Explore the working mobile app, then inspect the tokens that make every layout feel distinctly CleverFerret.</p>
+      </div>
+      <div class="stats" aria-label="Prototype summary">
+        <div class="stat"><b>9</b><span>App screens</span></div>
+        <div class="stat"><b>8</b><span>Layout packs</span></div>
+        <div class="stat"><b>24</b><span>Palettes</span></div>
+        <div class="stat"><b>1</b><span>Shared system</span></div>
+      </div>
+    </header>
 
-  <div class="cards">
-    <div class="card">
-      <span class="tag">01 · Live product</span>
-      <h2>Explore the complete app</h2>
-      <p>Navigate Home, Library, Discover, Search, Player, Reader, Settings, Downloads and Theme Studio. Playback, reader controls, filters and themes are fully interactive.</p>
-      <img class="preview" src="assets/theme-preview.webp" alt="CleverFerret phone prototype and theme picker preview" loading="lazy">
-      <a class="btn" href="app.dc.html">Launch app mockup →</a>
+    <div class="cards">
+      <div class="card">
+        <span class="tag">01 · Live product</span>
+        <h2>Explore the complete app</h2>
+        <p>Navigate Home, Library, Discover, Search, Player, Reader, Settings, Downloads and Theme Studio. Playback, reader controls, filters and themes are fully interactive.</p>
+        <img class="preview" src="assets/theme-preview.webp" alt="CleverFerret phone prototype and theme picker preview" loading="lazy">
+        <a class="btn" href="app.dc.html">Launch app mockup →</a>
+      </div>
+      <div class="card">
+        <span class="tag">02 · System reference</span>
+        <h2>Build with the theme system</h2>
+        <p>Inspect layout packs, colour families, effects, motion and reader modes across phone, tablet and TV. Every choice maps back to reusable product tokens.</p>
+        <a class="btn" href="theme-system.dc.html">Open Theme System →</a>
+      </div>
     </div>
-    <div class="card">
-      <span class="tag">02 · System reference</span>
-      <h2>Build with the theme system</h2>
-      <p>Inspect layout packs, colour families, effects, motion and reader modes across phone, tablet and TV. Every choice maps back to reusable product tokens.</p>
-      <a class="btn" href="theme-system.dc.html">Open Theme System →</a>
-    </div>
-  </div>
 
-  <section class="map">
-    <h2>Screen map</h2>
-    <table>
-      <thead><tr><th>Project screen</th><th>Repo source</th></tr></thead>
-      <tbody>
-        <tr><td>Home</td><td class="src">ui/modern/home/ModernHomeScreen.kt, ui/modern/components/Scaffolding.kt, SharedComponents.kt (MiniPlayer)</td></tr>
-        <tr><td>Library (phone / tablet)</td><td class="src">ui/modern/library/ModernLibraryScreen.kt, ui/modern/domain/Models.kt</td></tr>
-        <tr><td>Discover</td><td class="src">ui/modern/discover/ModernDiscoverScreen.kt</td></tr>
-        <tr><td>Search</td><td class="src">ui/modern/search/ModernSearchScreen.kt</td></tr>
-        <tr><td>Audio player</td><td class="src">ui/modern/player/ModernAudioPlayerScreen.kt</td></tr>
-        <tr><td>Reader</td><td class="src">ui/modern/reader/ModernReaderScreen.kt, docs/THEMING.md (Day/Sepia/Night)</td></tr>
-        <tr><td>Settings</td><td class="src">ui/modern/settings/ModernSettingsScreen.kt</td></tr>
-        <tr><td>Theme Studio</td><td class="src">ui/modern/theme/ModernThemePickerScreen.kt (layout / colour / effect tabs)</td></tr>
-        <tr><td>Tokens / type</td><td class="src">ui/modern/theme/CFTokens.kt, CFTheme.kt, ui/theme/UnifiedThemeSystem.kt, MetallicColors.kt</td></tr>
-        <tr><td>Downloads, TV preview</td><td class="src">new</td></tr>
-      </tbody>
-    </table>
-  </section>
+    <section class="map">
+      <h2>Screen map</h2>
+      <table>
+        <thead><tr><th>Project screen</th><th>Repo source</th></tr></thead>
+        <tbody>
+          <tr><td>Home</td><td class="src">ui/modern/home/ModernHomeScreen.kt, ui/modern/components/Scaffolding.kt, SharedComponents.kt (MiniPlayer)</td></tr>
+          <tr><td>Library (phone / tablet)</td><td class="src">ui/modern/library/ModernLibraryScreen.kt, ui/modern/domain/Models.kt</td></tr>
+          <tr><td>Discover</td><td class="src">ui/modern/discover/ModernDiscoverScreen.kt</td></tr>
+          <tr><td>Search</td><td class="src">ui/modern/search/ModernSearchScreen.kt</td></tr>
+          <tr><td>Audio player</td><td class="src">ui/modern/player/ModernAudioPlayerScreen.kt</td></tr>
+          <tr><td>Reader</td><td class="src">ui/modern/reader/ModernReaderScreen.kt, docs/THEMING.md (Day/Sepia/Night)</td></tr>
+          <tr><td>Settings</td><td class="src">ui/modern/settings/ModernSettingsScreen.kt</td></tr>
+          <tr><td>Theme Studio</td><td class="src">ui/modern/theme/ModernThemePickerScreen.kt (layout / colour / effect tabs)</td></tr>
+          <tr><td>Tokens / type</td><td class="src">ui/modern/theme/CFTokens.kt, CFTheme.kt, ui/theme/UnifiedThemeSystem.kt, MetallicColors.kt</td></tr>
+          <tr><td>Downloads, TV preview</td><td class="src">new</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
 
   <footer>
     Source app: <a href="https://github.com/Kaleaon/CleverFerret" target="_blank" rel="noopener">Kaleaon/CleverFerret</a>
