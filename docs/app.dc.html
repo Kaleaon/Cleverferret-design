@@ -51,14 +51,14 @@ a{color:#818cf8}a:hover{color:#a5b4fc}
     <div class="prototype-title">{{ themeName }}</div>
     <div class="prototype-meta">{{ effectName }} effects · motion {{ motionName }}{{ pendingNote }}</div>
   </div>
-  <div style="display:flex;flex-direction:column;gap:8px">
+  <nav aria-label="Prototype screens" style="display:flex;flex-direction:column;gap:8px">
     <div class="prototype-label">EXPLORE 9 SCREENS</div>
     <div class="screen-grid">
       <sc-for list="{{ jumpList }}" as="j" hint-placeholder-count="9">
         <button type="button" class="jump-item" onClick="{{ j.pick }}" style="{{ j.st }}">{{ j.name }}</button>
       </sc-for>
     </div>
-  </div>
+  </nav>
   <div class="prototype-note" style="display:flex;flex-direction:column;gap:9px">
     <div class="prototype-label">PROTOTYPE TIPS</div>
     <div class="prototype-tip">Open <b>Settings → Active theme</b> to restyle the entire app. Your selection is saved locally.</div>
@@ -67,7 +67,7 @@ a{color:#818cf8}a:hover{color:#a5b4fc}
   <a href="theme-system.dc.html" style="font:600 13px/1 Inter,sans-serif;text-decoration:none">Open theme specification →</a>
 </aside>
 
-<div class="device-stage" style="{{ vars }}">
+<main class="device-stage" style="{{ vars }}">
 <div class="phone-frame" data-screen-label="Phone">
 
   <div style="height:28px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font:500 12px/1 var(--lf);color:var(--ink);background:var(--sbbg)">
@@ -89,13 +89,13 @@ a{color:#818cf8}a:hover{color:#a5b4fc}
       <div style="position:absolute;left:80px;right:76px;top:0;height:64px;display:flex;align-items:flex-end;justify-content:flex-end;padding-bottom:7px;box-sizing:border-box;font:700 24px/1 Antonio,sans-serif;letter-spacing:.05em;color:var(--onpriL);white-space:nowrap;overflow:hidden">{{ screenTitle }}</div>
       <div style="position:absolute;left:76px;top:64px;width:26px;height:26px;background:var(--pri)"></div>
       <div style="position:absolute;left:76px;top:64px;width:26px;height:26px;background:var(--bg);border-radius:26px 0 0 0"></div>
-      <div style="position:absolute;left:0;top:64px;width:76px;bottom:22px;display:flex;flex-direction:column;gap:4px">
+      <nav aria-label="Console rail" style="position:absolute;left:0;top:64px;width:76px;bottom:22px;display:flex;flex-direction:column;gap:4px">
         <button type="button" class="nav-item" aria-label="{{ armLabel }}" onClick="{{ armClick }}" style="flex:none;height:32px;background:var(--pri);color:var(--onpriL);display:flex;align-items:center;padding-left:9px;font:700 9.5px/1.05 Antonio,sans-serif;letter-spacing:.14em;cursor:pointer">{{ armLabel }}</button>
         <sc-for list="{{ rail }}" as="r" hint-placeholder-count="6">
           <button type="button" class="nav-item" aria-label="{{ r.label }}" onClick="{{ r.pick }}" style="{{ r.st }}"><span style="position:absolute;left:8px;top:5px;font:500 8px/1 Antonio,sans-serif;opacity:.6">{{ r.code }}</span>{{ r.label }}</button>
         </sc-for>
         <div style="flex:1;min-height:20px;background:var(--outv);border-radius:0 0 0 22px"></div>
-      </div>
+      </nav>
       <div style="position:absolute;left:80px;right:4px;bottom:4px;height:18px;display:flex;gap:4px"><span style="width:34px;flex:none;background:var(--sec2)"></span><span style="flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;padding:0 10px;background:var(--surf);color:var(--ink2);border-radius:0 9px 9px 0;font:500 9.5px/1 Antonio,sans-serif;letter-spacing:.06em;white-space:nowrap;overflow:hidden"><span>SYNC OK · 4 SOURCES</span><span>{{ footRight }}</span></span></div>
     </sc-if>
 
@@ -492,44 +492,44 @@ a{color:#818cf8}a:hover{color:#a5b4fc}
     </div>
 
     <sc-if value="{{ showSide }}" hint-placeholder-val="{{ false }}">
-      <div style="position:absolute;left:0;top:0;bottom:0;width:72px;display:flex;flex-direction:column;align-items:center;padding-top:16px;box-sizing:border-box;background:var(--navbg);box-shadow:1px 0 0 var(--outv);z-index:4">
+      <nav aria-label="Sidebar navigation" style="position:absolute;left:0;top:0;bottom:0;width:72px;display:flex;flex-direction:column;align-items:center;padding-top:16px;box-sizing:border-box;background:var(--navbg);box-shadow:1px 0 0 var(--outv);z-index:4">
         <div style="font:900 22px/1 var(--dff);letter-spacing:.1em;background:var(--metal);-webkit-background-clip:text;background-clip:text;color:transparent;filter:var(--wglow);padding-bottom:16px;margin-bottom:8px;border-bottom:1px solid var(--outv)">CF</div>
         <sc-for list="{{ sideItems }}" as="n" hint-placeholder-count="5">
           <button type="button" aria-label="{{ n.label }}" onClick="{{ n.pick }}" style="{{ n.st }}"><span style="{{ n.icon }}">{{ n.glyph }}</span>{{ n.label }}</button>
         </sc-for>
-      </div>
+      </nav>
     </sc-if>
     <sc-if value="{{ showMetro }}" hint-placeholder-val="{{ false }}">
       <div style="position:absolute;left:0;right:0;top:0;height:104px;padding:10px 0 0 16px;box-sizing:border-box;overflow:hidden;z-index:4">
         <div style="font:600 12px/1 'Open Sans',sans-serif;letter-spacing:.06em;color:var(--ink)">{{ appTitle }}</div>
-        <div style="display:flex;gap:20px;margin-top:10px;white-space:nowrap;font:300 46px/1 'Open Sans',sans-serif;letter-spacing:-.02em">
+        <nav aria-label="Pivot navigation" style="display:flex;gap:20px;margin-top:10px;white-space:nowrap;font:300 46px/1 'Open Sans',sans-serif;letter-spacing:-.02em">
           <sc-for list="{{ pivots }}" as="p" hint-placeholder-count="5"><button type="button" class="tab-item" role="tab" aria-selected="{{ p.on }}" onClick="{{ p.pick }}" style="{{ p.st }}">{{ p.label }}</button></sc-for>
-        </div>
+        </nav>
       </div>
-      <div style="position:absolute;left:0;right:0;bottom:0;height:64px;display:flex;align-items:center;justify-content:center;gap:28px;background:var(--surf);z-index:4">
+      <nav aria-label="App bar" style="position:absolute;left:0;right:0;bottom:0;height:64px;display:flex;align-items:center;justify-content:center;gap:28px;background:var(--surf);z-index:4">
         <sc-for list="{{ metroBar }}" as="b" hint-placeholder-count="4"><button type="button" aria-label="{{ b.label }}" onClick="{{ b.pick }}" style="{{ b.st }}">{{ b.glyph }}</button></sc-for>
         <span style="position:absolute;right:14px;top:6px;font:700 16px/1 'Open Sans',sans-serif;letter-spacing:2px;color:var(--ink)">···</span>
-      </div>
+      </nav>
     </sc-if>
     <sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
-      <div style="position:absolute;left:0;right:0;bottom:0;height:80px;display:flex;background:var(--navbg);border-top:var(--navbt);backdrop-filter:var(--bf);z-index:4">
+      <nav aria-label="Main navigation" style="position:absolute;left:0;right:0;bottom:0;height:80px;display:flex;background:var(--navbg);border-top:var(--navbt);backdrop-filter:var(--bf);z-index:4">
         <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
           <button type="button" aria-label="{{ n.label }}" onClick="{{ n.pick }}" style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer">
             <div style="{{ n.pill }}"><span style="{{ n.icon }}">{{ n.glyph }}</span></div>
             <span style="{{ n.lab }}">{{ n.label }}</span>
           </button>
         </sc-for>
-      </div>
+      </nav>
     </sc-if>
     <sc-if value="{{ showTiles }}" hint-placeholder-val="{{ false }}">
-      <div style="position:absolute;left:0;right:0;bottom:0;height:72px;display:flex;gap:2px;padding:2px;box-sizing:border-box;background:var(--bg);z-index:4">
+      <nav aria-label="Tile navigation" style="position:absolute;left:0;right:0;bottom:0;height:72px;display:flex;gap:2px;padding:2px;box-sizing:border-box;background:var(--bg);z-index:4">
         <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
           <button type="button" aria-label="{{ n.label }}" onClick="{{ n.pick }}" style="{{ n.tile }}"><span style="width:22px;height:22px;overflow:hidden;font-family:'Material Symbols Outlined';font-size:22px;line-height:22px;font-variation-settings:'FILL' 1">{{ n.glyph }}</span><span style="font:400 12px/1 var(--lf);text-transform:lowercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ n.label }}</span></button>
         </sc-for>
-      </div>
+      </nav>
     </sc-if>
   </div>
-</div>
+</main>
 </div>
 
 </div>
