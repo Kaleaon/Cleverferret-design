@@ -19,15 +19,15 @@ Production adoption is prepared in CleverFerret's `codex/universal-layout-standa
 component theme consume the bundled Ktheme contract. Unknown IDs default to Compose; old
 `Compose`, `Lcars` and `Metro` names map to `compose`, `sweep` and `tiles`.
 
-| Prototype ID | Native treatment |
-| --- | --- |
-| compose | Material shapes, phone bar → wide rail |
-| terminal | JetBrains Mono, consistent 4dp corners, metadata at least 12sp |
-| sweep | Black field, opposing elliptical sweeps, filled text rail, text transport, measured docks |
-| tiles | Open Sans, square shapes, lowercase pivot navigation, preserved media titles, actions bounded at 160dp |
-| glass | Nunito Sans, soft shapes and opaque text surfaces as the safe glass fallback |
-| rules | Jost, persistent rail, sharp corners and quiet surfaces |
-| press | Source Serif 4/Jost, quiet solid actions and shadow-free surfaces |
+| Prototype ID | Native treatment                                                                                       |
+| ------------ | ------------------------------------------------------------------------------------------------------ |
+| compose      | Material shapes, phone bar → wide rail                                                                 |
+| terminal     | JetBrains Mono, consistent 4dp corners, metadata at least 12sp                                         |
+| sweep        | Black field, opposing elliptical sweeps, filled text rail, text transport, measured docks              |
+| tiles        | Open Sans, square shapes, lowercase pivot navigation, preserved media titles, actions bounded at 160dp |
+| glass        | Nunito Sans, soft shapes and opaque text surfaces as the safe glass fallback                           |
+| rules        | Jost, persistent rail, sharp corners and quiet surfaces                                                |
+| press        | Source Serif 4/Jost, quiet solid actions and shadow-free surfaces                                      |
 
 The native frame derives outer radii 94 × 30dp from rail 76dp, bar 12dp and inner radius 18dp.
 Its two inner/outer curve centers are `(94, 86)` and `(94, 150)`, matching the prototype.
