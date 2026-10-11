@@ -184,14 +184,18 @@ try {
       await page.waitForFunction(
         () =>
           document
-            .querySelector('.phone-frame nav[aria-label="Main"]')
+            .querySelector('.phone-frame nav[aria-label="Sidebar navigation"]')
             ?.getBoundingClientRect().width === 72
       );
       assert.equal(
-        await page.locator('.phone-frame nav[aria-label="Main"]').count(),
+        await page
+          .locator('.phone-frame nav[aria-label="Sidebar navigation"]')
+          .count(),
         1
       );
-      const navLocator = page.locator('.phone-frame nav[aria-label="Main"]');
+      const navLocator = page.locator(
+        '.phone-frame nav[aria-label="Sidebar navigation"]'
+      );
       const nav = await navLocator.boundingBox();
       assert.ok(nav, "Tablet rail element boundingBox found");
       assert.equal(nav.width, 72, `${design[0]} tablet rail`);
@@ -219,7 +223,7 @@ try {
       await page.waitForFunction(
         () =>
           document
-            .querySelector('.phone-frame nav[aria-label="Main"]')
+            .querySelector('.phone-frame nav[aria-label="Main navigation"]')
             ?.getBoundingClientRect().width > 72
       );
     await page.locator('.cf-mini button[aria-label="Play"]').click();
