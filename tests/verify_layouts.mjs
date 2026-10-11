@@ -47,21 +47,60 @@ const server = http.createServer((req, res) => {
   );
   res.end(fs.readFileSync(file));
 });
+
 await new Promise((resolve, reject) => {
   server.on("error", reject);
   server.listen(0, "127.0.0.1", resolve);
 });
+
+const possiblePaths = [
+  process.env.CHROMIUM_PATH,
+  "/usr/bin/chromium",
+  "/usr/bin/google-chrome",
+].filter(Boolean);
+const fallbackPath = possiblePaths.find((p) => fs.existsSync(p));
 const launchOpts = {
   headless: true,
-  args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+  args: [
+    "--no-sandbox",
+    "--disable-setuid-sandbox",
+    "--disable-dev-shm-usage",
+    "--disable-gpu",
+    "--mute-audio",
+    "--font-render-hinting=none",
+    "--force-color-profile=srgb",
+  ],
 };
 if (process.env.CHROMIUM_PATH) {
   launchOpts.executablePath = process.env.CHROMIUM_PATH;
 }
+
 let browser;
-let pages = 0;
 try {
   browser = await chromium.launch(launchOpts);
+} catch (err) {
+  if (fallbackPath) {
+    try {
+      browser = await chromium.launch({
+        ...launchOpts,
+        executablePath: fallbackPath,
+      });
+    } catch {
+      delete launchOpts.executablePath;
+      browser = await chromium.launch(launchOpts);
+    }
+  } else {
+    delete launchOpts.executablePath;
+    browser = await chromium.launch(launchOpts);
+  }
+}
+
+let pages = 0;
+const errors = [];
+const layoutIssues = [];
+const base = `http://127.0.0.1:${server.address().port}`;
+
+try {
   const context = await browser.newContext({
     viewport: { width: 380, height: 780 },
   });
@@ -94,41 +133,35 @@ try {
         })
       : route.abort();
   });
-  const errors = [];
-  const layoutIssues = [];
-  const base = `http://127.0.0.1:${server.address().port}`;
-
-  const page = await context.newPage();
-  page.on("pageerror", (e) => errors.push(e.message));
-  let hasLoadedApp = false;
-
-  async function openOnPage(design, screen = "home") {
-    const [layout, palette, effect] = design;
-    if (!hasLoadedApp) {
-      await page.goto(
-        `${base}/app.dc.html?embed=1&screen=${screen}&layout=${layout}&palette=${palette}&effect=${effect}&motion=off`
-      );
-      hasLoadedApp = true;
-    } else {
-      await page.evaluate(
-        ({ layout, palette, effect, screen }) => {
-          window.__app.setState({
-            theme: { layout, palette, effect, motion: "off" },
-          });
-          window.__app.goto(screen, true);
-        },
-        { layout, palette, effect, screen }
-      );
-    }
-    await page
-      .locator(`.phone-frame[data-layout="${layout}"] .cf-screen`)
-      .waitFor();
-    pages++;
-  }
 
   for (const design of designs) {
+    const page = await context.newPage();
+    page.on("pageerror", (e) => errors.push(e.message));
+    let loadedInitial = false;
+
+    async function open(screen = "home") {
+      const [layout, palette, effect] = design;
+      if (!loadedInitial) {
+        await page.goto(
+          `${base}/app.dc.html?embed=1&screen=${screen}&layout=${layout}&palette=${palette}&effect=${effect}&motion=off`
+        );
+        loadedInitial = true;
+      } else {
+        await page.evaluate((s) => {
+          const u = new URL(location.href);
+          u.searchParams.set("screen", s);
+          history.pushState({}, "", u.toString());
+          window.dispatchEvent(new PopStateEvent("popstate"));
+        }, screen);
+      }
+      await page
+        .locator(`.phone-frame[data-layout="${layout}"] .cf-screen`)
+        .waitFor();
+      pages++;
+    }
+
     for (const screen of CF.SCREENS) {
-      await openOnPage(design, screen.id);
+      await open(screen.id);
       const issues = await page.locator(".phone-frame").evaluate((frame) => {
         const issues = [];
         const shell = frame.querySelector(".cf-shell").getBoundingClientRect();
@@ -174,27 +207,27 @@ try {
         layoutIssues.push({ page: `${design[0]}/${screen.id}`, issues });
     }
 
-    await openOnPage(design);
+    await open("home");
     // Adaptive layouts must respond to a resize without a reload.
     await page.setViewportSize({ width: 960, height: 780 });
     const adaptive = ["compose", "terminal", "glass", "press"].includes(
       design[0]
     );
     if (adaptive) {
-      await page.waitForFunction(
-        () =>
-          document
-            .querySelector('.phone-frame nav[aria-label="Main"]')
-            ?.getBoundingClientRect().width === 72
-      );
+      await page.waitForFunction(() => {
+        const el = document.querySelector(
+          '.phone-frame nav[aria-label="Main"]'
+        );
+        return el && Math.round(el.getBoundingClientRect().width) === 72;
+      });
       assert.equal(
         await page.locator('.phone-frame nav[aria-label="Main"]').count(),
         1
       );
-      const navLocator = page.locator('.phone-frame nav[aria-label="Main"]');
-      const nav = await navLocator.boundingBox();
-      assert.ok(nav, "Tablet rail element boundingBox found");
-      assert.equal(nav.width, 72, `${design[0]} tablet rail`);
+      const navWidth = await page
+        .locator('.phone-frame nav[aria-label="Main"]')
+        .evaluate((el) => Math.round(el.getBoundingClientRect().width));
+      assert.equal(navWidth, 72, `${design[0]} tablet rail`);
     }
     if (design[0] === "tiles") {
       const heights = await page
@@ -229,19 +262,33 @@ try {
     console.log(
       `PASS ${design[0]}: ${CF.SCREENS.length} screens, resize and playback`
     );
+    await page.close();
   }
 
-  await openOnPage(designs[2], "player");
+  const finalPage = await context.newPage();
+  finalPage.on("pageerror", (e) => errors.push(e.message));
+  async function openFinal(d, screen = "home") {
+    const [layout, palette, effect] = d;
+    await finalPage.goto(
+      `${base}/app.dc.html?embed=1&screen=${screen}&layout=${layout}&palette=${palette}&effect=${effect}&motion=off`
+    );
+    await finalPage
+      .locator(`.phone-frame[data-layout="${layout}"] .cf-screen`)
+      .waitFor();
+    pages++;
+  }
+
+  await openFinal(designs[2], "player");
   assert.equal(
-    await page
+    await finalPage
       .locator(".cf-transport .cf-control-label")
       .filter({ hasText: "Play" })
       .isVisible(),
     true,
     "LCARS transport is text-led"
   );
-  await openOnPage(designs[2]);
-  const centers = await page.locator(".phone-frame").evaluate((frame) => {
+  await openFinal(designs[2]);
+  const centers = await finalPage.locator(".phone-frame").evaluate((frame) => {
     const curve = (selector, property, corner) => {
       const el = frame.querySelector(selector),
         r = el.getBoundingClientRect();
@@ -279,16 +326,18 @@ try {
     "Rendered content sweep centers"
   );
   assert.equal(
-    await page
+    await finalPage
       .locator(".lc-readouts")
       .evaluate((el) => getComputedStyle(el).backgroundColor),
     "rgba(0, 0, 0, 0)"
   );
-  await page.locator('.cf-mini button[aria-label^="Open player"]').click();
-  await page.locator('.cf-screen[data-screen-label="Audio player"]').waitFor();
-  await page.getByRole("button", { name: "Cast", exact: true }).click();
-  await page.locator('[role="status"] .cf-toast').waitFor();
-  const dock = await page.locator(".cf-shell").evaluate((shell) => {
+  await finalPage.locator('.cf-mini button[aria-label^="Open player"]').click();
+  await finalPage
+    .locator('.cf-screen[data-screen-label="Audio player"]')
+    .waitFor();
+  await finalPage.getByRole("button", { name: "Cast", exact: true }).click();
+  await finalPage.locator('[role="status"] .cf-toast').waitFor();
+  const dock = await finalPage.locator(".cf-shell").evaluate((shell) => {
     const screen = shell.querySelector(".cf-screen").getBoundingClientRect();
     const toast = shell.querySelector(".cf-toast").getBoundingClientRect();
     return { contentBottom: screen.bottom, toastTop: toast.top };
@@ -297,12 +346,12 @@ try {
     dock.toastTop >= dock.contentBottom,
     "LCARS feedback must not cover content"
   );
-  await page.evaluate(() => {
+  await finalPage.evaluate(() => {
     try {
       localStorage.clear();
     } catch (_) {}
   });
-  await page.close();
+  await finalPage.close();
   assert.deepEqual(errors, [], "No browser exceptions");
   assert.deepEqual(layoutIssues, [], "Layout and interaction targets");
   console.log(`SUCCESS: ${pages} rendered pages; all seven families passed.`);
