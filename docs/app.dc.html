@@ -100,7 +100,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
 </sc-if>
 
 <main class="device-stage" style="{{ vars }}" aria-label="CleverFerret phone prototype">
-<div class="phone-frame cf-ui" data-screen-label="Phone">
+<div class="phone-frame cf-ui" data-layout="{{ layoutId }}" data-effect="{{ effectId }}" data-lcars-reference="{{ lcarsReference }}" data-screen-label="Phone">
 
   <div class="cf-statusbar" aria-hidden="true">
     <span>9:41</span>
@@ -111,26 +111,24 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
 
     <sc-if value="{{ isSweep }}" hint-placeholder-val="{{ false }}">
       <!-- LCARS split frame. Header: the column swoops down into the divider bar. -->
-      <button type="button" onClick="{{ armClick }}" style="position:absolute;left:0;top:0;width:76px;height:30px;background:var(--sec2);color:var(--onsec2L);display:flex;align-items:flex-end;justify-content:flex-end;padding:0 7px 4px 0;font:700 9.5px/1 Antonio,sans-serif;letter-spacing:.14em">{{ armLabel }}</button>
-      <div aria-hidden="true" style="position:absolute;left:0;top:34px;right:0;height:62px;background:var(--pri);border-radius:0 0 0 38px"></div>
-      <div aria-hidden="true" style="position:absolute;left:76px;top:34px;right:0;height:50px;background:var(--bg);border-radius:0 0 0 18px"></div>
-      <div aria-hidden="true" style="position:absolute;right:0;top:84px;width:44px;height:12px;background:var(--sec2);border-radius:0 6px 6px 0;box-shadow:-4px 0 0 var(--bg)"></div>
-      <div aria-hidden="true" style="position:absolute;right:48px;top:84px;width:64px;height:12px;background:var(--sec);box-shadow:-4px 0 0 var(--bg)"></div>
-      <div role="heading" aria-level="1" aria-hidden="{{ lcTitleHidden }}" style="position:absolute;left:84px;right:8px;top:2px;display:flex;justify-content:flex-end;font:700 28px/1 Antonio,sans-serif;letter-spacing:.04em;color:var(--lcTitle);white-space:nowrap;overflow:hidden">{{ screenTitle }}</div>
-      <div aria-hidden="true" style="position:absolute;left:84px;right:8px;top:48px;height:20px;display:flex;gap:4px;justify-content:flex-end;overflow:hidden">
+      <button type="button" class="lc-arm" onClick="{{ armClick }}">{{ armLabel }}</button>
+      <div aria-hidden="true" class="lc-header-outer"></div>
+      <div aria-hidden="true" class="lc-header-inner"></div>
+      <div aria-hidden="true" class="lc-bar-tail header"><span></span><span></span></div>
+      <div role="heading" aria-level="1" aria-hidden="{{ lcTitleHidden }}" class="lc-screen-title">{{ screenTitle }}</div>
+      <div aria-hidden="true" class="lc-readouts">
         <sc-for list="{{ lcReadouts }}" as="r"><span style="{{ r.st }}"><span style="opacity:.8;letter-spacing:.14em">{{ r.k }}</span>{{ r.v }}</span></sc-for>
       </div>
       <!-- Content: the bar swoops down from the divider into the rail. -->
-      <div aria-hidden="true" style="position:absolute;left:0;top:100px;right:0;height:56px;background:var(--sec);border-radius:38px 0 0 0"></div>
-      <div aria-hidden="true" style="position:absolute;right:0;top:100px;width:28px;height:12px;background:var(--pri);border-radius:0 6px 6px 0;box-shadow:-4px 0 0 var(--bg)"></div>
-      <div aria-hidden="true" style="position:absolute;right:32px;top:100px;width:88px;height:12px;background:var(--surf2);box-shadow:-4px 0 0 var(--bg)"></div>
-      <nav aria-label="Main" style="position:absolute;left:0;top:160px;width:76px;bottom:0;display:flex;flex-direction:column;gap:4px">
+      <div aria-hidden="true" class="lc-content-outer"></div>
+      <div aria-hidden="true" class="lc-bar-tail content"><span></span><span></span></div>
+      <nav aria-label="Main" class="lc-rail">
         <sc-for list="{{ rail }}" as="r" hint-placeholder-count="6">
           <button type="button" aria-current="{{ r.current }}" onClick="{{ r.pick }}" style="{{ r.st }}"><span aria-hidden="true" style="position:absolute;left:8px;top:5px;font:500 8px/1 Antonio,sans-serif;opacity:.6">{{ r.code }}</span>{{ r.label }}</button>
         </sc-for>
         <div style="flex:1;min-height:12px;background:var(--outv)"></div>
       </nav>
-      <div aria-hidden="true" style="position:absolute;left:84px;right:26px;bottom:5px;display:flex;justify-content:space-between;gap:8px;font:600 10px/1 Antonio,sans-serif;letter-spacing:.1em;color:var(--ink2);white-space:nowrap;overflow:hidden"><span>{{ footLeft }}</span><span>{{ footRight }}</span></div>
+      <div aria-hidden="true" class="lc-footer"><span>{{ footLeft }}</span><span>{{ footRight }}</span></div>
     </sc-if>
 
     <div class="cf-shell">
@@ -148,7 +146,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
               <button type="button" class="cf-press" aria-label="{{ hero.title }} details" onClick="{{ hero.detail }}" style="flex:none;border-radius:var(--rc)"><span style="{{ hero.cover.st }}"><sc-if value="{{ hero.cover.showText }}"><span style="{{ hero.cover.tSt }}">{{ hero.cover.t }}</span><span style="{{ hero.cover.aSt }}">{{ hero.cover.a }}</span></sc-if></span></button>
               <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;align-items:flex-start">
                 <span class="cf-chip-metal cf-shine">Resume</span>
-                <h2 style="font:900 22px/1.15 var(--dff);letter-spacing:var(--hdls);text-transform:var(--tt);color:var(--ink);overflow-wrap:anywhere">{{ hero.title }}</h2>
+                <h2 class="cf-media-title">{{ hero.title }}</h2>
                 <div style="font:400 14px/20px var(--ff);color:var(--ink2)">{{ hero.author }}</div>
                 <div class="cf-meta">{{ hero.subtitle }}</div>
                 <div class="cf-track" style="width:100%" role="progressbar" aria-label="Progress" aria-valuenow="{{ hero.pct }}" aria-valuemin="0" aria-valuemax="100"><div class="cf-fill" style="{{ hero.bar }}"></div></div>
@@ -743,7 +741,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
             <sc-for list="{{ rules }}" as="r" hint-placeholder-count="7">
               <div class="cf-card" style="display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:var(--rp)">
                 <div class="cf-row" style="gap:10px"><span class="ms fill" style="color:var(--priText)" aria-hidden="true">{{ r.icon }}</span><h3 style="flex:1;font:700 14px/1.2 var(--dff);text-transform:var(--tt);letter-spacing:var(--htls);color:var(--ink)">{{ r.name }}</h3>
-                  <div class="cf-seg" role="group" aria-label="{{ r.name }} naming" style="flex:none"><sc-for list="{{ r.opts }}" as="o"><button type="button" aria-pressed="{{ o.on }}" onClick="{{ o.pick }}" style="padding:6px 10px;min-height:30px">{{ o.name }}</button></sc-for></div>
+                  <div class="cf-seg" role="group" aria-label="{{ r.name }} naming" style="flex:none"><sc-for list="{{ r.opts }}" as="o"><button type="button" aria-pressed="{{ o.on }}" onClick="{{ o.pick }}" style="padding:6px 10px;min-height:48px">{{ o.name }}</button></sc-for></div>
                 </div>
                 <div class="lm-tpl"><sc-for list="{{ r.parts }}" as="p"><span class="{{ p.cls }}">{{ p.text }}</span></sc-for></div>
                 <div class="lm-path"><span class="ms" aria-hidden="true">subdirectory_arrow_right</span><span>{{ r.example }}</span></div>
@@ -846,7 +844,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
                       <div class="cf-row" style="gap:8px;align-items:flex-start;padding:10px;border-radius:var(--rt);background:var(--surf2)"><span class="ms" style="font-size:18px;color:var(--priText)" aria-hidden="true">phone_android</span><span class="cf-sub">{{ pl.note }}</span></div>
                       <div class="lm-file">core · {{ pl.core }} · {{ pl.lines }} lines, no calibre or Qt imports</div>
                       <div class="cf-row" style="justify-content:space-between">
-                        <button type="button" role="switch" aria-checked="{{ pl.enabled }}" class="cf-row" onClick="{{ pl.toggleEnabled }}" style="gap:8px;min-height:44px"><span class="{{ pl.enCls }}" aria-hidden="true"></span><span class="cf-sub">{{ pl.enLabel }}</span></button>
+                        <button type="button" role="switch" aria-checked="{{ pl.enabled }}" class="cf-row" onClick="{{ pl.toggleEnabled }}" style="gap:8px;min-height:48px"><span class="{{ pl.enCls }}" aria-hidden="true"></span><span class="cf-sub">{{ pl.enLabel }}</span></button>
                         <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ pl.run }}" disabled="{{ !pl.enabled }}" style="{{ pl.runSt }}"><span class="ms" aria-hidden="true">play_arrow</span>{{ pl.runLabel }}</button>
                       </div>
                     </div>
@@ -876,19 +874,19 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
             <span style="{{ art.st }}"><sc-if value="{{ art.showText }}"><span style="{{ art.tSt }}">{{ art.t }}</span><span style="{{ art.aSt }}">{{ art.a }}</span></sc-if></span>
             <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;text-align:center">
               <span class="cf-chip-metal cf-shine">{{ nowKind }}</span>
-              <h1 class="cf-metal-text" style="font:900 22px/1.2 var(--dff);text-transform:var(--tt);letter-spacing:var(--hdls);overflow-wrap:anywhere">{{ nowTitle }}</h1>
+              <h1 class="cf-metal-text" style="font:900 22px/1.2 var(--dff);text-transform:var(--contentCase);letter-spacing:var(--hdls);overflow-wrap:break-word">{{ nowTitle }}</h1>
               <div style="font:600 13px/1.3 var(--ff);color:var(--ink2)">{{ nowAuthor }} · {{ nowChapter }}</div>
             </div>
             <div style="width:100%;display:flex;flex-direction:column;gap:6px">
               <input type="range" class="cf-range" min="0" max="1000" value="{{ posMil }}" onInput="{{ seek }}" onChange="{{ seek }}" aria-label="Seek" aria-valuetext="{{ posLabel }} of {{ durLabel }}" style="{{ seekSt }}">
               <div style="display:flex;justify-content:space-between;font:600 11px/1 var(--lf);letter-spacing:.1em;color:var(--ink2)"><span>{{ posLabel }}</span><span>-{{ remainLabel }}</span></div>
             </div>
-            <div style="width:100%;display:flex;align-items:center;justify-content:space-between">
-              <button type="button" class="cf-iconbtn" aria-label="Previous" onClick="{{ prevTrack }}"><span class="ms fill" style="font-size:28px" aria-hidden="true">skip_previous</span></button>
-              <button type="button" class="cf-iconbtn" aria-label="Back 30 seconds" onClick="{{ back30 }}"><span class="ms" style="font-size:28px" aria-hidden="true">replay_30</span></button>
-              <button type="button" class="cf-shine cf-press" aria-label="{{ playAria }}" onClick="{{ togglePlay }}" style="width:72px;height:72px;flex:none;border-radius:var(--rs);background:var(--metal);display:flex;align-items:center;justify-content:center;color:var(--ctafg);box-shadow:var(--ctash);animation:var(--pulse)"><span class="ms fill" style="font-size:36px" aria-hidden="true">{{ playIcon }}</span></button>
-              <button type="button" class="cf-iconbtn" aria-label="Forward 30 seconds" onClick="{{ fwd30 }}"><span class="ms" style="font-size:28px" aria-hidden="true">forward_30</span></button>
-              <button type="button" class="cf-iconbtn" aria-label="Next" onClick="{{ nextTrack }}"><span class="ms fill" style="font-size:28px" aria-hidden="true">skip_next</span></button>
+            <div class="cf-transport" style="width:100%;display:flex;align-items:center;justify-content:space-between">
+              <button type="button" class="cf-player-control cf-iconbtn" aria-label="Previous" onClick="{{ prevTrack }}"><span class="ms fill" style="font-size:28px" aria-hidden="true">skip_previous</span><span class="cf-control-label">Prev</span></button>
+              <button type="button" class="cf-player-control cf-iconbtn" aria-label="Back 30 seconds" onClick="{{ back30 }}"><span class="ms" style="font-size:28px" aria-hidden="true">replay_30</span><span class="cf-control-label">−30</span></button>
+              <button type="button" class="cf-player-control cf-shine cf-press" aria-label="{{ playAria }}" onClick="{{ togglePlay }}" style="width:72px;height:72px;flex:none;border-radius:var(--rs);background:var(--metal);display:flex;align-items:center;justify-content:center;color:var(--ctafg);box-shadow:var(--ctash);animation:var(--pulse)"><span class="ms fill" style="font-size:36px" aria-hidden="true">{{ playIcon }}</span><span class="cf-control-label">{{ playAria }}</span></button>
+              <button type="button" class="cf-player-control cf-iconbtn" aria-label="Forward 30 seconds" onClick="{{ fwd30 }}"><span class="ms" style="font-size:28px" aria-hidden="true">forward_30</span><span class="cf-control-label">+30</span></button>
+              <button type="button" class="cf-player-control cf-iconbtn" aria-label="Next" onClick="{{ nextTrack }}"><span class="ms fill" style="font-size:28px" aria-hidden="true">skip_next</span><span class="cf-control-label">Next</span></button>
             </div>
             <div class="cf-card" style="width:100%;display:flex;justify-content:space-evenly;padding:4px 0;border-radius:var(--rp)">
               <button type="button" class="vd-ctl" onClick="{{ cycleSpeed }}" aria-label="Playback speed {{ speedLabel }}" style="color:var(--ink);font:600 11px/1 var(--lf);letter-spacing:.1em"><span class="ms" style="font-size:20px" aria-hidden="true">speed</span>{{ speedLabel }}</button>
@@ -1153,14 +1151,14 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
       </sc-if>
 
       <sc-if value="{{ showMini }}" hint-placeholder-val="{{ true }}">
-        <div style="position:absolute;left:var(--mpx);right:var(--mpx);bottom:12px;border-radius:var(--rp);background:var(--mpbg);box-shadow:0 8px 24px rgba(0,0,0,.35);overflow:hidden;-webkit-backdrop-filter:var(--bf);backdrop-filter:var(--bf);z-index:3" role="region" aria-label="Mini player">
+        <div class="cf-mini" role="region" aria-label="Mini player">
           <div style="display:flex;align-items:center;gap:8px;padding:8px">
             <button type="button" onClick="{{ goPlayer }}" aria-label="Open player: {{ nowTitle }}" style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
               <span style="{{ miniCover.st }}"></span>
               <span style="flex:1;min-width:0;overflow:hidden"><span class="cf-title cf-ell" style="display:block">{{ nowTitle }}</span><span class="cf-meta cf-ell" style="display:block">{{ nowSub }}</span></span>
             </button>
-            <button type="button" class="cf-iconbtn" aria-label="Previous" onClick="{{ prevTrack }}" style="width:40px;height:40px"><span class="ms fill" aria-hidden="true">skip_previous</span></button>
-            <button type="button" aria-label="{{ playAria }}" onClick="{{ togglePlay }}" style="width:40px;height:40px;flex:none;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;background:var(--pri);color:var(--onpriL);box-shadow:var(--ctash)"><span class="ms fill" aria-hidden="true">{{ playIcon }}</span></button>
+            <button type="button" class="cf-player-control cf-iconbtn" aria-label="Previous" onClick="{{ prevTrack }}" style="width:40px;height:40px"><span class="ms fill" aria-hidden="true">skip_previous</span><span class="cf-control-label">Prev</span></button>
+            <button class="cf-player-control" type="button" aria-label="{{ playAria }}" onClick="{{ togglePlay }}" style="width:40px;height:40px;flex:none;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;background:var(--pri);color:var(--onpriL);box-shadow:var(--ctash)"><span class="ms fill" aria-hidden="true">{{ playIcon }}</span><span class="cf-control-label">{{ playAria }}</span></button>
           </div>
           <div class="cf-track thin" style="border-radius:0"><div class="cf-fill" style="{{ progSt }}"></div></div>
         </div>
@@ -1309,7 +1307,7 @@ function genericFields(it, pick) {
 
 class Component extends DCLogic {
   state = {
-    theme: { ...CF.DEFAULT_THEME }, pending: null, studioTab: 'layout', embed: false,
+    viewportWidth: 380, theme: { ...CF.DEFAULT_THEME }, pending: null, studioTab: 'layout', embed: false,
     tab: 'home', stack: [],
     now: 'phm', pos: .71, playing: false, speed: 1, sleep: true, queue: ['hf', 'tm', 'rl', 'kb'], history: ['tb'], shuffle: false, repeat: 'off',
     detailId: 'tb', readId: 'fr', reader: 'sepia', chrome: true, appearance: false, fontStep: 2, rfont: null, bookmark: true, tts: false, page: 12,
@@ -1346,9 +1344,16 @@ class Component extends DCLogic {
       window.addEventListener('message', this.onMsg);
       try { window.parent.postMessage({ type: 'cf-embed-ready', screen }, '*'); } catch (e) {}
     }
+    this.observeSize = () => {
+      const width = Math.round(document.querySelector('.phone-frame').getBoundingClientRect().width);
+      if (width !== this.state.viewportWidth) this.setState({ viewportWidth: width });
+    };
+    this.resizeObserver = new ResizeObserver(this.observeSize);
+    this.resizeObserver.observe(document.querySelector('.phone-frame'));
+    this.observeSize();
     this.iv = setInterval(() => this.tick(), 1000);
   }
-  componentWillUnmount() { clearInterval(this.iv); clearTimeout(this.tt); clearTimeout(this.lt); if (this.onMsg) window.removeEventListener('message', this.onMsg); }
+  componentWillUnmount() { this.resizeObserver?.disconnect(); clearInterval(this.iv); clearTimeout(this.tt); clearTimeout(this.lt); if (this.onMsg) window.removeEventListener('message', this.onMsg); }
 
   tick() {
     const S = this.state;
@@ -1439,7 +1444,10 @@ class Component extends DCLogic {
     const immersive = screen === 'video' || screen === 'onboarding';
     // Screens with their own bottom action bar, and the media modes, drop the bottom navigation bar.
     const ownsBottom = ['themes', 'inbox', 'match', 'repair', 'organize', 'reader', 'player', 'queue'].includes(screen);
-    const sweep = !immersive && L.nav === 'sweep', tiles = !immersive && L.nav === 'tiles', side = !immersive && L.nav === 'rail', tabsNav = !immersive && !ownsBottom && L.nav === 'tabs';
+    const wide = S.viewportWidth >= 720;
+    const sweep = !immersive && L.nav === 'sweep', tiles = !immersive && L.nav === 'tiles';
+    const side = !immersive && (L.nav === 'rail' || (wide && L.nav === 'tabs'));
+    const tabsNav = !immersive && !ownsBottom && !wide && L.nav === 'tabs';
     const priText = R.vars['--priText'];
     const now = byId(S.now), dur = now.dur || 3600;
     const showMini = !pushed && !immersive;
@@ -1447,13 +1455,13 @@ class Component extends DCLogic {
 
     const vars = {
       ...R.vars,
-      '--shB': sweep ? '20px' : tabsNav ? '80px' : tiles ? '64px' : '0px',
-      '--shL': sweep ? '76px' : side ? '72px' : '0px', '--shT': sweep ? '112px' : tiles ? '104px' : '0px', '--shR': '0px', '--shRad': sweep ? '18px 0 0 0' : '0',
+      '--shB': sweep ? CF.px(R.frame.footer) : tabsNav ? '80px' : tiles ? '64px' : '0px',
+      '--shL': sweep ? CF.px(R.frame.rail) : side ? '72px' : '0px', '--shT': sweep ? CF.px(R.frame.shellTop) : tiles ? '104px' : '0px', '--shR': '0px', '--shRad': sweep ? CF.px(R.frame.inner) + ' 0 0 0' : '0',
       '--shBg': sweep ? (R.bgimg + c.bg) : 'transparent', '--lcTitle': priText,
       '--appbg': screen === 'video' ? '#000' : sweep ? c.bg : R.vars['--pbg'],
       '--sbbg': screen === 'video' ? '#000' : sweep ? c.bg : 'transparent', '--sbink': screen === 'video' ? '#fff' : c.ink,
       '--tbd': sweep || tiles ? 'none' : 'flex', '--ptbd': tiles ? 'none' : 'flex', '--srchL': tiles ? '16px' : '4px',
-      '--qh': tiles ? 'auto' : '80px', '--qar': tiles ? '1' : 'auto',
+      '--qh': tiles ? 'clamp(96px, 30cqw, 160px)' : '80px', '--qar': 'auto',
       '--scrollTop': sweep ? '14px' : '0px', '--px': sweep ? '12px' : '16px', '--ppx': sweep ? '12px' : '24px', '--mpx': sweep ? '8px' : '12px',
       '--lcd': sweep ? 'block' : 'none', '--subd': sweep ? 'none' : 'block', '--hflex': sweep ? 'none' : '1', '--hgap': sweep ? '4px' : '0px', '--hsz': sweep ? '15px' : '17px', '--htc': sweep ? priText : c.ink,
       '--heroGap': sweep ? '12px' : '16px', '--heroPad': sweep ? '12px' : '16px',
@@ -1487,7 +1495,7 @@ class Component extends DCLogic {
     const formats = FORMATS.map(([name, n, k]) => { const f = FILTERS.find(x => x[1] === k); return { name, count: fmtCount(n), aria: `${name}, ${n} items`,
       pick: () => { if (f) { this.setState({ filter: f[0], query: '' }); this.push('search'); } else this.say(`${name} · ${n} items · opens the ${name.toLowerCase()} library`); } }; });
     const srcList = SOURCES.map(([id, label, desc, st0]) => { const st = S.sources[id] || st0; const [tok, icon, lab] = SRC_ST[st]; return { label, desc: st === 'online' && id === 'jelly' ? 'Connected · 26 movies' : desc, icon, stLabel: lab,
-      iconSt: { color: P.status[tok], fontSize: '22px' }, stSt: { color: P.status[tok] }, canRetry: st === 'offline',
+      iconSt: { color: R.status[tok], fontSize: '22px' }, stSt: { color: R.status[tok] }, canRetry: st === 'offline',
       retry: () => { this.setState(s => ({ sources: { ...s.sources, [id]: 'syncing' } })); setTimeout(() => this.setState(s => ({ sources: { ...s.sources, [id]: 'online' } })), 1400); } }; });
     const offline = srcList.filter(s => s.canRetry).length;
 
@@ -1501,10 +1509,10 @@ class Component extends DCLogic {
     const dlEntries = Object.entries(S.downloads).filter(([id]) => byId(id));
     const dlRow = (id, st) => { const it = byId(id); const done = st === 'done';
       const [tok, icon, label] = done ? ['completed', 'check_circle', 'On device · ' + it.size] : st === 'failed' ? ['failed', 'error', 'Download failed'] : st === 'outdated' ? ['outdated', 'update', '8 new chapters'] : typeof st === 'number' ? ['downloading', 'downloading', 'Downloading · ' + st + '%'] : ['ongoing', 'pause_circle', 'Paused · ' + Math.abs(st) + '%'];
-      return { id, title: it.title, kind: kindU(it.kind), stSt: { color: P.status[tok] }, stIcon: icon, stLabel: label, cv: cover(it, 48, LISTEN.includes(it.kind) ? 48 : 66),
+      return { id, title: it.title, kind: kindU(it.kind), stSt: { color: R.status[tok] }, stIcon: icon, stLabel: label, cv: cover(it, 48, LISTEN.includes(it.kind) ? 48 : 66),
         open: () => this.openDetail(it), removeLabel: 'Remove ' + it.title + ' from device',
         remove: () => { this.setState(s => { const d = { ...s.downloads }; delete d[id]; return { downloads: d }; }); this.say('Removed ' + it.title + ' from device'); },
-        pct: typeof st === 'number' ? st : 0, bar: { width: (typeof st === 'number' ? st : st === 'failed' ? 30 : 0) + '%', background: P.status[tok] } }; };
+        pct: typeof st === 'number' ? st : 0, bar: { width: (typeof st === 'number' ? st : st === 'failed' ? 30 : 0) + '%', background: R.status[tok] } }; };
     const dlDone = dlEntries.filter(([, v]) => v === 'done').map(([id, v]) => dlRow(id, v));
     const dlActive = dlEntries.filter(([, v]) => v !== 'done').map(([id, v]) => {
       const r = dlRow(id, v);
@@ -1572,10 +1580,10 @@ class Component extends DCLogic {
     const dt = {
       title: di.title, author: di.author, kind: kindU(di.kind), kindTitle: di.kind, about: di.about, metaLine: `${di.year} · ${lengthOf(di)}`,
       cv: cover(di, 112, LISTEN.includes(di.kind) ? 112 : 164, { shadow: '0 10px 24px rgba(0,0,0,.3)' }),
-      hasStatus: !!stMeta, stSt: stMeta ? { color: P.status[stTok], marginTop: '2px' } : {}, stIcon: stMeta ? stMeta[2] : '', stLabel: stMeta ? (stTok === 'ongoing' ? 'Ongoing · updates weekly' : stMeta[1]) : '',
+      hasStatus: !!stMeta, stSt: stMeta ? { color: R.status[stTok], marginTop: '2px' } : {}, stIcon: stMeta ? stMeta[2] : '', stLabel: stMeta ? (stTok === 'ongoing' ? 'Ongoing · updates weekly' : stMeta[1]) : '',
       hasProgress: (di.p || 0) > 0, pct: pctOf(di.p), bar: { width: pctOf(di.p) + '%' }, progressLabel: pctOf(di.p) + '% · ' + di.subtitle,
       ctaLabel: (di.p || 0) > 0 ? 'Resume' : verb, ctaIcon: verbIcon, play: () => this.start(di),
-      dlIcon: dlInfo[0], dlText: dlInfo[1], dlAria: dlInfo[2], dlIconSt: { color: dlInfo[3] ? P.status[dlInfo[3]] : c.ink, fontVariationSettings: dlSt === 'done' ? "'FILL' 1" : "'FILL' 0" },
+      dlIcon: dlInfo[0], dlText: dlInfo[1], dlAria: dlInfo[2], dlIconSt: { color: dlInfo[3] ? R.status[dlInfo[3]] : c.ink, fontVariationSettings: dlSt === 'done' ? "'FILL' 1" : "'FILL' 0" },
       download: () => { if (dlSt === 'done') { this.setState(s => { const d = { ...s.downloads }; delete d[di.id]; return { downloads: d }; }); this.say('Removed from device'); } else if (dlSt === 'outdated') { this.setState(s => ({ downloads: { ...s.downloads, [di.id]: 'done' } })); this.say('Updated · 8 new chapters'); } else if (typeof dlSt !== 'number') { this.setState(s => ({ downloads: { ...s.downloads, [di.id]: 0 } })); this.say('Downloading ' + di.title); } },
       moreIcon: LISTEN.includes(di.kind) ? 'queue_music' : 'bookmarks', moreText: LISTEN.includes(di.kind) ? 'Queue' : 'Shelf',
       more: () => { if (LISTEN.includes(di.kind)) { this.setState(s => ({ queue: s.queue.includes(di.id) || s.now === di.id ? s.queue : s.queue.concat(di.id) })); this.say('Added to queue'); } else this.say('Added to “Weekend reads”'); },
@@ -1585,13 +1593,13 @@ class Component extends DCLogic {
       listTitle: LISTEN.includes(di.kind) && di.kind !== 'Audiobook' ? (di.kind === 'Music' ? 'Tracks' : 'Episodes') : 'Chapters', listSub: chList.length + ' entries',
       chapters: chList.map(([t, d], i) => { const played = (di.p || 0) > 0 && i < curCh, current = (di.p || 0) > 0 && i === curCh;
         return { num: String(i + 1).padStart(2, '0'), title: t, dur: current ? d + ' · in progress' : d, cls: 'dt-ch' + (played ? ' played' : '') + (current ? ' current' : ''), current: current ? 'step' : undefined,
-          icon: played ? 'check_circle' : current ? 'play_circle' : (/^New/.test(d) ? 'fiber_new' : ''), iconSt: { color: played ? P.status.completed : priText, fontSize: '20px' },
+          icon: played ? 'check_circle' : current ? 'play_circle' : (/^New/.test(d) ? 'fiber_new' : ''), iconSt: { color: played ? R.status.completed : priText, fontSize: '20px' },
           pick: () => this.start(di) }; }),
       related: relatedIds.map(it => ({ title: it.title, open: () => this.openDetail(it), cv: cover(it, 96, LISTEN.includes(it.kind) ? 96 : 138) })),
       lib: [
-        { icon: 'verified', iconSt: { color: P.status.completed }, title: 'Matched · ' + (CF.AGENTS[di.kind] || CF.AGENTS.Book)[0] + ' · 96%', sub: 'Metadata, cover and series confirmed', subCls: 'cf-sub', action: 'Fix match',
+        { icon: 'verified', iconSt: { color: R.status.completed }, title: 'Matched · ' + (CF.AGENTS[di.kind] || CF.AGENTS.Book)[0] + ' · 96%', sub: 'Metadata, cover and series confirmed', subCls: 'cf-sub', action: 'Fix match',
           pick: () => { this.setState({ matchId: 'cat:' + di.id, mPick: 0, mOff: [], mAgentsOff: [], mq: '' }); this.push('match'); } },
-        { icon: 'health_and_safety', iconSt: { color: P.status.completed }, title: 'File health · 100', sub: 'Validated ' + formatOf(di) + ' · no problems', subCls: 'cf-sub', action: 'Check',
+        { icon: 'health_and_safety', iconSt: { color: R.status.completed }, title: 'File health · 100', sub: 'Validated ' + formatOf(di) + ' · no problems', subCls: 'cf-sub', action: 'Check',
           pick: () => { this.setState({ repairId: 'cat:' + di.id, rOff: [], rView: 'after' }); this.push('repair'); } },
         { icon: 'folder', iconSt: { color: priText }, title: 'Stored in /Media', sub: libPath(di), subCls: 'lm-file', action: 'Rules', pick: () => this.push('organize') },
       ],
@@ -1672,8 +1680,8 @@ class Component extends DCLogic {
       const worst = it.fixes.reduce((w, f) => CF.FIXES[f][0] === 'error' ? 'error' : w === 'error' ? w : CF.FIXES[f][0] === 'warning' ? 'warning' : w || 'info', '');
       const row = { file: it.file, title: st.matched || it.conf >= 90 ? it.title : it.conf ? 'Best guess: ' + it.title : it.title, sub: `${it.kind} · ${it.size} · ${it.agent}`,
         cv: cover({ ...it, kind: it.kind === 'Document' ? 'Book' : it.kind }, 40, ['Audiobook', 'Music'].includes(it.kind) ? 40 : 56, { bare: true }),
-        confSt: { color: P.status[ct[1]] }, confIcon: ct[3], confLabel: status === 'dup' ? 'Duplicate · ' + it.dup.split(' as ')[0] : (st.matched ? ct[2] : `${conf}% · ${ct[2]}`) + ' · ' + it.agent,
-        hasFixes: fixesLeft > 0 && status !== 'dup', fixSt: { color: P.status[CF.SEVERITY[worst || 'info'][0]] }, fixLabel: fixesLeft + (fixesLeft === 1 ? ' fix' : ' fixes'),
+        confSt: { color: R.status[ct[1]] }, confIcon: ct[3], confLabel: status === 'dup' ? 'Duplicate · ' + it.dup.split(' as ')[0] : (st.matched ? ct[2] : `${conf}% · ${ct[2]}`) + ' · ' + it.agent,
+        hasFixes: fixesLeft > 0 && status !== 'dup', fixSt: { color: R.status[CF.SEVERITY[worst || 'info'][0]] }, fixLabel: fixesLeft + (fixesLeft === 1 ? ' fix' : ' fixes'),
         destIcon: status === 'review' || status === 'unmatched' ? 'hourglass_empty' : 'folder', dest: status === 'review' || status === 'unmatched' ? 'Waiting for a match before filing' : status === 'dup' ? 'Already filed at ' + destOf(it) : destOf(it) };
       const toMatch = () => { this.setState({ matchId: it.id, mPick: 0, mOff: [], mAgentsOff: [], mq: '' }); this.push('match'); };
       const toRepair = () => { this.setState({ repairId: it.id, rOff: [], rView: 'after' }); this.push('repair'); };
@@ -1709,7 +1717,7 @@ class Component extends DCLogic {
       candSub: cands.length ? `${cands.length} results · best first` : 'No results from the selected sources',
       cands: cands.map((cd, i) => { const t = confTok(cd.conf); return { title: cd.title, line: [cd.author, cd.year, cd.edition].filter(Boolean).join(' · '), agent: cd.agent, conf: cd.conf, on: i === S.mPick,
         cv: cover({ ...mi, kind: mi.kind === 'Document' ? 'Book' : mi.kind, hue: cd.hue || mi.hue, title: cd.title }, 40, ['Audiobook', 'Music'].includes(mi.kind) ? 40 : 58, { bare: true }),
-        confSt: { color: P.status[t[1]] }, bar: { width: cd.conf + '%', background: P.status[t[1]] }, pick: () => this.setState({ mPick: i, mOff: [] }) }; }),
+        confSt: { color: R.status[t[1]] }, bar: { width: cd.conf + '%', background: R.status[t[1]] }, pick: () => this.setState({ mPick: i, mOff: [] }) }; }),
       fields: fieldsRaw.map(([k, old, nu], i) => { const on = !S.mOff.includes(i); return { k, old: old || 'empty', nu, on, oldCls: 'lm-old' + (!old ? ' empty' : '') + (!on ? ' kept' : ''), box: on ? 'check_box' : 'check_box_outline_blank', boxSt: { color: on ? priText : c.ink2, fontSize: '20px', fontVariationSettings: on ? "'FILL' 1" : "'FILL' 0" },
         pick: () => this.setState(s => ({ mOff: s.mOff.includes(i) ? s.mOff.filter(x => x !== i) : s.mOff.concat(i) })) }; }),
       applyCount: `${fieldsRaw.length - S.mOff.length} of ${fieldsRaw.length} fields`,
@@ -1732,16 +1740,16 @@ class Component extends DCLogic {
     const rp = { title: ri.title, file: ri.file, fileMeta: `${ri.kind} · ${ri.size}`, cv: cover({ ...ri, kind: ri.kind === 'Document' ? 'Book' : ri.kind }, 48, ['Audiobook', 'Music'].includes(ri.kind) ? 48 : 68, { bare: true }),
       score, scoreNote: issues.length ? (fixedAll ? `/100 · was ${before}` : `/100 → ${after} after repair`) : '/100',
       stateIcon: fixedAll || !issues.length ? 'verified' : S.repairing ? 'autorenew' : 'build', stateLabel: fixedAll || !issues.length ? 'Healthy' : S.repairing ? 'Repairing…' : issues.length + ' problems',
-      stateSt: { color: P.status[fixedAll || !issues.length ? 'completed' : S.repairing ? 'downloading' : scoreTok] }, bar: { width: score + '%', background: P.status[scoreTok] },
+      stateSt: { color: R.status[fixedAll || !issues.length ? 'completed' : S.repairing ? 'downloading' : scoreTok] }, bar: { width: score + '%', background: R.status[scoreTok] },
       listTitle: issues.length ? 'Problems found' : 'Checks', listSub: issues.length ? `${issues.filter(x => x[1] === 'error').length} errors · ${issues.filter(x => x[1] === 'warning').length} warnings · ${issues.filter(x => x[1] === 'info').length} suggestions` : 'Validated just now', healthy: !issues.length,
       issues: issues.map(([f, sev, problem, fix, b, a]) => { const on = !S.rOff.includes(f); const done = fixedAll && on; return { problem, fix: done ? 'Fixed · ' + fix.charAt(0).toLowerCase() + fix.slice(1) : fix, before: b, after: a, on, done,
-        sevIcon: done ? 'check_circle' : CF.SEVERITY[sev][1], sevSt: { color: P.status[done ? 'completed' : CF.SEVERITY[sev][0]], fontSize: '22px' }, beforeSt: { textDecoration: 'line-through', color: c.ink2 },
+        sevIcon: done ? 'check_circle' : CF.SEVERITY[sev][1], sevSt: { color: R.status[done ? 'completed' : CF.SEVERITY[sev][0]], fontSize: '22px' }, beforeSt: { textDecoration: 'line-through', color: c.ink2 },
         switchCls: 'cf-switch' + (done ? ' done' : on ? ' on' : ''), pick: () => { if (!done) this.setState(s => ({ rOff: s.rOff.includes(f) ? s.rOff.filter(x => x !== f) : s.rOff.concat(f) })); } }; }),
       hasPreview: isText || isAudio, textPreview: isText, audioPreview: isAudio,
       views: [['before', 'Before'], ['after', 'After']].map(([id, name]) => ({ name, on: (showAfter ? 'after' : 'before') === id, pick: () => this.setState({ rView: id }) })),
       sample: showAfter ? 'The signal reached Red Coast Base at dawn. Ye Wenjie read it twice, then wrote in the log: “We are here.”' : 'The sig- nal reached Red Coast Base at dawn. Ye Wen- jie read it twice, then wrote in the log: â€œWe are here.â€\u009d',
       pageSt: showAfter ? { padding: '16px 18px', borderRadius: 'var(--rt)', background: P.reader[S.reader].bg, color: P.reader[S.reader].ink, font: `400 ${FONT_STEPS[S.fontStep]}px/1.6 "Source Serif 4",Georgia,serif` } : { padding: '16px 18px', borderRadius: 'var(--rt)', background: P.reader[S.reader].bg, color: P.reader[S.reader].ink, font: '400 11px/1.25 "Times New Roman",serif', textAlign: 'justify' },
-      wave: Array.from({ length: 34 }, (_, i) => { const raw = .25 + .75 * Math.abs(Math.sin(i * 1.3) * Math.cos(i * .37)); const h = showAfter ? .55 + .2 * Math.abs(Math.sin(i * 1.9)) : raw; return { st: { flex: 1, height: Math.round(h * 100) + '%', borderRadius: '2px', background: showAfter ? c.pri : (raw > .85 ? P.status.failed : rgba(c.ink, .45)) } }; }),
+      wave: Array.from({ length: 34 }, (_, i) => { const raw = .25 + .75 * Math.abs(Math.sin(i * 1.3) * Math.cos(i * .37)); const h = showAfter ? .55 + .2 * Math.abs(Math.sin(i * 1.9)) : raw; return { st: { flex: 1, height: Math.round(h * 100) + '%', borderRadius: '2px', background: showAfter ? c.pri : (raw > .85 ? R.status.failed : rgba(c.ink, .45)) } }; }),
       audioAria: showAfter ? 'Waveform after repair: steady loudness around −18 LUFS' : 'Waveform before repair: loudness swings from −11 to −24 LUFS with clipped peaks',
       footTitle: fixedAll ? 'Repaired · original kept' : issues.length ? `${selected.length} of ${issues.length} repairs selected` : 'Nothing to repair', footSub: fixedAll ? 'Undo from Settings → Maintenance' : `Health ${before} → ${after}`,
       canRun: !fixedAll && !S.repairing && selected.length > 0, runIcon: fixedAll ? 'done_all' : S.repairing ? 'hourglass_top' : 'build', runLabel: fixedAll ? 'Done' : S.repairing ? 'Repairing' : 'Repair ' + selected.length,
@@ -1817,22 +1825,22 @@ class Component extends DCLogic {
     const circ = (glyph, label, pick, on) => ({ glyph, label, pick, on: !!on, st: { width: '44px', height: '44px', flex: 'none', borderRadius: '50%', border: `2px solid ${on ? c.pri : c.ink}`, background: on ? c.pri : 'transparent', color: on ? qOnPri : c.ink, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: on && E.glow ? `0 0 14px ${glowC}` : 'none' } });
     const metroBar = [pushed ? circ('arrow_back', 'Back', () => this.back()) : circ('search', 'Search', () => this.push('search'), screen === 'search'), circ(S.playing ? 'pause' : 'play_arrow', S.playing ? 'Pause' : 'Play', () => this.setState(s => ({ playing: !s.playing })), S.playing), circ('cast', 'Cast', () => this.say('Cast · Living Room TV available')), circ('palette', 'Themes', () => { if (screen !== 'themes') this.push('themes'); }, screen === 'themes')];
     const sideItems = NAV.map(([id, glyph, label]) => { const on = activeTab === id; return { glyph, label, current: on ? 'page' : undefined, pick: () => this.nav(id),
-      st: { width: '72px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', padding: '12px 0', color: on ? priText : c.ink2, boxShadow: on ? `inset 2px 0 0 ${c.pri}` : 'none', font: `500 8.5px/1 ${L.lf}`, letterSpacing: '.08em', textTransform: 'uppercase' },
+      st: { width: '72px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', padding: '12px 0', color: on ? priText : c.ink2, boxShadow: on ? `inset 2px 0 0 ${c.pri}` : 'none', font: `600 10px/1 ${L.lf}`, letterSpacing: '.02em', textTransform: 'uppercase' },
       icon: { fontSize: '22px', fontVariationSettings: on ? "'FILL' 1" : "'FILL' 0" } }; });
     const RAIL = [['home', 'HOME'], ['library', 'LIBRARY'], ['discover', 'DISCOVER'], ['downloads', 'DOWNLOADS'], ['search', 'SEARCH'], ['settings', 'SETTINGS']];
     const tint = [c.sec2, c.surf2, c.sec, c.surf2, c.sec2, c.sec];
-    const hs = [62, 50, 56, 50, 52, 50];
+    const hs = [60, 48, 56, 48, 52, 48];
     const railActive = screen === 'search' ? 'search' : S.tab;
     const rail = RAIL.map(([id, label], i) => { const on = railActive === id; const bg = on ? c.pri : tint[i]; return { label, code: '0' + (i + 1) + '-' + (4471 + i * 17), current: on ? 'page' : undefined,
       pick: () => id === 'search' ? (screen === 'search' ? null : this.push('search')) : this.nav(id),
-      st: { position: 'relative', flex: 'none', height: hs[i] + 'px', width: '76px', background: bg, color: pickInk(bg, [c.bg, c.onpri, c.ink]), display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end', padding: '0 8px 5px 0', font: '700 10px/1 Antonio,sans-serif', letterSpacing: '.1em', boxShadow: on ? 'var(--ctash)' : 'none', animation: on ? 'var(--pulse)' : 'none' } }; });
+      st: { position: 'relative', flex: 'none', height: hs[i] + 'px', width: CF.px(R.frame.rail), background: bg, color: pickInk(bg, [c.bg, c.onpri, c.ink]), display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end', padding: '0 8px 5px 0', font: '700 12px/1 Antonio,sans-serif', letterSpacing: '.1em', boxShadow: on ? 'var(--ctash)' : 'none', animation: on ? 'var(--pulse)' : 'none' } }; });
 
     const lcReadouts = [['BOOKS', '412', c.sec2], ['SYNC', offline ? 'ERR' : '2M', offline ? c.err : c.surf2], ['HFY', '+8', c.sec]].map(([k, v, bg], i, a) => ({ k, v,
-      st: { flex: 'none', display: 'flex', alignItems: 'center', gap: '4px', height: '20px', padding: '0 9px', background: bg, color: pickInk(bg, [c.bg, c.ink]), font: '700 9.5px/1 Antonio,sans-serif', borderRadius: i === 0 ? '10px 0 0 10px' : i === a.length - 1 ? '0 10px 10px 0' : '0' } }));
+      st: { flex: 'none', display: 'flex', alignItems: 'center', gap: '4px', height: '20px', padding: '0 2px', background: 'transparent', color: CF.contrast.ensure(bg, [c.bg], 4.5), font: '700 12px/1 Antonio,sans-serif' } }));
     const posLabel = hms(S.pos * dur);
     return {
-      vars, embed: S.embed, shellClass: 'prototype-shell' + (S.embed ? ' embed' : '') + (R.motionOn ? '' : ' cf-anim-off'),
-      themeName, effectName: E.name, motionName: T.motion, clampNote, systemVersion: CF.version,
+      vars, layoutId: T.layout, effectId: T.effect, lcarsReference: T.layout === 'sweep' && T.palette === 'lcars' && T.effect === 'flat' ? 'true' : 'false', embed: S.embed, shellClass: 'prototype-shell' + (S.embed ? ' embed' : '') + (R.motionOn ? '' : ' cf-anim-off'),
+      themeName, effectName: T.layout === 'sweep' && T.effect !== 'flat' ? E.name + ' · LCARS-inspired' : E.name, motionName: T.motion, clampNote, systemVersion: CF.version,
       selLayout: S.theme.layout, selPalette: S.theme.palette, selEffect: S.theme.effect, layoutOpts, paletteGroups, effectOpts,
       pickLayout: e => this.setTheme({ layout: e.target.value }), pickPalette: e => this.setTheme({ palette: e.target.value }), pickEffect: e => this.setTheme({ effect: e.target.value }),
       resetAll: () => { try { localStorage.removeItem('cf-theme'); } catch (e) {} this.setState({ theme: { ...CF.DEFAULT_THEME }, pending: null, tab: 'home', stack: [], queue: ['hf', 'tm', 'rl', 'kb'], history: ['tb'], now: 'phm', pos: .71, playing: false, downloads: { phm: 'done', hf: 'done', fr: 'done', ar: 'done', sg: 64, tb: 'failed', oc: 'outdated' }, sources: { calibre: 'online', plex: 'online', hfy: 'syncing', jelly: 'offline', local: 'online' } }); this.say('Prototype reset'); },
@@ -1914,7 +1922,7 @@ class Component extends DCLogic {
       obFinish: () => { this.nav('home'); this.say('Tour skipped · replay it from Settings'); },
       navItems,
       sPlugins: screen === 'plugins', plugins, pluginSub: visiblePlugins.length + ' from Kaleaon/calibre_plugins', adultHidden: CF.PLUGINS.some(pl => pl.adult), installPlugin: () => this.say('Choose a calibre plugin ZIP · its manifest is checked first'),
-      pluginTiers: CF.PLUGIN_TIERS.map(([name, icon, tok, body]) => ({ name, icon, body, st: { color: P.status[tok], fontSize: '22px' } })),
+      pluginTiers: CF.PLUGIN_TIERS.map(([name, icon, tok, body]) => ({ name, icon, body, st: { color: R.status[tok], fontSize: '22px' } })),
       sInbox: screen === 'inbox', sMatch: screen === 'match', sRepair: screen === 'repair', sOrganize: screen === 'organize', sTags: screen === 'tags',
       goInbox: () => this.push('inbox'), goOrganize: () => this.push('organize'), goTags: () => this.push('tags'), goDupes: () => { this.setState({ ibFilter: 'Duplicates' }); this.push('inbox'); },
       rescan: () => this.say('Watch folders scanned · no new files'), inboxLine, inboxBadge: String(live.length), hasInbox: live.length > 0,

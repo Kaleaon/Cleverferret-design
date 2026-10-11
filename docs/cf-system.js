@@ -87,7 +87,7 @@
     metro: ['Metro Cyan', '001A33 002448 3D4854 F0F8FF B8CAD6 00AEEF 001A33 0070CA F0F8FF 2D89EF 00AEEF 4D5A66 CF6679'],
     aurora: ['Aurora Glass Night', '0A1224 101C33 1D2B4A E7F0FF B5C7E9 6DE8FF 0A1224 2A6F85 E7F0FF 8C7CFF 7CFFD8 334364 CF6679'],
     slatec: ['Slate Cyan', '1A1F24 232930 3D4854 E8F0F5 B8CAD6 00D9FF 1A1F24 00A8CC 1A1F24 2A333D 6BA5B8 4D5A66 CF6679'],
-    lcars: ['LCARS Amber', '120C1C 1C132A 3D1F5C F3E9FF D0B3E6 F2A65A 120C1C CC7A2B 120C1C A485F7 C5678D 4D2F5C CF6679'],
+    lcars: ['LCARS Amber', '000000 000000 1C132A F3E9FF FFCC99 F2A65A 000000 CC7A2B 000000 A485F7 C5678D 3D2F5C CF6679'],
     amber: ['Midnight Amber', '0C1824 15202E 253447 E8EEF5 B8C5D6 FFBF00 0C1824 CC9900 0C1824 D4A76A D4A76A 3D4854 CF6679'],
     royalb: ['Royal Bronze', '1A0A30 220D40 3D1F5C F0E6FF D0B3E6 CD7F32 1A0A30 975929 F0E6FF 2D1550 9B7A5F 4D2F5C CF6679'],
     forest: ['Forest Copper', '0D1F0D 152915 2A4D2A E8F5E8 B8D9B8 B87333 0D1F0D 935E29 E8F5E8 1A3D1A 8FA886 3D5A3D CF6679'],
@@ -150,7 +150,7 @@
     compose: { name: 'Compose', nav: 'tabs', navSpec: 'bar → rail', fontName: 'Roboto', ff: 'Roboto,system-ui,sans-serif', dff: 'Roboto,system-ui,sans-serif', lf: 'Roboto,system-ui,sans-serif', rl: 18, rp: 14, rt: 12, rc: 6, rs: 999, ri: 10, ra: 20, tt: 'none', htls: '-.01em', tw: 700, card: 'compose', qgap: '8px',
       desc: 'MD3 · rounded 18/14/12 · pill CTAs · navigation bar',
       note: 'Today\'s modern surface: MD3 roles, 18/14/12 rounding, pill metal CTAs, NavigationBar on phones and NavigationRail on tablets.' },
-    terminal: { name: 'Ink Terminal', nav: 'tabs', navSpec: 'tabs → rail', fontName: 'JetBrains Mono', ff: '"JetBrains Mono",monospace', dff: '"JetBrains Mono",monospace', lf: '"JetBrains Mono",monospace', rl: 8, rp: 4, rt: 4, rc: 2, rs: 4, ri: 4, ra: 4, tt: 'uppercase', htls: '.18em', tw: 700, card: 'box', qgap: '9px',
+    terminal: { name: 'Ink Terminal', nav: 'tabs', navSpec: 'tabs → rail', fontName: 'JetBrains Mono', ff: '"JetBrains Mono",monospace', dff: '"JetBrains Mono",monospace', lf: '"JetBrains Mono",monospace', rl: 4, rp: 4, rt: 4, rc: 4, rs: 4, ri: 4, ra: 4, tt: 'uppercase', htls: '.18em', tw: 700, card: 'box', qgap: '9px',
       desc: 'Mono · 4px corners · boxed cards · tracked caps',
       note: 'Dense grid, mono type, 4px corners, boxed cards with hairline outlines, tracked uppercase titles. The reader switches to mono too.' },
     sweep: { name: 'Sweep Console', nav: 'sweep', navSpec: 'sweep → sweep', fontName: 'Antonio + Nunito Sans', ff: '"Nunito Sans",sans-serif', dff: 'Antonio,sans-serif', lf: 'Antonio,sans-serif', rl: 0, rp: 0, rt: 0, rc: 0, rs: 999, ri: 999, ra: 0, tt: 'uppercase', htls: '.1em', tw: 700, card: 'lcars', qgap: '3px',
@@ -173,19 +173,20 @@
   // Sweep Console against LCARS conventions (reference: commons.wikimedia.org/wiki/File:Lcars_wallpaper.svg).
   // status: kept = follows the convention · deviation = knowingly breaks it · retired = removed deviation.
   const LCARS = {
+    frame: { rail: 76, bar: 12, gap: 4, inner: 18, arm: 48, header: 64, elbow: 48, footer: 24 },
     rules: [
       ['Split frame', 'The header column swoops down into the divider bar, and the content bar swoops down into the rail below it. The two elbows face each other across a double bar.'],
       ['Text in black space', 'Screen titles and readouts sit in the black field beside or above a bar, right-aligned. A bar is never a text background.'],
       ['Labels inside segments', 'Rail and button labels sit bottom-right inside their segment, with a small numeric code top-left.'],
-      ['Concentric corners', 'The inner corner of each elbow is concentric with its outer sweep, at the same gap everywhere.'],
+      ['Concentric corners', 'Each inner corner and outer elliptical sweep share a center. Outer radii are the inner radius plus the rail width horizontally and bar height vertically.'],
       ['Caps and gaps', 'Bars end in a rounded cap or butt against a 4px black gap. No borders, gradients or shadows.'],
     ],
     deviations: [
       ['retired', 'Overlay on a bar', 'Sweep Console v1 drew the screen title and the BOOKS / SYNC / HFY readouts on top of the header bar, and the sync footer on a bottom bar. LCARS keeps bars free of text. Replaced by the split frame; titles and readouts now sit in black space.'],
-      ['deviation', 'Floating mini player and toasts', 'They float over the content frame instead of docking into a bar. Kept because playback and feedback must stay visible on a phone.'],
+      ['retired', 'Floating mini player and toasts', 'Playback and feedback now occupy their own dock rows inside the console, with black gaps. They no longer cover the scrolling content.'],
       ['deviation', 'Pictogram icons', 'Material Symbols appear inside content cards. Canon LCARS uses text and numeric codes only. Kept for recognition and accessibility; the rail and frame stay text-only.'],
       ['deviation', 'Platform status bar', 'The Android status bar sits above the frame. It is required by the platform.'],
-      ['deviation', 'Effect packs', 'Glow, glass, grain and gradient borders can be layered on the console. LCARS is flat; the Flat effect pack is the conformant choice.'],
+      ['deviation', 'Effect packs', 'The Console preset uses Flat. Other effects remain available as LCARS-inspired variants and are labeled as such.'],
     ],
   };
 
@@ -428,6 +429,25 @@
 
   // ─── Resolvers ─────────────────────────────────────────────────────────
   const gradOf = m => `linear-gradient(135deg, ${m[0]} 0%, ${m[1]} 45%, ${m[2]} 85%, ${m[3]} 100%)`;
+  // Alpha surfaces are audited against the maximum washes, including both overlapping.
+  // CSS backdrop saturation is applied before the translucent surface is composited.
+  const glassBackgrounds = c => {
+    const fields = [c.bg, mix(c.bg, c.sec, .32), mix(c.bg, c.pri, .22), mix(mix(c.bg, c.pri, .22), c.sec, .32)];
+    return fields.flatMap(bg => {
+      const rgb = hx(bg), gray = .213 * rgb[0] + .715 * rgb[1] + .072 * rgb[2];
+      const filtered = toHex(rgb.map(channel => gray + 1.8 * (channel - gray)));
+      return [bg, mix(filtered, c.surf, .6), mix(filtered, c.surf2, .6), mix(filtered, c.surf, .65), mix(filtered, c.surf, .75)];
+    });
+  };
+  // Keep raw metal stops for the spec; derive accessible brushes for UI labels.
+  const accessibleMetal = (stops, backgrounds, min = 4.5) => stops.map(stop => contrast.ensure(stop, backgrounds, min));
+  function lcarsGeometry() {
+    const f = LCARS.frame;
+    const headerTop = f.arm + f.gap, headerBottom = headerTop + f.header;
+    const contentTop = headerBottom + f.gap, shellTop = contentTop + f.bar;
+    return { ...f, outerX: f.rail + f.inner, outerY: f.bar + f.inner,
+      headerTop, headerBottom, contentTop, shellTop, railTop: contentTop + f.elbow + f.gap };
+  }
   const px = v => v === 999 ? '999px' : v + 'px';
   const familyOf = id => (FAMILIES.find(f => f[1].includes(id)) || ['Other'])[0];
   const cache = {};
@@ -477,12 +497,20 @@
   function resolve(theme, opts) {
     opts = opts || {};
     const T = effectiveTheme(theme);
-    const L = LAYOUTS[T.layout], P = palette(T.palette, { enforce: opts.enforce !== false }), E = EFFECTS[T.effect], c = P.c;
+    const L = LAYOUTS[T.layout], P = palette(T.palette, { enforce: opts.enforce !== false }), E = EFFECTS[T.effect], c = { ...P.c };
+    const readingSurfaces = [c.bg, c.surf, c.surf2, ...(E.glass ? glassBackgrounds(c) : [])];
+    if (opts.enforce !== false && E.glass) {
+      c.ink = contrast.ensure(c.ink, readingSurfaces, 4.5);
+      c.ink2 = contrast.ensure(c.ink2, readingSurfaces, 4.5);
+    }
     const reduced = opts.reduced != null ? opts.reduced : prefersReducedMotion();
     const motionOn = T.motion === 'on' || (T.motion === 'system' && !reduced);
     const grad = gradOf(P.metal);
-    const metal = E.cta ? grad : `linear-gradient(${c.pri}, ${c.pri})`;
     const ctafg = pickInk(E.cta ? P.metal[1] : c.pri, [c.onpri, c.ink, c.bg]);
+    // Leave headroom for the luminance dip between differently coloured stops.
+    const ctaStops = accessibleMetal(P.metal, [ctafg], 4.8);
+    const textStops = accessibleMetal(P.metal, readingSurfaces, 4.8);
+    const metal = E.cta ? gradOf(ctaStops) : `linear-gradient(${c.pri}, ${c.pri})`;
     const glowC = rgba(c.pri, .55);
     const onpriL = pickInk(c.pri, [c.bg, c.onpri, c.ink]);
     const onPriC = pickInk(c.priC, [c.onpriC, c.ink, c.bg]);
@@ -518,12 +546,17 @@
       '--outv': c.outv, '--sec': c.sec, '--sec2': c.sec2, '--err': c.err,
       '--onpriL': onpriL, '--onsec2L': pickInk(c.sec2, [c.bg, c.ink]), '--onsecL': pickInk(c.sec, [c.bg, c.ink]),
       '--pbg': bgimg + c.bg, '--bgimg': bgimg || 'none',
-      '--metal': metal, '--ctafg': ctafg, '--ctash': E.glow ? `0 0 18px ${glowC}` : 'none', '--wglow': E.glow ? `drop-shadow(0 0 6px ${rgba(c.pri, .6)})` : 'none',
+      '--metal': metal, '--metalText': E.cta ? gradOf(textStops) : `linear-gradient(${contrast.ensure(c.pri, readingSurfaces, 4.5)}, ${contrast.ensure(c.pri, readingSurfaces, 4.5)})`,
+      '--ctafg': ctafg, '--ctash': E.glow ? `0 0 18px ${glowC}` : 'none', '--wglow': E.glow ? `drop-shadow(0 0 6px ${rgba(c.pri, .6)})` : 'none',
       '--shim': motionOn && E.shimmer ? 'cfShimmer 2.8s linear infinite' : 'none', '--shimo': E.shimmer ? 1 : 0,
       '--pulse': motionOn && E.pulse ? 'cfPulse 2.4s ease-in-out infinite' : 'none',
       '--enter': motionOn ? 'cfIn .2s cubic-bezier(.05,.7,.1,1)' : 'none', '--skelAnim': motionOn ? 'cfSkel 1.4s ease-in-out infinite' : 'none',
       '--press': motionOn ? 'scale(.97)' : 'none', '--bf': E.glass ? 'blur(14px) saturate(180%)' : 'none',
       '--ff': L.ff, '--dff': L.dff, '--lf': L.lf, '--tt': L.tt, '--htls': L.htls, '--tw': L.tw,
+      '--contentCase': T.layout === 'tiles' ? 'none' : L.tt,
+      '--heroTitleSize': T.layout === 'rules' ? 'clamp(16px, 6cqw, 22px)' : '22px',
+      '--ctaWeight': T.layout === 'press' ? 600 : 900,
+      '--miniShadow': ['press', 'terminal', 'rules', 'sweep'].includes(T.layout) ? 'none' : '0 8px 24px rgba(0,0,0,.2)',
       '--hdls': T.layout === 'rules' ? '.08em' : T.layout === 'terminal' ? '.06em' : L.htls,
       '--rl': px(L.rl), '--rp': px(L.rp), '--rt': px(L.rt), '--rc': px(L.rc), '--rs': px(L.rs), '--ri': px(L.ri), '--ra': px(L.ra),
       '--cbt': cb.t, '--cbr': cb.r, '--cbb': cb.b, '--cbl': cb.l, '--cbg': cbg, '--csh': csh, '--herobg': herobg, '--fbg': herobg,
@@ -536,11 +569,14 @@
       '--navbg': E.glass ? rgba(c.surf, .65) : c.surf, '--navbt': L.card === 'rule' || L.card === 'quiet' ? hair : 'none', '--navbr': L.card === 'rule' || L.card === 'quiet' ? hair : 'none',
       '--focus': P.id === 'contrast' ? '#00FFFF' : c.pri, '--hair': rgba(c.outv, .7),
       // Primary used as text (kind labels, links, counts) must clear 4.5:1 on every surface it sits on.
-      '--priText': contrast.ensure(c.pri, [c.surf, c.bg, c.surf2], 4.5),
+      '--priText': contrast.ensure(c.pri, readingSurfaces, 4.5),
       '--rpbg': R.bg, '--rpink': R.ink, '--rpmuted': mix(R.ink, R.bg, .35), '--rff': T.layout === 'terminal' ? '"JetBrains Mono",monospace' : '"Source Serif 4",Georgia,serif',
     };
-    for (const [k] of STATUS) vars['--st-' + k] = P.status[k];
-    return { T, L, P, E, c, vars, grad, metal, ctafg, glowC, onpriL, onPriC, qOnPri, bgimg, motionOn, reduced, hair, clamped: !!P.clamp, requested: { ...DEFAULT_THEME, ...(theme || {}) } };
+    const status = Object.fromEntries(STATUS.map(([k]) => [k, contrast.ensure(P.status[k], readingSurfaces, 4.5)]));
+    for (const [k] of STATUS) vars['--st-' + k] = status[k];
+    const frame = lcarsGeometry();
+    for (const [k, v] of Object.entries(frame)) vars['--lc-' + k] = px(v);
+    return { T, L, P, E, c, status, vars, grad, metal, ctafg, ctaStops, textStops, readingSurfaces, frame, glowC, onpriL, onPriC, qOnPri, bgimg, motionOn, reduced, hair, clamped: !!P.clamp, requested: { ...DEFAULT_THEME, ...(theme || {}) } };
   }
 
   // Contrast pairs that matter for a palette, used by the spec audit and tests.
@@ -558,7 +594,7 @@
 
   const CF = {
     version: '2.0.0',
-    hx, toHex, mix, rgba, ratio, pickInk, gradOf, px, contrast,
+    hx, toHex, mix, rgba, ratio, pickInk, gradOf, accessibleMetal, glassBackgrounds, lcarsGeometry, px, contrast,
     KEYS, ROLE_NAMES, PALETTES, FAMILIES, METAL, CLAMPS, STATUS, LAYOUTS, EFFECTS,
     TYPE, SPACE, GUTTERS, RADIUS, MOTION, CONTRAST, CATALOG, SCREENS, DEFAULT_THEME,
     LCARS, PIPELINE, CONFIDENCE, confidenceOf, SEVERITY, FIXES, AGENTS, INBOX, CANDIDATES, MATCH_FIELDS, NAMING, templateParts, applyTemplate, TAG_SOURCES, TAG_GROUPS, AUTO_TAG_RULES, PLUGINS, PLUGIN_TIERS,
