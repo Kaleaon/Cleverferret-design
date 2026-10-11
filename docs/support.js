@@ -1,4 +1,4 @@
-// GENERATED from dc-runtime/src/*.ts — do not edit. Rebuild with `cd dc-runtime && bun run build`.
+// Centralized support runtime re-export from @ktheme/react/support
 "use strict";
 (() => {
   var __defProp = Object.defineProperty;
