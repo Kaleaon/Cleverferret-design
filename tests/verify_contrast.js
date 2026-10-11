@@ -20,11 +20,23 @@ for (const id of Object.keys(CF.PALETTES)) {
   for (const [mode, page] of Object.entries(P.reader)) check(CF.ratio(page.ink, page.bg) >= 4.5, `${P.name}: reader ${mode} page`);
 
   // Theme-derived text roles: primary used as text, the metal CTA label, and the selected nav pill.
-  for (const effect of ['flat', 'sheen']) {
+  for (const effect of Object.keys(CF.EFFECTS)) {
     const R = CF.resolve({ layout: 'compose', palette: id, effect }, { reduced: true });
-    const ctaBg = R.E.cta ? P.metal[1] : c.pri;
-    check(CF.ratio(R.ctafg, ctaBg) >= 4.5, `${P.name} / ${effect}: CTA label ${R.ctafg} on ${ctaBg}`);
-    for (const bg of [c.surf, c.bg, c.surf2]) check(CF.ratio(R.vars['--priText'], bg) >= 4.5, `${P.name}: --priText on ${bg}`);
+    const stops = R.E.cta ? R.ctaStops : [c.pri, c.pri];
+    // Interpolate between stops, rather than checking only a gradient's base colour.
+    for (let i = 1; i < stops.length; i++) for (let n = 0; n <= 32; n++) {
+      const bg = CF.mix(stops[i - 1], stops[i], n / 32);
+      check(CF.ratio(R.ctafg, bg) >= 4.5, `${P.name}/${effect}: CTA gradient at ${i}:${n}`);
+    }
+    for (const bg of R.readingSurfaces) {
+      for (const role of ['--priText', '--ink', '--ink2', ...CF.STATUS.map(([k]) => '--st-' + k)]) {
+        check(CF.ratio(R.vars[role], bg) >= 4.5, `${P.name}/${effect}: ${role} on ${bg}`);
+      }
+      if (R.E.cta) for (let i = 1; i < R.textStops.length; i++) for (let n = 0; n <= 32; n++) {
+        const ink = CF.mix(R.textStops[i - 1], R.textStops[i], n / 32);
+        check(CF.ratio(ink, bg) >= 4.5, `${P.name}/${effect}: metal text gradient at ${i}:${n} on ${bg}`);
+      }
+    }
     check(CF.ratio(R.onPriC, c.priC) >= 4.5, `${P.name}: nav pill label on primaryContainer`);
   }
 }

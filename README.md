@@ -42,9 +42,13 @@ design-notes/
   design-language.md    principles, patterns and how they map to the Kotlin code
   calibre-plugins.md    running Kaleaon/calibre_plugins inside the app
   sync-log.md           what was taken from the app repo, and where the two have drifted
+  layout-refinement-plan.md  seven-layout acceptance and verification plan
+  android-layout-parity.md   source-reviewed native gaps and implementation order
 tests/
   verify_contrast.js    WCAG 2.2 AA audit of every colour pack and derived text role
   verify_system.js      structural checks on the token data and the pages
+  verify_layouts.mjs    all-screen browser, responsive and interaction regressions
+  verify_images.mjs     PNG encoding-independent visual comparison checks
 ```
 
 `cf-system.js` holds all of the design data:
@@ -64,10 +68,33 @@ node tests/verify_contrast.js
 node tests/verify_system.js
 ```
 
-Both need only Node. The first checks every colour pack after contrast correction. It covers MD3 role
+These two scripts need only Node. The first checks every colour pack after contrast correction. It covers MD3 role
 pairs, status colours, reader pages, CTA labels, primary-as-text and nav pills. The second checks that
 every pack, layout and effect combination resolves, that each registered screen exists in the
 prototype, and that the inbox, naming, tag and plugin data is consistent.
+
+For all seven layout families in Chromium:
+
+```
+npm ci
+npx playwright install chromium
+npm run test:layouts
+npm run validate
+```
+
+The browser suite exercises all 20 screens, minimum targets, resize behavior and playback.
+It serves the exact React runtime locally and uses fallback fonts for repeatable geometry checks.
+The contrast suite samples between gradient stops and checks glass wash/surface composites.
+`CHROMIUM_PATH` can select a system browser. Unified validation includes these suites; its
+landing-page contrast warnings do not constitute a full app accessibility audit.
+
+Landing snapshots load the locked Fontsource Inter/JetBrains Mono fixtures and wait for fonts,
+so CDN timing does not change layout. The runner prefers the installed Playwright browser and
+compares decoded RGBA pixels (PNG compression/row filters are ignored). Refresh reviewed
+baselines with `node tools/ci-runner.mjs --visual --update-snapshots` when appearance changes.
+The committed baselines use Ubuntu 24.04 and the locked Playwright browser, matching CI.
+Use that environment for exact comparisons; a different Linux font rasterizer can differ even
+with identical font files. Inspect the images before accepting a baseline refresh.
 
 ## Enabling GitHub Pages (one-time setup)
 

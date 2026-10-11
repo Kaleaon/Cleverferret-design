@@ -286,7 +286,7 @@ pre.ts-json{margin:0;padding:18px;border:1px solid #262a37;border-radius:10px;ba
       <h2 id="h-found">Foundations</h2>
       <p class="ts-d">Shared scales from <span class="ts-mono">CFTheme.kt</span> (type) and <span class="ts-mono">DesignTokensV1</span> (spacing, radius, motion, contrast). Specimens use the active layout pack's typefaces.</p>
     </header>
-    <div class="ts-themed cf-ui" style="{{ vars }}">
+    <div class="ts-themed cf-ui" data-layout="{{ layoutId }}" style="{{ vars }}">
       <div class="ts-cards wide">
         <div class="ts-spec" style="grid-column:1/-1">
           <div class="cap">Type scale · {{ fontName }}</div>
@@ -370,7 +370,7 @@ pre.ts-json{margin:0;padding:18px;border:1px solid #262a37;border-radius:10px;ba
       <div class="ts-panel">
         <h3>Status colours</h3>
         <p class="ts-small" style="margin:0">From <span class="ts-mono">CFStatusColors</span>, lifted to 4.5:1 on surface. Status is never colour alone: always an icon and a label too.</p>
-        <div class="cf-ui" style="{{ vars }}"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px;border-radius:10px;background:var(--surf)">
+        <div class="cf-ui" data-layout="{{ layoutId }}" style="{{ vars }}"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px;border-radius:10px;background:var(--surf)">
           <sc-for list="{{ statusRows }}" as="s" hint-placeholder-count="8"><div style="display:flex;flex-direction:column;gap:3px"><span class="cf-status" style="{{ s.st }}"><span class="ms fill" aria-hidden="true">{{ s.icon }}</span>{{ s.label }}</span><span class="ts-mono" style="font-size:10px;color:var(--ink2)">{{ s.hex }} · {{ s.ratio }}</span></div></sc-for>
         </div></div>
       </div>
@@ -407,7 +407,7 @@ pre.ts-json{margin:0;padding:18px;border:1px solid #262a37;border-radius:10px;ba
 
   <section id="library" class="ts-sec" aria-labelledby="h-library">
     <header><h2 id="h-library">Library management patterns</h2><p class="ts-d">CleverFerret catalogues like Calibre and files like Plex. New media passes a five-stage pipeline: it is matched against metadata sources, repaired if badly formatted, renamed to a server-ready path, and tagged. These patterns appear in the Import inbox, Fix match, File repair, Sort rules, Tag explorer and Calibre plugins screens.</p></header>
-    <div class="ts-themed cf-ui" style="{{ vars }}">
+    <div class="ts-themed cf-ui" data-layout="{{ layoutId }}" style="{{ vars }}">
       <div class="ts-cards wide">
         <div class="ts-spec" style="grid-column:1/-1">
           <div class="cap">Cataloging pipeline · services/pipeline</div>
@@ -452,7 +452,7 @@ pre.ts-json{margin:0;padding:18px;border:1px solid #262a37;border-radius:10px;ba
 
   <section id="components" class="ts-sec" aria-labelledby="h-components">
     <header><h2 id="h-components">Components</h2><p class="ts-d">The shared UI kit (<span class="ts-mono">cf-ui.css</span>) rendered in the active theme. The app uses these classes too, so what you see here is what ships in the prototype.</p></header>
-    <div class="ts-themed cf-ui" style="{{ vars }}">
+    <div class="ts-themed cf-ui" data-layout="{{ layoutId }}" style="{{ vars }}">
       <div class="ts-cards">
         <div class="ts-spec"><div class="cap">Wordmark and headers</div><div class="cf-metal-text" style="font:900 30px/1.1 var(--dff);align-self:flex-start">CleverFerret</div><div class="cf-sh flush"><span class="cap"></span><div class="tw"><h2 style="margin:0">Continue</h2><p style="margin:0">Pick up where you left off</p></div><span class="bar"></span><span class="end"></span></div></div>
         <div class="ts-spec"><div class="cap">Buttons</div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button type="button" class="cf-cta cf-shine cf-press" style="animation:var(--pulse)"><span class="ms fill" aria-hidden="true">play_arrow</span>Resume</button><button type="button" class="lm-act cf-press"><span class="ms" aria-hidden="true">fact_check</span>Review</button><button type="button" class="cf-link">See all</button><button type="button" class="cf-iconbtn" aria-label="Search"><span class="ms" aria-hidden="true">search</span></button></div></div>
@@ -605,7 +605,7 @@ class Component extends DCLogic {
         prevPri: { width: '14px', height: '14px', borderRadius: '50%', background: gradOf(p.metal) }, prevText: { font: '700 12px/1 Inter,sans-serif', color: p.c.ink } }; });
     const okCount = matrix.filter(m => m.ok).length;
     const flatCta = !E.cta;
-    const metalLegibility = flatCta ? `${E.name} uses solid primary for CTAs: label ${R.ctafg} at ${ratio(R.ctafg, c.pri).toFixed(1)}:1.` : `CTA label ${R.ctafg}: ${ratio(R.ctafg, P.metal[1]).toFixed(1)}:1 on base, ${ratio(R.ctafg, P.metal[2]).toFixed(1)}:1 on highlight, ${ratio(R.ctafg, P.metal[0]).toFixed(1)}:1 on shadow.`;
+    const metalLegibility = flatCta ? `${E.name} uses solid primary for CTAs: label ${R.ctafg} at ${ratio(R.ctafg, c.pri).toFixed(1)}:1.` : `CTA label ${R.ctafg}: ${ratio(R.ctafg, R.ctaStops[1]).toFixed(1)}:1 on base, ${ratio(R.ctafg, R.ctaStops[2]).toFixed(1)}:1 on highlight, ${ratio(R.ctafg, R.ctaStops[0]).toFixed(1)}:1 on shadow.`;
 
     // ── Library management ──
     const sample = { books: 'tbp', audiobooks: 'rec', comics: 'saga', movies: 'arr', tv: 'tz', music: 'kob', webfiction: 'hfy' };
@@ -613,9 +613,9 @@ class Component extends DCLogic {
       return { name: n.name, conv: cur[1] + ' · also ' + n.options.slice(1).map(o => o[1]).join(', '), parts: CF.templateParts(cur[2]).map(p => ({ text: p.text, cls: p.token ? 'lm-token' : '' })), example: '/Media/' + CF.applyTemplate(cur[2], ex.vals) }; });
     const RULES = ['Files automatically', 'Waits in the inbox for review', 'Shown but never auto-applied', 'Identify by ISBN, OCR or search'];
     const RANGES = ['≥ 90%', '60–89%', '1–59%', '0%'];
-    const confRows = CF.CONFIDENCE.map(([min, tok, label, icon], i) => ({ range: RANGES[i], label, rule: RULES[i], icon, st: { color: P.status[tok] } }));
-    const sevRows = Object.entries(CF.SEVERITY).map(([name, [tok, icon, desc]]) => ({ name: capFirst(name), icon, desc, st: { color: P.status[tok], fontSize: '22px' } }));
-    const fixRows = Object.values(CF.FIXES).map(([sev, problem, fix, before, after]) => ({ problem, before, after, icon: CF.SEVERITY[sev][1], st: { color: P.status[CF.SEVERITY[sev][0]], fontSize: '18px' } }));
+    const confRows = CF.CONFIDENCE.map(([min, tok, label, icon], i) => ({ range: RANGES[i], label, rule: RULES[i], icon, st: { color: R.status[tok] } }));
+    const sevRows = Object.entries(CF.SEVERITY).map(([name, [tok, icon, desc]]) => ({ name: capFirst(name), icon, desc, st: { color: R.status[tok], fontSize: '22px' } }));
+    const fixRows = Object.values(CF.FIXES).map(([sev, problem, fix, before, after]) => ({ problem, before, after, icon: CF.SEVERITY[sev][1], st: { color: R.status[CF.SEVERITY[sev][0]], fontSize: '18px' } }));
     const tagSamples = [['Fiction › Science fiction › Hard SF', 38, 'calibre'], ['Fiction › Gothic', 17, 'calibre'], ['Space opera', 51, 'auto'], ['First contact', 29, 'user'], ['Award winners', 27, 'plex'], ['Family movie night', 19, 'jellyfin']].map(([t, n, src]) => {
       const parts = t.split(' › '); const leaf = parts.pop(); return { leaf, crumb: parts.length ? parts.join(' › ') + ' ›' : '', hasCrumb: parts.length > 0, count: n, icon: CF.TAG_SOURCES[src][0] }; });
 
@@ -623,14 +623,14 @@ class Component extends DCLogic {
     const json = JSON.stringify({
       id: themeId, name: themeName, systemVersion: CF.version,
       layout: { id: T.layout, nav: L.nav, font: L.fontName, radius: { large: L.rl, panel: L.rp, tile: L.rt, cover: L.rc, control: L.rs === 999 ? 'pill' : L.rs, icon: L.ri === 999 ? 'pill' : L.ri, artwork: L.ra }, card: L.card, titleCase: L.tt },
-      colour: { id: slug(P.name), darkMode: !P.light, colorScheme: Object.fromEntries(KEYS.map(k => [ROLE_NAMES[k], c[k]])), metal: { shadow: P.metal[0], base: P.metal[1], highlight: P.metal[2], shimmer: P.metal[3] }, status: P.status, playerControls: P.player, reader: P.reader },
+      colour: { id: slug(P.name), darkMode: !P.light, colorScheme: Object.fromEntries(KEYS.map(k => [ROLE_NAMES[k], c[k]])), metal: { shadow: P.metal[0], base: P.metal[1], highlight: P.metal[2], shimmer: P.metal[3] }, status: R.status, playerControls: P.player, reader: P.reader },
       effects: { id: T.effect, lockedBy: P.clamp ? P.id : null, slots: { cta: E.cta ? 'metal' : 'solid', shimmer: !!E.shimmer, glow: !!E.glow, glass: !!E.glass, background: E.bg || 'none', gradientBorder: !!E.gborder, crystalPulse: !!E.pulse } },
       motion: T.motion, readerPage: S.reader,
     }, null, 2);
 
     const reduced = R.reduced;
     return {
-      vars, version: CF.version, themeName, themeId, effectName: E.name, palName: P.name, layoutName: L.name, fontName: L.fontName,
+      layoutId: T.layout, vars, version: CF.version, themeName, themeId, effectName: T.layout === 'sweep' && T.effect !== 'flat' ? E.name + ' · LCARS-inspired' : E.name, palName: P.name, layoutName: L.name, fontName: L.fontName,
       clampNote: P.clamp ? P.clamp.why : '', appHref: 'app.dc.html?' + themeQ,
       motionLabel: T.motion === 'system' ? (reduced ? 'system · reduced' : 'system') : T.motion,
       comboFormula: `${CF.counts.layouts} × ${CF.counts.palettes} × ${CF.counts.effects} = ${(CF.counts.layouts * CF.counts.palettes * CF.counts.effects).toLocaleString('en-US')} themes`,
@@ -642,7 +642,7 @@ class Component extends DCLogic {
       phones: PHONES.map(([id, name, mode]) => ({ src: `app.dc.html?embed=1&screen=${id}&${this.frameQ}`, title: `CleverFerret ${name} screen, live`, cap: `${name.toUpperCase()} · ${mode}` })),
       navSweep: sweep, navNotSweep: !sweep, navLabelT: sweep ? 'sweep rail' : 'navigation rail', lcRailT, railItems: NAV.map(navItem), items,
       formats: FORMATS.map(([name, n]) => ({ name, count: fmtCount(n) })),
-      sources: SOURCES.map(([label, desc, st]) => ({ label, desc, stateU: st === 'on' ? 'ONLINE' : 'SYNCING', blk: { width: '14px', height: '24px', flex: 'none', background: st === 'on' ? P.status.completed : P.status.downloading } })),
+      sources: SOURCES.map(([label, desc, st]) => ({ label, desc, stateU: st === 'on' ? 'ONLINE' : 'SYNCING', blk: { width: '14px', height: '24px', flex: 'none', background: st === 'on' ? R.status.completed : R.status.downloading } })),
       tvNav, tvItems,
       typeRows, spaceRows, gutters: 'Gutters: ' + CF.GUTTERS.map(([n, v]) => `${n} ${v}`).join(' · '), radiusRows,
       coreRadius: CF.RADIUS.map(([n, v]) => n.replace('radius.', '') + ' ' + (v === 999 ? 'full' : v)).join(' · '),
@@ -655,7 +655,7 @@ class Component extends DCLogic {
       activeScore: `${passN} / ${pairs.length} pairs pass`, activeScoreSub: `${aaaN} reach AAA (7:1)`,
       correctionsCount: S.enforceWCAG ? `${changed.length} ${changed.length === 1 ? 'role' : 'roles'} adjusted` : 'Off', correctionsSub: S.enforceWCAG ? (changed.length ? changed.map(k => ROLE_NAMES[k]).join(', ') : 'Source values already pass') : 'Showing source values',
       roles, pairs: pairRows, matrix,
-      statusRows: CF.STATUS.map(([k, label, icon]) => ({ label, icon, st: { color: P.status[k] }, hex: P.status[k], ratio: ratio(P.status[k], c.surf).toFixed(1) + ':1' })),
+      statusRows: CF.STATUS.map(([k, label, icon]) => ({ label, icon, st: { color: R.status[k] }, hex: R.status[k], ratio: ratio(R.status[k], c.surf).toFixed(1) + ':1' })),
       playerRows: Object.entries(P.player).map(([name, v]) => ({ name, sw: { width: '22px', height: '22px', borderRadius: '6px', background: v, flex: 'none', boxShadow: '0 0 0 1px #3b3f50' } })),
       metalBar: { height: '44px', borderRadius: '8px', background: R.grad }, metalHex: P.metal.join(' · '), metalSrc: P.metalSrc, metalLegibility,
       readerSw: READERS.map(([id, name]) => ({ name, ratio: ratio(P.reader[id].bg, P.reader[id].ink).toFixed(1), st: { flex: 1, height: '64px', borderRadius: '8px', background: P.reader[id].bg, color: P.reader[id].ink, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px', border: S.reader === id ? '2px solid #818cf8' : '1px solid #262a37' } })),

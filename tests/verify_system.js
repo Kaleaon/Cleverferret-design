@@ -70,6 +70,14 @@ for (const p of CF.PLUGINS) {
 
 // LCARS conformance is documented
 check(CF.LCARS.deviations.some(d => d[1] === 'Overlay on a bar'), 'LCARS: overlay-on-a-bar deviation must stay documented');
+const frame = CF.lcarsGeometry();
+// The header's bottom-left outer/inner curves share both coordinates of their center.
+check(frame.outerX === frame.rail + frame.inner, 'LCARS header: horizontal curve centers differ');
+check(frame.headerBottom - frame.outerY === frame.headerTop + frame.header - frame.bar - frame.inner, 'LCARS header: vertical curve centers differ');
+// The content's top-left curve uses the same center as the content cutout.
+check(frame.contentTop + frame.outerY === frame.shellTop + frame.inner, 'LCARS content: vertical curve centers differ');
+check(frame.contentTop - frame.headerBottom === frame.gap, 'LCARS: opposing bars need a black gap');
+check(CF.palette('lcars').c.bg === '#000000', 'LCARS reference field must be black');
 
 // Pages load the shared module and kit
 for (const f of ['app.dc.html', 'theme-system.dc.html']) {
