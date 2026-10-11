@@ -104,7 +104,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
 
   <div class="cf-statusbar" aria-hidden="true">
     <span>9:41</span>
-    <span style="display:flex;gap:4px"><span class="ms fill">signal_cellular_4_bar</span><span class="ms fill">wifi</span><span class="ms fill">battery_full</span></span>
+    <span style="display:flex;gap:4px"><span class="ms fill" aria-hidden="true">signal_cellular_4_bar</span><span class="ms fill" aria-hidden="true">wifi</span><span class="ms fill" aria-hidden="true">battery_full</span></span>
   </div>
 
   <div class="cf-viewport">
@@ -140,8 +140,8 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
         <section class="cf-screen" data-screen-label="Home" aria-label="Home">
           <header class="cf-topbar">
             <h1 class="cf-wordmark cf-metal-text">CleverFerret</h1>
-            <button type="button" class="cf-iconbtn" aria-label="Search" onClick="{{ goSearch }}"><span class="ms">search</span></button>
-            <button type="button" class="cf-iconbtn" aria-label="Cast" onClick="{{ castTap }}"><span class="ms">cast</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Search" onClick="{{ goSearch }}"><span class="ms" aria-hidden="true">search</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Cast" onClick="{{ castTap }}"><span class="ms" aria-hidden="true">cast</span></button>
           </header>
           <div class="cf-scroll cf-body">
             <div class="cf-card hero" style="margin:0 var(--px);display:flex;gap:var(--heroGap);padding:var(--heroPad);border-radius:var(--rl)">
@@ -152,7 +152,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
                 <div style="font:400 14px/20px var(--ff);color:var(--ink2)">{{ hero.author }}</div>
                 <div class="cf-meta">{{ hero.subtitle }}</div>
                 <div class="cf-track" style="width:100%" role="progressbar" aria-label="Progress" aria-valuenow="{{ hero.pct }}" aria-valuemin="0" aria-valuemax="100"><div class="cf-fill" style="{{ hero.bar }}"></div></div>
-                <button type="button" class="cf-cta cf-shine cf-press" style="animation:var(--pulse)" onClick="{{ resumeHero }}"><span class="ms fill">play_arrow</span>Resume</button>
+                <button type="button" class="cf-cta cf-shine cf-press" style="animation:var(--pulse)" onClick="{{ resumeHero }}"><span class="ms fill" aria-hidden="true">play_arrow</span>Resume</button>
               </div>
             </div>
 
@@ -161,7 +161,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
               <div class="cf-pad" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--qgap)">
                 <sc-for list="{{ quick }}" as="q" hint-placeholder-count="6">
                   <button type="button" class="cf-press" onClick="{{ q.pick }}" style="height:var(--qh);aspect-ratio:var(--qar);display:flex;flex-direction:column;align-items:var(--qalign);justify-content:var(--qjust);gap:4px;padding:8px;border-radius:var(--rt);background:var(--qbg);border-top:var(--qbt);border-right:var(--qbr);border-bottom:var(--qbb);border-left:var(--qbl);box-shadow:var(--qsh);-webkit-backdrop-filter:var(--bf);backdrop-filter:var(--bf)">
-                    <span class="ms fill" style="color:var(--qic)">{{ q.icon }}</span>
+                    <span class="ms fill" style="color:var(--qic)" aria-hidden="true">{{ q.icon }}</span>
                     <span style="font:600 11px/1.2 var(--lf);letter-spacing:.1em;text-transform:var(--tt);color:var(--qfg)">{{ q.label }}</span>
                   </button>
                 </sc-for>
@@ -200,12 +200,12 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
           <div class="cf-scroll cf-body">
             <header class="cf-topbar" style="height:auto;padding-top:12px">
               <div style="flex:1;min-width:0"><div class="cf-meta cf-ell" style="font-weight:600;font-size:11px;letter-spacing:.12em">Library · {{ themeName }}</div><h1 class="cf-metal-text" style="font:900 26px/1.2 var(--dff)">CleverFerret</h1></div>
-              <button type="button" class="cf-iconbtn" aria-label="Search" onClick="{{ goSearch }}"><span class="ms">search</span></button>
-              <button type="button" class="cf-iconbtn" aria-label="Cast" onClick="{{ castTap }}"><span class="ms">cast</span></button>
+              <button type="button" class="cf-iconbtn" aria-label="Search" onClick="{{ goSearch }}"><span class="ms" aria-hidden="true">search</span></button>
+              <button type="button" class="cf-iconbtn" aria-label="Cast" onClick="{{ castTap }}"><span class="ms" aria-hidden="true">cast</span></button>
             </header>
             <div class="cf-card hero" style="margin:0 var(--px);padding:14px;border-radius:var(--rl);display:flex;flex-direction:column;gap:12px">
               <div class="cf-row">
-                <span class="cf-well"><span class="ms fill">inventory_2</span></span>
+                <span class="cf-well"><span class="ms fill" aria-hidden="true">inventory_2</span></span>
                 <div style="flex:1;min-width:0"><h2 class="cf-title" style="font-size:15px">Library manager</h2><div class="cf-sub">{{ inboxLine }}</div></div>
                 <button type="button" class="lm-act cf-press" onClick="{{ goInbox }}">Inbox<sc-if value="{{ hasInbox }}"><span style="min-width:20px;padding:3px 6px;border-radius:10px;background:var(--onpriC);color:var(--priC);font:800 10px/1 var(--lf);text-align:center">{{ inboxBadge }}</span></sc-if></button>
               </div>
@@ -259,8 +259,8 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
         <section class="cf-screen" data-screen-label="Discover" aria-label="Discover" aria-busy="{{ discoverLoading }}">
           <header class="cf-topbar">
             <h1 class="cf-appbar-title cf-metal-text">Discover</h1>
-            <button type="button" class="cf-iconbtn" aria-label="Search" onClick="{{ goSearch }}"><span class="ms">search</span></button>
-            <button type="button" class="cf-iconbtn" aria-label="Cast" onClick="{{ castTap }}"><span class="ms">cast</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Search" onClick="{{ goSearch }}"><span class="ms" aria-hidden="true">search</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Cast" onClick="{{ castTap }}"><span class="ms" aria-hidden="true">cast</span></button>
           </header>
           <div class="cf-scroll cf-body">
             <sc-if value="{{ discoverLoading }}">
@@ -322,7 +322,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
                         <span class="cf-status" style="{{ d.stSt }}"><span class="ms fill" aria-hidden="true">{{ d.stIcon }}</span>{{ d.stLabel }}</span>
                         <span class="cf-track thin" role="progressbar" aria-label="{{ d.title }} download" aria-valuenow="{{ d.pct }}" aria-valuemin="0" aria-valuemax="100"><span class="cf-fill" style="{{ d.bar }}"></span></span>
                       </span>
-                      <button type="button" class="cf-iconbtn" aria-label="{{ d.actLabel }}" onClick="{{ d.act }}"><span class="ms">{{ d.actIcon }}</span></button>
+                      <button type="button" class="cf-iconbtn" aria-label="{{ d.actLabel }}" onClick="{{ d.act }}"><span class="ms" aria-hidden="true">{{ d.actIcon }}</span></button>
                     </li>
                   </sc-for>
                 </ul>
@@ -332,10 +332,10 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
               <div class="cf-sh"><span class="cap"></span><div class="tw"><h2>On this device</h2></div><span class="bar"></span><span class="end"></span></div>
               <sc-if value="{{ dlEmpty }}" hint-placeholder-val="{{ false }}">
                 <div class="cf-empty">
-                  <div class="well"><span class="ms">download</span></div>
+                  <div class="well"><span class="ms" aria-hidden="true">download</span></div>
                   <h3>Nothing offline</h3>
                   <p>Download items from their detail page to read or listen without a connection.</p>
-                  <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ goDiscover }}"><span class="ms">explore</span>Browse Discover</button>
+                  <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ goDiscover }}"><span class="ms" aria-hidden="true">explore</span>Browse Discover</button>
                 </div>
               </sc-if>
               <ul class="cf-pad" style="display:flex;flex-direction:column;gap:8px">
@@ -343,7 +343,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
                   <li class="cf-card" style="display:flex;align-items:center;gap:12px;padding:8px;border-radius:var(--rt)">
                     <button type="button" aria-label="{{ d.title }} details" onClick="{{ d.open }}" style="flex:none;border-radius:var(--rc)"><span style="{{ d.cv.st }}"></span></button>
                     <button type="button" onClick="{{ d.open }}" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px"><span class="cf-kind">{{ d.kind }}</span><span class="cf-title cf-ell" style="width:100%">{{ d.title }}</span><span class="cf-status" style="{{ d.stSt }}"><span class="ms fill" aria-hidden="true">{{ d.stIcon }}</span>{{ d.stLabel }}</span></button>
-                    <button type="button" class="cf-iconbtn" aria-label="{{ d.removeLabel }}" onClick="{{ d.remove }}"><span class="ms">delete</span></button>
+                    <button type="button" class="cf-iconbtn" aria-label="{{ d.removeLabel }}" onClick="{{ d.remove }}"><span class="ms" aria-hidden="true">delete</span></button>
                   </li>
                 </sc-for>
               </ul>
@@ -360,7 +360,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
             <button type="button" class="cf-card cf-press" onClick="{{ goThemes }}" style="display:flex;align-items:center;gap:16px;padding:16px;border-radius:var(--rl);text-align:left">
               <span class="cf-shine" style="width:56px;height:56px;flex:none;border-radius:var(--rp);background:var(--metal);animation:var(--pulse)"></span>
               <span style="flex:1;min-width:0"><span style="display:block;font:600 11px/1.3 var(--lf);letter-spacing:.12em;color:var(--ink2);text-transform:uppercase">Active theme</span><span class="cf-metal-text" style="display:block;font:900 17px/1.25 var(--dff)">{{ themeName }}</span><span class="cf-sub" style="display:block">{{ effectName }} effects · motion {{ motionName }}</span></span>
-              <span class="ms" style="color:var(--ink2)">chevron_right</span>
+              <span class="ms" style="color:var(--ink2)" aria-hidden="true">chevron_right</span>
             </button>
             <sc-for list="{{ settingsGroups }}" as="g" hint-placeholder-count="4">
               <div style="display:flex;flex-direction:column;gap:6px">
@@ -368,9 +368,9 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
                 <div class="cf-card" style="border-radius:var(--rp);overflow:hidden">
                   <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="4">
                     <button type="button" class="cf-srow" onClick="{{ r.pick }}">
-                      <span class="cf-well"><span class="ms fill">{{ r.icon }}</span></span>
+                      <span class="cf-well"><span class="ms fill" aria-hidden="true">{{ r.icon }}</span></span>
                       <span style="flex:1;min-width:0"><span class="cf-title" style="display:block">{{ r.title }}</span><span class="cf-sub" style="display:block">{{ r.sub }}</span></span>
-                      <span class="ms" style="color:var(--ink2);font-size:20px">{{ r.trail }}</span>
+                      <span class="ms" style="color:var(--ink2);font-size:20px" aria-hidden="true">{{ r.trail }}</span>
                     </button>
                   </sc-for>
                 </div>
@@ -385,7 +385,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
       <sc-if value="{{ sThemes }}" hint-placeholder-val="{{ false }}">
         <section class="cf-screen" data-screen-label="Themes" aria-label="Theme studio">
           <header class="cf-topbar pushed">
-            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms">arrow_back</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms" aria-hidden="true">arrow_back</span></button>
             <h1 class="cf-appbar-title cf-metal-text">Themes</h1>
           </header>
           <div class="cf-seg" role="tablist" aria-label="Theme layers" style="flex:none;margin:0 var(--px) 8px">
@@ -394,12 +394,12 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
             </sc-for>
           </div>
           <div class="cf-scroll" role="tabpanel" aria-label="{{ studioPanel }}" style="padding:4px var(--px) 16px;display:flex;flex-direction:column;gap:10px">
-            <sc-if value="{{ studioClamp }}"><div class="cf-card" style="display:flex;gap:10px;padding:12px;border-radius:var(--rt);font:400 12px/1.45 var(--ff);color:var(--ink2)"><span class="ms" style="color:var(--priText);font-size:20px">lock</span><span>{{ studioClamp }}</span></div></sc-if>
+            <sc-if value="{{ studioClamp }}"><div class="cf-card" style="display:flex;gap:10px;padding:12px;border-radius:var(--rt);font:400 12px/1.45 var(--ff);color:var(--ink2)"><span class="ms" style="color:var(--priText);font-size:20px" aria-hidden="true">lock</span><span>{{ studioClamp }}</span></div></sc-if>
             <sc-if value="{{ stLayout }}" hint-placeholder-val="{{ true }}">
               <sc-for list="{{ layoutCards }}" as="l" hint-placeholder-count="7">
                 <button type="button" aria-pressed="{{ l.on }}" onClick="{{ l.pick }}" style="{{ l.st }}">
                   <span style="{{ l.shape }}" aria-hidden="true"></span>
-                  <span style="flex:1;min-width:0"><span style="display:flex;align-items:center;gap:6px"><span style="{{ l.nameSt }}">{{ l.name }}</span><sc-if value="{{ l.on }}"><span class="ms" style="color:var(--priText);font-size:18px">check</span></sc-if></span><span class="cf-sub" style="display:block">{{ l.desc }}</span></span>
+                  <span style="flex:1;min-width:0"><span style="display:flex;align-items:center;gap:6px"><span style="{{ l.nameSt }}">{{ l.name }}</span><sc-if value="{{ l.on }}"><span class="ms" style="color:var(--priText);font-size:18px" aria-hidden="true">check</span></sc-if></span><span class="cf-sub" style="display:block">{{ l.desc }}</span></span>
                 </button>
               </sc-for>
             </sc-if>
@@ -410,7 +410,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
                   <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
                     <sc-for list="{{ f.cards }}" as="p" hint-placeholder-count="4">
                       <button type="button" aria-label="{{ p.aria }}" aria-pressed="{{ p.on }}" onClick="{{ p.pick }}" style="{{ p.st }}">
-                        <span style="display:flex;align-items:center;gap:4px;width:100%"><span style="{{ p.nameSt }}">{{ p.name }}</span><sc-if value="{{ p.on }}"><span class="ms" style="{{ p.check }}">check</span></sc-if></span>
+                        <span style="display:flex;align-items:center;gap:4px;width:100%"><span style="{{ p.nameSt }}">{{ p.name }}</span><sc-if value="{{ p.on }}"><span class="ms" style="{{ p.check }}" aria-hidden="true">check</span></sc-if></span>
                         <span style="{{ p.bar }}"></span>
                         <span style="display:flex;gap:6px;align-items:center;width:100%"><span style="{{ p.s1 }}"></span><span style="{{ p.s2 }}"></span><span style="{{ p.s3 }}"></span><span style="{{ p.s4 }}"></span><span style="{{ p.badge }}">{{ p.badgeText }}</span></span>
                       </button>
@@ -423,7 +423,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
               <sc-for list="{{ effectCards }}" as="e" hint-placeholder-count="8">
                 <button type="button" aria-pressed="{{ e.on }}" onClick="{{ e.pick }}" style="{{ e.st }}">
                   <span style="{{ e.chip }}" aria-hidden="true"></span>
-                  <span style="flex:1;min-width:0"><span style="display:flex;align-items:center;gap:6px"><span style="font:700 13px/1.3 var(--dff);color:var(--ink);text-transform:var(--tt)">{{ e.name }}</span><sc-if value="{{ e.on }}"><span class="ms" style="color:var(--priText);font-size:18px">check</span></sc-if></span><span class="cf-sub" style="display:block">{{ e.desc }}</span></span>
+                  <span style="flex:1;min-width:0"><span style="display:flex;align-items:center;gap:6px"><span style="font:700 13px/1.3 var(--dff);color:var(--ink);text-transform:var(--tt)">{{ e.name }}</span><sc-if value="{{ e.on }}"><span class="ms" style="color:var(--priText);font-size:18px" aria-hidden="true">check</span></sc-if></span><span class="cf-sub" style="display:block">{{ e.desc }}</span></span>
                 </button>
               </sc-for>
               <h2 style="font:700 10px/1.3 var(--lf);letter-spacing:.16em;color:var(--ink2);margin-top:8px">MOTION</h2>
@@ -436,7 +436,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
           <div style="flex:none;display:flex;align-items:center;gap:8px;padding:12px 16px;background:var(--surf);box-shadow:0 -1px 0 var(--outv)">
             <div style="flex:1;min-width:0;font:600 11px/1.35 var(--lf);letter-spacing:.06em;color:var(--ink2)"><span style="display:block;text-transform:uppercase;letter-spacing:.12em">{{ studioState }}</span><span class="cf-ell" style="display:block;color:var(--ink)">{{ studioName }}</span></div>
             <sc-if value="{{ dirty }}"><button type="button" class="cf-link" onClick="{{ revert }}">Revert</button></sc-if>
-            <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ apply }}" disabled="{{ !dirty }}" style="{{ applySt }}"><span class="ms">{{ applyIcon }}</span>{{ applyLabel }}</button>
+            <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ apply }}" disabled="{{ !dirty }}" style="{{ applySt }}"><span class="ms" aria-hidden="true">{{ applyIcon }}</span>{{ applyLabel }}</button>
           </div>
         </section>
       </sc-if>
@@ -445,11 +445,11 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
       <sc-if value="{{ sSearch }}" hint-placeholder-val="{{ false }}">
         <section class="cf-screen" data-screen-label="Search" aria-label="Search" style="gap:12px">
           <div style="flex:none;display:flex;align-items:center;gap:4px;padding:8px 12px 0 var(--srchL)">
-            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}" style="display:var(--ptbd)"><span class="ms">arrow_back</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}" style="display:var(--ptbd)"><span class="ms" aria-hidden="true">arrow_back</span></button>
             <div role="search" style="flex:1;min-width:0;height:48px;display:flex;align-items:center;gap:8px;padding:0 6px 0 12px;border-radius:var(--rs);background:var(--surf2)">
               <span class="ms" style="color:var(--ink2);font-size:22px" aria-hidden="true">search</span>
               <input type="search" value="{{ query }}" onChange="{{ onQuery }}" placeholder="Search everything" aria-label="Search everything" style="flex:1;min-width:0;border:none;background:transparent;color:var(--ink);font:400 15px/1 var(--ff);outline-offset:4px">
-              <sc-if value="{{ hasQuery }}" hint-placeholder-val="{{ false }}"><button type="button" class="cf-iconbtn sm" aria-label="Clear search" onClick="{{ clearQuery }}" style="width:36px;height:36px"><span class="ms" style="color:var(--ink2)">close</span></button></sc-if>
+              <sc-if value="{{ hasQuery }}" hint-placeholder-val="{{ false }}"><button type="button" class="cf-iconbtn sm" aria-label="Clear search" onClick="{{ clearQuery }}" style="width:36px;height:36px"><span class="ms" style="color:var(--ink2)" aria-hidden="true">close</span></button></sc-if>
             </div>
           </div>
           <div class="cf-hscroll" role="group" aria-label="Format filter" style="flex:none;gap:8px">
@@ -476,7 +476,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
             </sc-for>
             <sc-if value="{{ noMatch }}" hint-placeholder-val="{{ false }}">
               <div class="cf-empty" role="status">
-                <div class="well"><span class="ms">search_off</span></div>
+                <div class="well"><span class="ms" aria-hidden="true">search_off</span></div>
                 <h3>No matches</h3>
                 <p>Try a broader query or switch the format filter.</p>
               </div>
@@ -489,10 +489,10 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
       <sc-if value="{{ sDetail }}" hint-placeholder-val="{{ false }}">
         <section class="cf-screen" data-screen-label="Detail" aria-label="{{ dt.title }}">
           <header class="cf-topbar pushed">
-            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms">arrow_back</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms" aria-hidden="true">arrow_back</span></button>
             <div class="cf-appbar-title cf-metal-text">{{ dt.kindTitle }}</div>
-            <button type="button" class="cf-iconbtn" aria-label="Add to collection" onClick="{{ dt.collect }}"><span class="ms">playlist_add</span></button>
-            <button type="button" class="cf-iconbtn" aria-label="Share" onClick="{{ dt.share }}"><span class="ms">share</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Add to collection" onClick="{{ dt.collect }}"><span class="ms" aria-hidden="true">playlist_add</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Share" onClick="{{ dt.share }}"><span class="ms" aria-hidden="true">share</span></button>
           </header>
           <div class="cf-scroll" style="display:flex;flex-direction:column;gap:18px;padding-bottom:32px">
             <div class="dt-hero">
@@ -508,9 +508,9 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
                 </div>
               </div>
               <div class="cf-row" style="margin-top:16px;gap:4px">
-                <button type="button" class="cf-cta cf-shine cf-press" style="animation:var(--pulse);margin-right:auto" onClick="{{ dt.play }}"><span class="ms fill">{{ dt.ctaIcon }}</span>{{ dt.ctaLabel }}</button>
-                <button type="button" class="dt-act" aria-label="{{ dt.dlAria }}" onClick="{{ dt.download }}"><span class="ms" style="{{ dt.dlIconSt }}">{{ dt.dlIcon }}</span><span>{{ dt.dlText }}</span></button>
-                <button type="button" class="dt-act" onClick="{{ dt.more }}"><span class="ms">{{ dt.moreIcon }}</span><span>{{ dt.moreText }}</span></button>
+                <button type="button" class="cf-cta cf-shine cf-press" style="animation:var(--pulse);margin-right:auto" onClick="{{ dt.play }}"><span class="ms fill" aria-hidden="true">{{ dt.ctaIcon }}</span>{{ dt.ctaLabel }}</button>
+                <button type="button" class="dt-act" aria-label="{{ dt.dlAria }}" onClick="{{ dt.download }}"><span class="ms" style="{{ dt.dlIconSt }}" aria-hidden="true">{{ dt.dlIcon }}</span><span>{{ dt.dlText }}</span></button>
+                <button type="button" class="dt-act" onClick="{{ dt.more }}"><span class="ms" aria-hidden="true">{{ dt.moreIcon }}</span><span>{{ dt.moreText }}</span></button>
               </div>
             </div>
             <ul class="cf-hscroll" aria-label="Tags" style="gap:8px">
@@ -567,10 +567,10 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
       <sc-if value="{{ sInbox }}" hint-placeholder-val="{{ false }}">
         <section class="cf-screen" data-screen-label="Import inbox" aria-label="Import inbox">
           <header class="cf-topbar pushed">
-            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms">arrow_back</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms" aria-hidden="true">arrow_back</span></button>
             <h1 class="cf-appbar-title cf-metal-text">Inbox</h1>
-            <button type="button" class="cf-iconbtn" aria-label="Sort rules" onClick="{{ goOrganize }}"><span class="ms">rule_folder</span></button>
-            <button type="button" class="cf-iconbtn" aria-label="Scan watch folders" onClick="{{ rescan }}"><span class="ms">refresh</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Sort rules" onClick="{{ goOrganize }}"><span class="ms" aria-hidden="true">rule_folder</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Scan watch folders" onClick="{{ rescan }}"><span class="ms" aria-hidden="true">refresh</span></button>
           </header>
           <div class="cf-scroll" style="padding:4px var(--px) 24px;display:flex;flex-direction:column;gap:12px">
             <ol class="lm-pipe" aria-label="Cataloging pipeline">
@@ -582,7 +582,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
             </div>
             <sc-if value="{{ inboxEmpty }}">
               <div class="cf-empty">
-                <div class="well"><span class="ms">inventory_2</span></div>
+                <div class="well"><span class="ms" aria-hidden="true">inventory_2</span></div>
                 <h3>{{ inboxEmptyTitle }}</h3>
                 <p>{{ inboxEmptyBody }}</p>
               </div>
@@ -613,7 +613,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
           </div>
           <div class="lm-foot">
             <div style="flex:1;min-width:0"><div class="cf-title">{{ readyLabel }}</div><div class="cf-sub">{{ fileModeLabel }}</div></div>
-            <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ fileAll }}" disabled="{{ !readyCount }}" style="{{ fileAllSt }}"><span class="ms">drive_file_move</span>File all</button>
+            <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ fileAll }}" disabled="{{ !readyCount }}" style="{{ fileAllSt }}"><span class="ms" aria-hidden="true">drive_file_move</span>File all</button>
           </div>
         </section>
       </sc-if>
@@ -622,13 +622,13 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
       <sc-if value="{{ sMatch }}" hint-placeholder-val="{{ false }}">
         <section class="cf-screen" data-screen-label="Fix match" aria-label="Fix match">
           <header class="cf-topbar pushed">
-            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms">arrow_back</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms" aria-hidden="true">arrow_back</span></button>
             <h1 class="cf-appbar-title cf-metal-text">Fix match</h1>
-            <button type="button" class="cf-iconbtn" aria-label="Scan ISBN barcode" onClick="{{ scanIsbn }}"><span class="ms">barcode_scanner</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Scan ISBN barcode" onClick="{{ scanIsbn }}"><span class="ms" aria-hidden="true">barcode_scanner</span></button>
           </header>
           <div class="cf-scroll" style="padding:4px var(--px) 24px;display:flex;flex-direction:column;gap:14px">
             <div class="cf-card" style="display:flex;gap:12px;align-items:center;padding:12px;border-radius:var(--rt)">
-              <span class="cf-well"><span class="ms fill">{{ mt.icon }}</span></span>
+              <span class="cf-well"><span class="ms fill" aria-hidden="true">{{ mt.icon }}</span></span>
               <div style="flex:1;min-width:0"><div class="lm-file" style="overflow-wrap:anywhere">{{ mt.file }}</div><div class="cf-sub">{{ mt.fileMeta }}</div></div>
             </div>
             <div role="search" style="height:48px;display:flex;align-items:center;gap:8px;padding:0 12px;border-radius:var(--rs);background:var(--surf2)">
@@ -665,7 +665,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
           <div class="lm-foot">
             <div style="flex:1;min-width:0"><div class="cf-title">{{ mt.applyCount }}</div><div class="cf-sub">Writes to the library and into the file</div></div>
             <button type="button" class="cf-link" onClick="{{ mt.skip }}">Not this</button>
-            <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ mt.apply }}"><span class="ms">done</span>Apply</button>
+            <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ mt.apply }}"><span class="ms" aria-hidden="true">done</span>Apply</button>
           </div>
         </section>
       </sc-if>
@@ -674,7 +674,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
       <sc-if value="{{ sRepair }}" hint-placeholder-val="{{ false }}">
         <section class="cf-screen" data-screen-label="File repair" aria-label="File repair">
           <header class="cf-topbar pushed">
-            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms">arrow_back</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms" aria-hidden="true">arrow_back</span></button>
             <h1 class="cf-appbar-title cf-metal-text">Repair</h1>
           </header>
           <div class="cf-scroll" style="padding:4px var(--px) 24px;display:flex;flex-direction:column;gap:14px">
@@ -691,7 +691,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
             </div>
             <div class="cf-sh flush"><span class="cap"></span><div class="tw"><h2>{{ rp.listTitle }}</h2><p>{{ rp.listSub }}</p></div><span class="bar"></span><span class="end"></span></div>
             <sc-if value="{{ rp.healthy }}">
-              <div class="cf-empty"><div class="well"><span class="ms" style="color:var(--st-completed)">verified</span></div><h3>No problems found</h3><p>Structure, encoding, metadata and cover all check out.</p></div>
+              <div class="cf-empty"><div class="well"><span class="ms" style="color:var(--st-completed)" aria-hidden="true">verified</span></div><h3>No problems found</h3><p>Structure, encoding, metadata and cover all check out.</p></div>
             </sc-if>
             <div class="cf-card" style="border-radius:var(--rp);overflow:hidden">
               <sc-for list="{{ rp.issues }}" as="x" hint-placeholder-count="3">
@@ -718,7 +718,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
           </div>
           <div class="lm-foot">
             <div style="flex:1;min-width:0"><div class="cf-title">{{ rp.footTitle }}</div><div class="cf-sub">{{ rp.footSub }}</div></div>
-            <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ rp.run }}" disabled="{{ !rp.canRun }}" style="{{ rp.runSt }}"><span class="ms">{{ rp.runIcon }}</span>{{ rp.runLabel }}</button>
+            <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ rp.run }}" disabled="{{ !rp.canRun }}" style="{{ rp.runSt }}"><span class="ms" aria-hidden="true">{{ rp.runIcon }}</span>{{ rp.runLabel }}</button>
           </div>
         </section>
       </sc-if>
@@ -727,13 +727,13 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
       <sc-if value="{{ sOrganize }}" hint-placeholder-val="{{ false }}">
         <section class="cf-screen" data-screen-label="Sort rules" aria-label="Sort rules">
           <header class="cf-topbar pushed">
-            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms">arrow_back</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms" aria-hidden="true">arrow_back</span></button>
             <h1 class="cf-appbar-title cf-metal-text">Sort rules</h1>
           </header>
           <div class="cf-scroll" style="padding:4px var(--px) 24px;display:flex;flex-direction:column;gap:14px">
             <p class="cf-sub" style="font-size:13px;line-height:19px">Every file is renamed and filed into a server-ready folder. Books follow Calibre's library layout; video and music follow Plex and Jellyfin naming, so their scanners match on the first pass.</p>
             <div class="cf-card" style="display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:var(--rp)">
-              <div class="cf-row"><span class="cf-well"><span class="ms fill">hard_drive</span></span><div style="flex:1;min-width:0"><div class="cf-title">Library root</div><div class="lm-file">/Media · internal storage · 47.3 GB</div></div><button type="button" class="cf-link" onClick="{{ changeRoot }}">Change</button></div>
+              <div class="cf-row"><span class="cf-well"><span class="ms fill" aria-hidden="true">hard_drive</span></span><div style="flex:1;min-width:0"><div class="cf-title">Library root</div><div class="lm-file">/Media · internal storage · 47.3 GB</div></div><button type="button" class="cf-link" onClick="{{ changeRoot }}">Change</button></div>
               <div class="cf-seg" role="group" aria-label="When filing"><sc-for list="{{ fileModes }}" as="m"><button type="button" aria-pressed="{{ m.on }}" onClick="{{ m.pick }}"><span class="ms" style="font-size:16px" aria-hidden="true">{{ m.icon }}</span>{{ m.name }}</button></sc-for></div>
               <sc-for list="{{ orgSwitches }}" as="w">
                 <button type="button" role="switch" aria-checked="{{ w.on }}" class="lm-fix" style="padding:6px 0;box-shadow:none" onClick="{{ w.pick }}"><span style="flex:1;min-width:0"><span class="cf-title" style="display:block">{{ w.name }}</span><span class="cf-sub" style="display:block">{{ w.sub }}</span></span><span class="{{ w.cls }}" aria-hidden="true"></span></button>
@@ -756,7 +756,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
           </div>
           <div class="lm-foot">
             <div style="flex:1;min-width:0"><div class="cf-title">{{ readyLabel }}</div><div class="cf-sub">{{ fileModeLabel }}</div></div>
-            <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ fileAll }}" disabled="{{ !readyCount }}" style="{{ fileAllSt }}"><span class="ms">drive_file_move</span>Sort now</button>
+            <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ fileAll }}" disabled="{{ !readyCount }}" style="{{ fileAllSt }}"><span class="ms" aria-hidden="true">drive_file_move</span>Sort now</button>
           </div>
         </section>
       </sc-if>
@@ -765,9 +765,9 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
       <sc-if value="{{ sTags }}" hint-placeholder-val="{{ false }}">
         <section class="cf-screen" data-screen-label="Tag explorer" aria-label="Tag explorer">
           <header class="cf-topbar pushed">
-            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms">arrow_back</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms" aria-hidden="true">arrow_back</span></button>
             <h1 class="cf-appbar-title cf-metal-text">Tags</h1>
-            <button type="button" class="cf-iconbtn" aria-label="New tag" onClick="{{ newTag }}"><span class="ms">new_label</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="New tag" onClick="{{ newTag }}"><span class="ms" aria-hidden="true">new_label</span></button>
           </header>
           <div class="cf-scroll" style="padding:4px var(--px) 24px;display:flex;flex-direction:column;gap:14px">
             <div role="search" style="height:44px;display:flex;align-items:center;gap:8px;padding:0 12px;border-radius:var(--rs);background:var(--surf2)">
@@ -794,7 +794,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
                 </div>
               </div>
             </sc-for>
-            <sc-if value="{{ tagNoMatch }}"><div class="cf-empty"><div class="well"><span class="ms">label_off</span></div><h3>No tags match</h3><p>Try a shorter filter, or create the tag.</p></div></sc-if>
+            <sc-if value="{{ tagNoMatch }}"><div class="cf-empty"><div class="well"><span class="ms" aria-hidden="true">label_off</span></div><h3>No tags match</h3><p>Try a shorter filter, or create the tag.</p></div></sc-if>
             <div class="cf-sh flush"><span class="cap"></span><div class="tw"><h2>Auto-tag rules</h2><p>Applied while importing and on refresh</p></div><span class="bar"></span><span class="end"></span></div>
             <div class="cf-card" style="border-radius:var(--rp);overflow:hidden">
               <sc-for list="{{ autoRules }}" as="a" hint-placeholder-count="4">
@@ -810,9 +810,9 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
       <sc-if value="{{ sPlugins }}" hint-placeholder-val="{{ false }}">
         <section class="cf-screen" data-screen-label="Calibre plugins" aria-label="Calibre plugins">
           <header class="cf-topbar pushed">
-            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms">arrow_back</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms" aria-hidden="true">arrow_back</span></button>
             <h1 class="cf-appbar-title cf-metal-text">Plugins</h1>
-            <button type="button" class="cf-iconbtn" aria-label="Install plugin from ZIP" onClick="{{ installPlugin }}"><span class="ms">upload_file</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Install plugin from ZIP" onClick="{{ installPlugin }}"><span class="ms" aria-hidden="true">upload_file</span></button>
           </header>
           <div class="cf-scroll" style="padding:4px var(--px) 28px;display:flex;flex-direction:column;gap:14px">
             <div class="cf-card hero" style="display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:var(--rp)">
@@ -825,7 +825,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
               <sc-for list="{{ plugins }}" as="pl" hint-placeholder-count="7">
                 <li class="cf-card" style="border-radius:var(--rp);overflow:hidden">
                   <button type="button" class="lm-fix" aria-expanded="{{ pl.open }}" onClick="{{ pl.toggle }}" style="box-shadow:none;align-items:flex-start">
-                    <span class="cf-well"><span class="ms fill">{{ pl.icon }}</span></span>
+                    <span class="cf-well"><span class="ms fill" aria-hidden="true">{{ pl.icon }}</span></span>
                     <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
                       <span class="cf-title">{{ pl.name }} <span class="cf-meta" style="font-weight:600">v{{ pl.version }}</span></span>
                       <span style="display:flex;gap:4px;flex-wrap:wrap"><sc-for list="{{ pl.caps }}" as="cp"><span class="cf-tag" style="padding:4px 7px;font-size:10px">{{ cp.name }}</span></sc-for></span>
@@ -847,7 +847,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
                       <div class="lm-file">core · {{ pl.core }} · {{ pl.lines }} lines, no calibre or Qt imports</div>
                       <div class="cf-row" style="justify-content:space-between">
                         <button type="button" role="switch" aria-checked="{{ pl.enabled }}" class="cf-row" onClick="{{ pl.toggleEnabled }}" style="gap:8px;min-height:44px"><span class="{{ pl.enCls }}" aria-hidden="true"></span><span class="cf-sub">{{ pl.enLabel }}</span></button>
-                        <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ pl.run }}" disabled="{{ !pl.enabled }}" style="{{ pl.runSt }}"><span class="ms">play_arrow</span>{{ pl.runLabel }}</button>
+                        <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ pl.run }}" disabled="{{ !pl.enabled }}" style="{{ pl.runSt }}"><span class="ms" aria-hidden="true">play_arrow</span>{{ pl.runLabel }}</button>
                       </div>
                     </div>
                   </sc-if>
@@ -867,10 +867,10 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
       <sc-if value="{{ sPlayer }}" hint-placeholder-val="{{ false }}">
         <section class="cf-screen" data-screen-label="Audio player" aria-label="Now playing">
           <header class="cf-topbar pushed">
-            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms">arrow_back</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms" aria-hidden="true">arrow_back</span></button>
             <div class="cf-appbar-title cf-metal-text">Now playing</div>
-            <button type="button" class="cf-iconbtn" aria-label="Cast" onClick="{{ castTap }}"><span class="ms">cast</span></button>
-            <button type="button" class="cf-iconbtn" aria-label="Details" onClick="{{ nowDetail }}"><span class="ms">info</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Cast" onClick="{{ castTap }}"><span class="ms" aria-hidden="true">cast</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Details" onClick="{{ nowDetail }}"><span class="ms" aria-hidden="true">info</span></button>
           </header>
           <div class="cf-scroll" style="padding:8px var(--ppx) 20px;display:flex;flex-direction:column;align-items:center;gap:14px">
             <span style="{{ art.st }}"><sc-if value="{{ art.showText }}"><span style="{{ art.tSt }}">{{ art.t }}</span><span style="{{ art.aSt }}">{{ art.a }}</span></sc-if></span>
@@ -884,18 +884,18 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
               <div style="display:flex;justify-content:space-between;font:600 11px/1 var(--lf);letter-spacing:.1em;color:var(--ink2)"><span>{{ posLabel }}</span><span>-{{ remainLabel }}</span></div>
             </div>
             <div style="width:100%;display:flex;align-items:center;justify-content:space-between">
-              <button type="button" class="cf-iconbtn" aria-label="Previous" onClick="{{ prevTrack }}"><span class="ms fill" style="font-size:28px">skip_previous</span></button>
-              <button type="button" class="cf-iconbtn" aria-label="Back 30 seconds" onClick="{{ back30 }}"><span class="ms" style="font-size:28px">replay_30</span></button>
-              <button type="button" class="cf-shine cf-press" aria-label="{{ playAria }}" onClick="{{ togglePlay }}" style="width:72px;height:72px;flex:none;border-radius:var(--rs);background:var(--metal);display:flex;align-items:center;justify-content:center;color:var(--ctafg);box-shadow:var(--ctash);animation:var(--pulse)"><span class="ms fill" style="font-size:36px">{{ playIcon }}</span></button>
-              <button type="button" class="cf-iconbtn" aria-label="Forward 30 seconds" onClick="{{ fwd30 }}"><span class="ms" style="font-size:28px">forward_30</span></button>
-              <button type="button" class="cf-iconbtn" aria-label="Next" onClick="{{ nextTrack }}"><span class="ms fill" style="font-size:28px">skip_next</span></button>
+              <button type="button" class="cf-iconbtn" aria-label="Previous" onClick="{{ prevTrack }}"><span class="ms fill" style="font-size:28px" aria-hidden="true">skip_previous</span></button>
+              <button type="button" class="cf-iconbtn" aria-label="Back 30 seconds" onClick="{{ back30 }}"><span class="ms" style="font-size:28px" aria-hidden="true">replay_30</span></button>
+              <button type="button" class="cf-shine cf-press" aria-label="{{ playAria }}" onClick="{{ togglePlay }}" style="width:72px;height:72px;flex:none;border-radius:var(--rs);background:var(--metal);display:flex;align-items:center;justify-content:center;color:var(--ctafg);box-shadow:var(--ctash);animation:var(--pulse)"><span class="ms fill" style="font-size:36px" aria-hidden="true">{{ playIcon }}</span></button>
+              <button type="button" class="cf-iconbtn" aria-label="Forward 30 seconds" onClick="{{ fwd30 }}"><span class="ms" style="font-size:28px" aria-hidden="true">forward_30</span></button>
+              <button type="button" class="cf-iconbtn" aria-label="Next" onClick="{{ nextTrack }}"><span class="ms fill" style="font-size:28px" aria-hidden="true">skip_next</span></button>
             </div>
             <div class="cf-card" style="width:100%;display:flex;justify-content:space-evenly;padding:4px 0;border-radius:var(--rp)">
-              <button type="button" class="vd-ctl" onClick="{{ cycleSpeed }}" aria-label="Playback speed {{ speedLabel }}" style="color:var(--ink);font:600 11px/1 var(--lf);letter-spacing:.1em"><span class="ms" style="font-size:20px">speed</span>{{ speedLabel }}</button>
-              <button type="button" class="vd-ctl" onClick="{{ toggleSleep }}" aria-pressed="{{ sleep }}" style="{{ sleepSt }}"><span class="ms fill" style="font-size:20px">bedtime</span>{{ sleepLabel }}</button>
-              <button type="button" class="vd-ctl" onClick="{{ goQueue }}" style="color:var(--ink);font:600 11px/1 var(--lf);letter-spacing:.1em"><span class="ms" style="font-size:20px">queue_music</span>Queue · {{ queueCount }}</button>
+              <button type="button" class="vd-ctl" onClick="{{ cycleSpeed }}" aria-label="Playback speed {{ speedLabel }}" style="color:var(--ink);font:600 11px/1 var(--lf);letter-spacing:.1em"><span class="ms" style="font-size:20px" aria-hidden="true">speed</span>{{ speedLabel }}</button>
+              <button type="button" class="vd-ctl" onClick="{{ toggleSleep }}" aria-pressed="{{ sleep }}" style="{{ sleepSt }}"><span class="ms fill" style="font-size:20px" aria-hidden="true">bedtime</span>{{ sleepLabel }}</button>
+              <button type="button" class="vd-ctl" onClick="{{ goQueue }}" style="color:var(--ink);font:600 11px/1 var(--lf);letter-spacing:.1em"><span class="ms" style="font-size:20px" aria-hidden="true">queue_music</span>Queue · {{ queueCount }}</button>
             </div>
-            <sc-if value="{{ hasUpNext }}"><button type="button" class="cf-row" onClick="{{ goQueue }}" style="width:100%;padding:8px 4px;border-radius:var(--rt);color:var(--ink2);font:500 12px/1.3 var(--ff)"><span class="ms" style="font-size:18px">subdirectory_arrow_right</span><span class="cf-ell" style="flex:1;min-width:0">Up next · <b style="color:var(--ink);font-weight:600">{{ upNext }}</b></span></button></sc-if>
+            <sc-if value="{{ hasUpNext }}"><button type="button" class="cf-row" onClick="{{ goQueue }}" style="width:100%;padding:8px 4px;border-radius:var(--rt);color:var(--ink2);font:500 12px/1.3 var(--ff)"><span class="ms" style="font-size:18px" aria-hidden="true">subdirectory_arrow_right</span><span class="cf-ell" style="flex:1;min-width:0">Up next · <b style="color:var(--ink);font-weight:600">{{ upNext }}</b></span></button></sc-if>
           </div>
         </section>
       </sc-if>
@@ -904,9 +904,9 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
       <sc-if value="{{ sQueue }}" hint-placeholder-val="{{ false }}">
         <section class="cf-screen" data-screen-label="Queue" aria-label="Queue">
           <header class="cf-topbar pushed">
-            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms">arrow_back</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms" aria-hidden="true">arrow_back</span></button>
             <h1 class="cf-appbar-title cf-metal-text">Queue</h1>
-            <button type="button" class="cf-iconbtn" aria-label="Clear queue" onClick="{{ clearQueue }}" disabled="{{ qEmpty }}"><span class="ms">clear_all</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Clear queue" onClick="{{ clearQueue }}" disabled="{{ qEmpty }}"><span class="ms" aria-hidden="true">clear_all</span></button>
           </header>
           <div class="cf-scroll" style="padding:4px var(--px) 32px;display:flex;flex-direction:column;gap:14px">
             <div class="cf-row" role="group" aria-label="Playback order" style="gap:8px">
@@ -922,7 +922,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
             <div class="cf-sh flush"><span class="cap"></span><div class="tw"><h2>Up next</h2><p>{{ qCountLabel }}</p></div><span class="bar"></span><span class="end"></span></div>
             <sc-if value="{{ qEmpty }}">
               <div class="cf-empty">
-                <div class="well"><span class="ms">queue_music</span></div>
+                <div class="well"><span class="ms" aria-hidden="true">queue_music</span></div>
                 <h3>Nothing in the queue</h3>
                 <p>Play something to get this party started.</p>
               </div>
@@ -930,12 +930,12 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
             <ol style="display:flex;flex-direction:column">
               <sc-for list="{{ qList }}" as="q" hint-placeholder-count="4">
                 <li class="q-row">
-                  <button type="button" class="cf-iconbtn sm" aria-label="{{ q.upLabel }}" onClick="{{ q.up }}" disabled="{{ q.first }}" style="color:var(--ink2)"><span class="ms">drag_indicator</span></button>
+                  <button type="button" class="cf-iconbtn sm" aria-label="{{ q.upLabel }}" onClick="{{ q.up }}" disabled="{{ q.first }}" style="color:var(--ink2)"><span class="ms" aria-hidden="true">drag_indicator</span></button>
                   <button type="button" class="cf-row" onClick="{{ q.play }}" style="flex:1;min-width:0;gap:10px;text-align:left">
                     <span style="{{ q.cv.st }}"></span>
                     <span style="flex:1;min-width:0"><span class="cf-title cf-ell" style="display:block">{{ q.title }}</span><span class="cf-sub cf-ell" style="display:block">{{ q.sub }}</span></span>
                   </button>
-                  <button type="button" class="cf-iconbtn sm" aria-label="{{ q.removeLabel }}" onClick="{{ q.remove }}" style="color:var(--ink2)"><span class="ms">close</span></button>
+                  <button type="button" class="cf-iconbtn sm" aria-label="{{ q.removeLabel }}" onClick="{{ q.remove }}" style="color:var(--ink2)"><span class="ms" aria-hidden="true">close</span></button>
                 </li>
               </sc-for>
             </ol>
@@ -967,14 +967,14 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
               </sc-if>
             </article>
           </div>
-          <sc-if value="{{ !chromeOn }}"><button type="button" class="rd-reveal" aria-label="Show reader controls" onClick="{{ toggleChrome }}"><span class="ms">more_horiz</span></button></sc-if>
+          <sc-if value="{{ !chromeOn }}"><button type="button" class="rd-reveal" aria-label="Show reader controls" onClick="{{ toggleChrome }}"><span class="ms" aria-hidden="true">more_horiz</span></button></sc-if>
           <sc-if value="{{ chromeOn }}" hint-placeholder-val="{{ true }}">
             <div class="rd-bar" style="top:0;box-shadow:0 1px 0 var(--outv);display:flex;align-items:center;padding:4px">
-              <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}" style="width:44px;height:44px"><span class="ms">arrow_back</span></button>
+              <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}" style="width:44px;height:44px"><span class="ms" aria-hidden="true">arrow_back</span></button>
               <div style="flex:1;min-width:0"><div class="cf-metal-text cf-ell" style="font:900 13px/1.3 var(--dff)">{{ readTitle }}</div><div class="cf-meta">{{ readAuthor }}</div></div>
-              <button type="button" class="cf-iconbtn sm" aria-label="Bookmark page" aria-pressed="{{ bookmark }}" onClick="{{ toggleBookmark }}"><span class="ms" style="{{ bmSt }}">bookmark</span></button>
-              <button type="button" class="cf-iconbtn sm" aria-label="Search in book" onClick="{{ searchInBook }}"><span class="ms">search</span></button>
-              <button type="button" class="cf-iconbtn sm" aria-label="Appearance" aria-expanded="{{ appearance }}" aria-pressed="{{ appearance }}" onClick="{{ toggleAppearance }}"><span class="ms">text_fields</span></button>
+              <button type="button" class="cf-iconbtn sm" aria-label="Bookmark page" aria-pressed="{{ bookmark }}" onClick="{{ toggleBookmark }}"><span class="ms" style="{{ bmSt }}" aria-hidden="true">bookmark</span></button>
+              <button type="button" class="cf-iconbtn sm" aria-label="Search in book" onClick="{{ searchInBook }}"><span class="ms" aria-hidden="true">search</span></button>
+              <button type="button" class="cf-iconbtn sm" aria-label="Appearance" aria-expanded="{{ appearance }}" aria-pressed="{{ appearance }}" onClick="{{ toggleAppearance }}"><span class="ms" aria-hidden="true">text_fields</span></button>
             </div>
             <div class="rd-bar" style="bottom:0;box-shadow:0 -1px 0 var(--outv);padding:12px 16px;display:flex;flex-direction:column;gap:8px">
               <sc-if value="{{ appearance }}">
@@ -994,10 +994,10 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
               <div class="cf-meta" style="font-weight:600;font-size:11px">{{ chapter }}</div>
               <input type="range" class="cf-range sm" min="1" max="{{ pageCount }}" value="{{ page }}" onInput="{{ setPage }}" onChange="{{ setPage }}" aria-label="Page" aria-valuetext="{{ pageLabel }}" style="{{ readSeekSt }}">
               <div style="display:flex;align-items:center"><span class="cf-meta" style="flex:1">{{ pageLabel }}</span>
-                <button type="button" class="cf-iconbtn sm" aria-label="Previous page" onClick="{{ prevPage }}"><span class="ms">chevron_left</span></button>
-                <button type="button" class="cf-iconbtn sm" aria-label="Next page" onClick="{{ nextPage }}"><span class="ms">chevron_right</span></button>
-                <button type="button" class="cf-iconbtn sm" aria-label="Chapters" onClick="{{ chaptersTap }}"><span class="ms">toc</span></button>
-                <button type="button" class="cf-iconbtn sm" aria-label="Read aloud" aria-pressed="{{ tts }}" onClick="{{ toggleTts }}"><span class="ms">record_voice_over</span></button>
+                <button type="button" class="cf-iconbtn sm" aria-label="Previous page" onClick="{{ prevPage }}"><span class="ms" aria-hidden="true">chevron_left</span></button>
+                <button type="button" class="cf-iconbtn sm" aria-label="Next page" onClick="{{ nextPage }}"><span class="ms" aria-hidden="true">chevron_right</span></button>
+                <button type="button" class="cf-iconbtn sm" aria-label="Chapters" onClick="{{ chaptersTap }}"><span class="ms" aria-hidden="true">toc</span></button>
+                <button type="button" class="cf-iconbtn sm" aria-label="Read aloud" aria-pressed="{{ tts }}" onClick="{{ toggleTts }}"><span class="ms" aria-hidden="true">record_voice_over</span></button>
               </div>
             </div>
           </sc-if>
@@ -1008,19 +1008,19 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
       <sc-if value="{{ sVideo }}" hint-placeholder-val="{{ false }}">
         <section class="cf-screen" data-screen-label="Video player" aria-label="Video player" style="background:#000;color:#fff">
           <header style="height:56px;flex:none;display:flex;align-items:center;padding:0 4px">
-            <button type="button" class="vd-btn" aria-label="Back" onClick="{{ back }}"><span class="ms">arrow_back</span></button>
+            <button type="button" class="vd-btn" aria-label="Back" onClick="{{ back }}"><span class="ms" aria-hidden="true">arrow_back</span></button>
             <div style="flex:1;min-width:0;padding-left:4px"><div class="cf-ell" style="font:700 15px/1.2 Inter,sans-serif">{{ vd.title }}</div><div style="font:500 11px/1.3 Inter,sans-serif;color:#a1a1aa">{{ vd.source }}</div></div>
-            <button type="button" class="vd-btn" aria-label="Captions" aria-pressed="{{ captions }}" onClick="{{ toggleCaptions }}"><span class="ms">{{ vd.ccIcon }}</span></button>
-            <button type="button" class="vd-btn" aria-label="Cast" onClick="{{ castTap }}"><span class="ms">cast</span></button>
+            <button type="button" class="vd-btn" aria-label="Captions" aria-pressed="{{ captions }}" onClick="{{ toggleCaptions }}"><span class="ms" aria-hidden="true">{{ vd.ccIcon }}</span></button>
+            <button type="button" class="vd-btn" aria-label="Cast" onClick="{{ castTap }}"><span class="ms" aria-hidden="true">cast</span></button>
           </header>
           <div style="position:relative;flex:none;aspect-ratio:16/9;background:#000;overflow:hidden">
             <div class="vd-frame" style="{{ vd.frameSt }}" onClick="{{ toggleVChrome }}" aria-hidden="true"></div>
             <sc-if value="{{ captions }}"><div class="vd-cap" aria-hidden="true">[ low, resonant hum ]</div></sc-if>
             <sc-if value="{{ vchrome }}">
               <div class="vd-scrim">
-                <button type="button" class="vd-btn" aria-label="Back 10 seconds" onClick="{{ vBack }}"><span class="ms" style="font-size:30px">replay_10</span></button>
-                <button type="button" class="vd-btn big" aria-label="{{ vd.playAria }}" onClick="{{ toggleVideo }}"><span class="ms fill">{{ vd.playIcon }}</span></button>
-                <button type="button" class="vd-btn" aria-label="Forward 10 seconds" onClick="{{ vFwd }}"><span class="ms" style="font-size:30px">forward_10</span></button>
+                <button type="button" class="vd-btn" aria-label="Back 10 seconds" onClick="{{ vBack }}"><span class="ms" style="font-size:30px" aria-hidden="true">replay_10</span></button>
+                <button type="button" class="vd-btn big" aria-label="{{ vd.playAria }}" onClick="{{ toggleVideo }}"><span class="ms fill" aria-hidden="true">{{ vd.playIcon }}</span></button>
+                <button type="button" class="vd-btn" aria-label="Forward 10 seconds" onClick="{{ vFwd }}"><span class="ms" style="font-size:30px" aria-hidden="true">forward_10</span></button>
               </div>
             </sc-if>
           </div>
@@ -1030,15 +1030,15 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
               <div style="display:flex;justify-content:space-between;font:600 11px/1 'JetBrains Mono',monospace;color:#a1a1aa"><span>{{ vd.pos }}</span><span>{{ vd.dur }}</span></div>
             </div>
             <div style="display:flex;gap:2px;justify-content:space-between">
-              <button type="button" class="vd-ctl" onClick="{{ vSpeed }}"><span class="ms" style="font-size:20px">speed</span>{{ vd.speed }}</button>
-              <button type="button" class="vd-ctl" aria-pressed="{{ captions }}" onClick="{{ toggleCaptions }}"><span class="ms" style="font-size:20px">subtitles</span>English CC</button>
-              <button type="button" class="vd-ctl" onClick="{{ vAudio }}"><span class="ms" style="font-size:20px">graphic_eq</span>5.1</button>
-              <button type="button" class="vd-ctl" aria-label="Full screen" onClick="{{ vFull }}"><span class="ms" style="font-size:20px">fullscreen</span></button>
+              <button type="button" class="vd-ctl" onClick="{{ vSpeed }}"><span class="ms" style="font-size:20px" aria-hidden="true">speed</span>{{ vd.speed }}</button>
+              <button type="button" class="vd-ctl" aria-pressed="{{ captions }}" onClick="{{ toggleCaptions }}"><span class="ms" style="font-size:20px" aria-hidden="true">subtitles</span>English CC</button>
+              <button type="button" class="vd-ctl" onClick="{{ vAudio }}"><span class="ms" style="font-size:20px" aria-hidden="true">graphic_eq</span>5.1</button>
+              <button type="button" class="vd-ctl" aria-label="Full screen" onClick="{{ vFull }}"><span class="ms" style="font-size:20px" aria-hidden="true">fullscreen</span></button>
             </div>
             <div style="display:flex;flex-direction:column;gap:6px;padding-top:4px;border-top:1px solid #27272a">
               <h1 style="font:800 20px/1.25 Inter,sans-serif;padding-top:8px">{{ vd.title }}</h1>
               <div style="font:400 13px/1.4 Inter,sans-serif;color:#a1a1aa">{{ vd.meta }}</div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="vd-chip">1080p</span><span class="vd-chip">Direct play</span><span class="vd-chip"><span class="ms" style="font-size:14px">cast</span>Plex · Living Room</span></div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="vd-chip">1080p</span><span class="vd-chip">Direct play</span><span class="vd-chip"><span class="ms" style="font-size:14px" aria-hidden="true">cast</span>Plex · Living Room</span></div>
               <p style="font:400 13px/1.5 Inter,sans-serif;color:#d4d4d8">{{ vd.about }}</p>
             </div>
             <div style="display:flex;flex-direction:column;gap:8px">
@@ -1057,9 +1057,9 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
       <sc-if value="{{ sStats }}" hint-placeholder-val="{{ false }}">
         <section class="cf-screen" data-screen-label="Reading stats" aria-label="Reading stats">
           <header class="cf-topbar pushed">
-            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms">arrow_back</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Back" onClick="{{ back }}"><span class="ms" aria-hidden="true">arrow_back</span></button>
             <h1 class="cf-appbar-title cf-metal-text">Stats</h1>
-            <button type="button" class="cf-iconbtn" aria-label="Share stats" onClick="{{ shareStats }}"><span class="ms">share</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Share stats" onClick="{{ shareStats }}"><span class="ms" aria-hidden="true">share</span></button>
           </header>
           <div class="cf-scroll" style="padding:4px var(--px) 32px;display:flex;flex-direction:column;gap:16px">
             <div class="cf-seg" role="group" aria-label="Range">
@@ -1088,7 +1088,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
               </ul>
             </div>
             <div class="cf-card hero" style="display:flex;gap:14px;align-items:center;padding:16px;border-radius:var(--rp)">
-              <span class="cf-shine" style="width:52px;height:52px;flex:none;border-radius:var(--ri);background:var(--metal);display:flex;align-items:center;justify-content:center;color:var(--ctafg);animation:var(--pulse)"><span class="ms fill" style="font-size:28px">local_fire_department</span></span>
+              <span class="cf-shine" style="width:52px;height:52px;flex:none;border-radius:var(--ri);background:var(--metal);display:flex;align-items:center;justify-content:center;color:var(--ctafg);animation:var(--pulse)"><span class="ms fill" style="font-size:28px" aria-hidden="true">local_fire_department</span></span>
               <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
                 <div style="font:700 10px/1 var(--lf);letter-spacing:.16em;color:var(--ink2)">STREAK</div>
                 <div class="cf-metal-text" style="font:900 20px/1.1 var(--dff)">14-day streak</div>
@@ -1118,14 +1118,14 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
             <p class="ob-body">{{ ob.body }}</p>
             <sc-if value="{{ ob.s0 }}">
               <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:6px" aria-hidden="true">
-                <sc-for list="{{ ob.tiles }}" as="t" hint-placeholder-count="12"><span class="{{ t.cls }}" style="{{ t.st }}"><span class="ms fill" style="font-size:26px">{{ t.icon }}</span><span>{{ t.label }}</span></span></sc-for>
+                <sc-for list="{{ ob.tiles }}" as="t" hint-placeholder-count="12"><span class="{{ t.cls }}" style="{{ t.st }}"><span class="ms fill" style="font-size:26px" aria-hidden="true">{{ t.icon }}</span><span>{{ t.label }}</span></span></sc-for>
               </div>
             </sc-if>
             <sc-if value="{{ ob.s1 }}">
               <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
                 <sc-for list="{{ ob.sources }}" as="s" hint-placeholder-count="5">
                   <button type="button" class="ob-src" aria-pressed="{{ s.on }}" onClick="{{ s.pick }}">
-                    <span class="cf-well"><span class="ms fill">{{ s.icon }}</span></span>
+                    <span class="cf-well"><span class="ms fill" aria-hidden="true">{{ s.icon }}</span></span>
                     <span style="flex:1;min-width:0;text-align:left"><span class="cf-title" style="display:block">{{ s.name }}</span><span class="cf-sub" style="display:block">{{ s.desc }}</span></span>
                     <span class="ms" style="{{ s.checkSt }}" aria-hidden="true">{{ s.check }}</span>
                   </button>
@@ -1147,7 +1147,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
           <footer style="flex:none;display:flex;align-items:center;gap:8px;padding:12px 16px 16px 24px">
             <div class="ob-dots" aria-hidden="true" style="flex:1"><sc-for list="{{ ob.dots }}" as="d"><i class="{{ d.cls }}"></i></sc-for></div>
             <sc-if value="{{ ob.canBack }}"><button type="button" class="cf-link" onClick="{{ obBack }}">Back</button></sc-if>
-            <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ obNext }}">{{ ob.cta }}<span class="ms">arrow_forward</span></button>
+            <button type="button" class="cf-cta cf-shine cf-press" onClick="{{ obNext }}">{{ ob.cta }}<span class="ms" aria-hidden="true">arrow_forward</span></button>
           </footer>
         </section>
       </sc-if>
@@ -1159,8 +1159,8 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
               <span style="{{ miniCover.st }}"></span>
               <span style="flex:1;min-width:0;overflow:hidden"><span class="cf-title cf-ell" style="display:block">{{ nowTitle }}</span><span class="cf-meta cf-ell" style="display:block">{{ nowSub }}</span></span>
             </button>
-            <button type="button" class="cf-iconbtn" aria-label="Previous" onClick="{{ prevTrack }}" style="width:40px;height:40px"><span class="ms fill">skip_previous</span></button>
-            <button type="button" aria-label="{{ playAria }}" onClick="{{ togglePlay }}" style="width:40px;height:40px;flex:none;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;background:var(--pri);color:var(--onpriL);box-shadow:var(--ctash)"><span class="ms fill">{{ playIcon }}</span></button>
+            <button type="button" class="cf-iconbtn" aria-label="Previous" onClick="{{ prevTrack }}" style="width:40px;height:40px"><span class="ms fill" aria-hidden="true">skip_previous</span></button>
+            <button type="button" aria-label="{{ playAria }}" onClick="{{ togglePlay }}" style="width:40px;height:40px;flex:none;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;background:var(--pri);color:var(--onpriL);box-shadow:var(--ctash)"><span class="ms fill" aria-hidden="true">{{ playIcon }}</span></button>
           </div>
           <div class="cf-track thin" style="border-radius:0"><div class="cf-fill" style="{{ progSt }}"></div></div>
         </div>
@@ -1187,7 +1187,7 @@ a{color:#a5b4fc}a:hover{color:#c7d2fe}
         </nav>
       </div>
       <div style="position:absolute;left:0;right:0;bottom:0;height:64px;display:flex;align-items:center;justify-content:center;gap:28px;background:var(--surf);z-index:4" role="toolbar" aria-label="App bar">
-        <sc-for list="{{ metroBar }}" as="b" hint-placeholder-count="4"><button type="button" aria-label="{{ b.label }}" aria-pressed="{{ b.on }}" onClick="{{ b.pick }}" style="{{ b.st }}"><span class="ms" style="font-size:20px">{{ b.glyph }}</span></button></sc-for>
+        <sc-for list="{{ metroBar }}" as="b" hint-placeholder-count="4"><button type="button" aria-label="{{ b.label }}" aria-pressed="{{ b.on }}" onClick="{{ b.pick }}" style="{{ b.st }}"><span class="ms" style="font-size:20px" aria-hidden="true">{{ b.glyph }}</span></button></sc-for>
         <span aria-hidden="true" style="position:absolute;right:14px;top:6px;font:700 16px/1 'Open Sans',sans-serif;letter-spacing:2px;color:var(--ink)">···</span>
       </div>
     </sc-if>

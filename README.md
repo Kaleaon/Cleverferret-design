@@ -1,54 +1,84 @@
 # CleverFerret Design System
 
-Design repo for CleverFerret — the theme system and interactive prototypes for the
-[CleverFerret](https://github.com/Kaleaon/CleverFerret) media library app.
+Design repo for [CleverFerret](https://github.com/Kaleaon/CleverFerret), a media library app that
+catalogues like Calibre and files like Plex. It holds the theme system, an interactive phone
+prototype, and the library-management patterns.
 
-![CleverFerret theme picker and phone prototype preview](docs/assets/theme-preview.webp)
+![Five prototype screens in five themes](docs/assets/app-preview.webp)
 
-## Live prototypes (GitHub Pages)
+## Pages (GitHub Pages)
 
-Once Pages is enabled for this repo (see below), the mockups are served from:
+Served from `docs/` at `https://kaleaon.github.io/Cleverferret-design/` once Pages is enabled (see below).
 
-- **App Prototype** — `docs/app.dc.html` — nine navigable screens (Home, Library, Discover,
-  Search, Player, Reader, Settings, Downloads, Theme Studio) with real navigation and state.
-- **Theme System** — `docs/theme-system.dc.html` — the full token spec sheet: layout packs,
-  colour families, effects, motion and reader modes, previewed across phone/tablet/TV.
-- **Landing page** — `docs/index.html` — links to both, plus the screen-to-source map.
+- **Landing page** (`docs/index.html`): overview, design principles, every colour pack, and the
+  screen-to-source map.
+- **App prototype** (`docs/app.dc.html`): 20 navigable screens with real state, in four groups.
+  - Browse: Home, Library, Discover, Downloads, Settings, Search, Item detail
+  - Library management: Import inbox, Fix match, File repair, Sort rules, Calibre plugins, Tag explorer
+  - Play & read: Audio player, Queue, Reader, Video player, Reading stats
+  - Personalise: Theme Studio, Onboarding
 
-Locally, open `docs/index.html` in a browser (or run any static file server, e.g.
-`python3 -m http.server` from `docs/`) — everything is static HTML/CSS/JS, no build step.
+  The side panel switches theme and jumps between screens. Deep links work too, for example
+  `app.dc.html?screen=inbox&layout=sweep&palette=lcars&effect=flat`.
+- **Theme system** (`docs/theme-system.dc.html`): the spec sheet. It covers live previews (the real
+  prototype, embedded), foundations, layout, colour and effect packs, LCARS conformance, a WCAG audit
+  of every pack, library-management patterns, components and portable theme JSON.
+
+Everything is static HTML/CSS/JS with no build step. To run it locally, serve `docs/` with any static
+server, for example `cd docs && python3 -m http.server`, then open `http://localhost:8000/`.
+
+## How it fits together
+
+```
+docs/
+  cf-system.js          tokens and resolver: the single source of truth (browser + Node)
+  cf-ui.css             UI kit: component classes shared by the app and the spec
+  app.dc.html           phone prototype
+  theme-system.dc.html  theme spec sheet
+  index.html            landing page
+  support.js            prototype runtime (React-based; loads React from a CDN at view time)
+  assets/               favicon and preview images
+design-notes/
+  design-language.md    principles, patterns and how they map to the Kotlin code
+  calibre-plugins.md    running Kaleaon/calibre_plugins inside the app
+  sync-log.md           what was taken from the app repo, and where the two have drifted
+tests/
+  verify_contrast.js    WCAG 2.2 AA audit of every colour pack and derived text role
+  verify_system.js      structural checks on the token data and the pages
+```
+
+`cf-system.js` holds all of the design data:
+
+- 26 colour packs, 7 layout packs and 8 effect packs
+- the type, spacing, radius, motion and contrast scales
+- status and player tokens
+- the library-management data: pipeline, match confidence, repair catalogue, naming conventions, tags and plugin manifests
+
+`CF.resolve(theme)` turns a theme (`{layout, palette, effect, motion}`) into the CSS custom properties
+that `cf-ui.css` reads. Change a value there and every page follows.
+
+## Tests
+
+```
+node tests/verify_contrast.js
+node tests/verify_system.js
+```
+
+Both need only Node. The first checks every colour pack after contrast correction. It covers MD3 role
+pairs, status colours, reader pages, CTA labels, primary-as-text and nav pills. The second checks that
+every pack, layout and effect combination resolves, that each registered screen exists in the
+prototype, and that the inbox, naming, tag and plugin data is consistent.
 
 ## Enabling GitHub Pages (one-time setup)
 
-This repo doesn't have Pages turned on yet — that setting can only be changed by a repo admin
-in the GitHub UI. `.github/workflows/pages.yml` builds and deploys `docs/` on every push to
-`main`, but the Pages *source* still has to be set once:
+`.github/workflows/pages.yml` deploys `docs/` on every push to `main`. A repo admin has to set the
+Pages source once:
 
 1. Go to **Settings → Pages** on `github.com/Kaleaon/Cleverferret-design`.
 2. Under **Build and deployment → Source**, choose **GitHub Actions**.
-3. After merging this branch to `main`, the workflow runs and the site publishes at
-   `https://kaleaon.github.io/Cleverferret-design/`.
-
-## How the prototypes work
-
-The `.dc.html` files are self-contained interactive documents rendered by `docs/support.js`
-(a small React-based runtime, loading React/ReactDOM/Babel from a CDN at view time). They need
-no server-side code — any static host, including GitHub Pages, serves them as-is.
-
-## Repo layout
-
-```
-docs/                    GitHub Pages site root
-  index.html             landing page
-  app.dc.html            phone app prototype (9 screens)
-  theme-system.dc.html   theme/token spec sheet
-  support.js             prototype runtime (shared by both .dc.html files)
-  assets/                images used by the landing page
-design-notes/
-  sync-log.md            design/source sync notes from the CleverFerret app repo
-```
 
 ## Related repos
 
 - App source: [Kaleaon/CleverFerret](https://github.com/Kaleaon/CleverFerret)
-- Palette/layout reference: Kaleaon/linkpoint-design, Kaleaon/Ktheme
+- Calibre plugins: [Kaleaon/calibre_plugins](https://github.com/Kaleaon/calibre_plugins)
+- Palette and layout reference: Kaleaon/linkpoint-design, Kaleaon/Ktheme
