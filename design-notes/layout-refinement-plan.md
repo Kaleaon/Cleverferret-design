@@ -41,7 +41,9 @@ for deterministic structure checks; screenshots with the actual fonts were revie
 
 Recorded local result: 119,554 contrast checks and 2,082 system checks passed; 149 browser pages
 passed, with all 140 screen/layout pairs covered. Phone and tablet screenshots were inspected
-with the configured fonts. Landing-page snapshots matched existing baselines. Its legacy
+with the configured fonts. Landing-page baselines were refreshed with locked local font fixtures;
+the visual runner waits for those fonts and compares decoded PNG pixels. A regression test checks
+that PNG filter/compression differences cannot produce false visual changes. Its legacy
 accessibility scanner reports seven non-blocking contrast warnings; it uses a simplified
 transparent-background fallback and does not establish full WCAG conformance.
 

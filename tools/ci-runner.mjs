@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import net from 'node:net';
 import http from 'node:http';
-import zlib from 'node:zlib';
+import { comparePNGBuffers } from './png-compare.mjs';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
@@ -172,71 +172,6 @@ async function startServerHarness(rootDirectory, requestedPort = 0) {
   });
 }
 
-// Pure Node PNG Parser & Pixel Matcher Helper
-function parsePNG(buffer) {
-  let offset = 8;
-  let width = 0, height = 0;
-  const idatChunks = [];
-  while (offset < buffer.length) {
-    const length = buffer.readUInt32BE(offset);
-    const type = buffer.toString('ascii', offset + 4, offset + 8);
-    if (type === 'IHDR') {
-      width = buffer.readUInt32BE(offset + 8);
-      height = buffer.readUInt32BE(offset + 12);
-    } else if (type === 'IDAT') {
-      idatChunks.push(buffer.subarray(offset + 8, offset + 8 + length));
-    } else if (type === 'IEND') {
-      break;
-    }
-    offset += 12 + length;
-  }
-  const idatCombined = Buffer.concat(idatChunks);
-  const raw = zlib.inflateSync(idatCombined);
-  return { width, height, raw };
-}
-
-function comparePNGBuffers(bufA, bufB, colorThreshold = 15) {
-  try {
-    const pngA = parsePNG(bufA);
-    const pngB = parsePNG(bufB);
-
-    if (pngA.width !== pngB.width || pngA.height !== pngB.height) {
-      return { match: false, diffPercent: 100, reason: `Dimension mismatch (${pngA.width}x${pngA.height} vs ${pngB.width}x${pngB.height})` };
-    }
-
-    const totalPixels = pngA.width * pngA.height;
-    let diffPixels = 0;
-    const bytesPerRow = 1 + pngA.width * 4;
-
-    for (let y = 0; y < pngA.height; y++) {
-      const rowStart = y * bytesPerRow + 1; // skip filter byte
-      for (let x = 0; x < pngA.width; x++) {
-        const px = rowStart + x * 4;
-        const dr = Math.abs(pngA.raw[px] - pngB.raw[px]);
-        const dg = Math.abs(pngA.raw[px + 1] - pngB.raw[px + 1]);
-        const db = Math.abs(pngA.raw[px + 2] - pngB.raw[px + 2]);
-        const da = Math.abs(pngA.raw[px + 3] - pngB.raw[px + 3]);
-
-        if (dr > colorThreshold || dg > colorThreshold || db > colorThreshold || da > colorThreshold) {
-          diffPixels++;
-        }
-      }
-    }
-
-    const diffPercent = (diffPixels / totalPixels) * 100;
-    return {
-      match: diffPercent <= 0.1,
-      diffPercent: parseFloat(diffPercent.toFixed(3)),
-      diffPixels,
-      totalPixels
-    };
-  } catch (e) {
-    // Fallback byte-wise buffer compare if PNG parsing fails
-    const isExact = bufA.equals(bufB);
-    return { match: isExact, diffPercent: isExact ? 0 : 100, reason: `Buffer comparison (PNG parse error: ${e.message})` };
-  }
-}
-
 // Helper to resolve Playwright browser launch
 async function getPlaywrightBrowser() {
   const playwright = await import('playwright');
@@ -248,18 +183,20 @@ async function getPlaywrightBrowser() {
     '/usr/bin/chromium'
   ].filter(Boolean);
 
-  let executablePath = possiblePaths.find(p => fs.existsSync(p));
+  const fallbackPath = possiblePaths.find(p => fs.existsSync(p));
 
   const launchOpts = {
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--font-render-hinting=none', '--force-color-profile=srgb']
   };
 
-  if (executablePath) {
-    launchOpts.executablePath = executablePath;
+  if (process.env.CHROMIUM_PATH) launchOpts.executablePath = process.env.CHROMIUM_PATH;
+  try {
+    return await playwright.chromium.launch(launchOpts);
+  } catch (error) {
+    if (process.env.CHROMIUM_PATH || !fallbackPath || !error.message.includes('Executable doesn')) throw error;
+    return await playwright.chromium.launch({ ...launchOpts, executablePath: fallbackPath });
   }
-
-  return await playwright.chromium.launch(launchOpts);
 }
 
 // TASK 1: Unit Tests
@@ -269,7 +206,7 @@ async function taskUnitTests() {
   const hasKthemeJest = fs.existsSync(path.join(cwd, 'jest.config.js')) || fs.existsSync(path.join(cwd, 'src/core/ThemeEngine.ts'));
   const hasReactVitest = fs.existsSync(path.join(cwd, 'docs/react/package.json'));
 
-  const designChecks = ['tests/verify_contrast.js', 'tests/verify_system.js', 'tests/verify_layouts.mjs']
+  const designChecks = ['tests/verify_contrast.js', 'tests/verify_system.js', 'tests/verify_images.mjs', 'tests/verify_layouts.mjs']
     .filter(script => fs.existsSync(path.join(cwd, script)));
   let success = true;
 
@@ -501,6 +438,18 @@ async function taskA11yAudit() {
 }
 
 // TASK 4: Playwright Visual Snapshot Regression Suite
+async function useSnapshotFonts(page) {
+  const fonts = [
+    ['Inter', '@fontsource-variable/inter', 'inter-latin-wght-normal.woff2'],
+    ['JetBrains Mono', '@fontsource-variable/jetbrains-mono', 'jetbrains-mono-latin-wght-normal.woff2'],
+  ];
+  const css = fonts.map(([family, pkg, file]) => {
+    const bytes = fs.readFileSync(path.join(cwd, 'node_modules', pkg, 'files', file));
+    return `@font-face{font-family:'${family}';font-style:normal;font-weight:100 900;font-display:block;src:url(data:font/woff2;base64,${bytes.toString('base64')}) format('woff2')}`;
+  }).join('\n');
+  await page.route('https://fonts.googleapis.com/**', route => route.fulfill({ contentType: 'text/css', body: css }));
+}
+
 async function taskVisualSuite() {
   log('Running Playwright Visual Snapshot Regression Testing...', 'header');
 
@@ -542,7 +491,9 @@ async function taskVisualSuite() {
     for (const vp of viewports) {
       log(`Capturing visual snapshots for viewport: ${vp.name} (${vp.width}x${vp.height})`, 'info');
       const page = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
+      if (fs.existsSync(docsIndex)) await useSnapshotFonts(page);
       await page.goto(targetUrl, { waitUntil: 'domcontentloaded' });
+      await page.evaluate(() => document.fonts.ready);
       await page.waitForTimeout(1000);
 
       // Attempt interactive panel triggers if available

@@ -48,6 +48,7 @@ tests/
   verify_contrast.js    WCAG 2.2 AA audit of every colour pack and derived text role
   verify_system.js      structural checks on the token data and the pages
   verify_layouts.mjs    all-screen browser, responsive and interaction regressions
+  verify_images.mjs     PNG encoding-independent visual comparison checks
 ```
 
 `cf-system.js` holds all of the design data:
@@ -86,6 +87,11 @@ It serves the exact React runtime locally and uses fallback fonts for repeatable
 The contrast suite samples between gradient stops and checks glass wash/surface composites.
 `CHROMIUM_PATH` can select a system browser. Unified validation includes these suites; its
 landing-page contrast warnings do not constitute a full app accessibility audit.
+
+Landing snapshots load the locked Fontsource Inter/JetBrains Mono fixtures and wait for fonts,
+so CDN timing does not change layout. The runner prefers the installed Playwright browser and
+compares decoded RGBA pixels (PNG compression/row filters are ignored). Refresh reviewed
+baselines with `node tools/ci-runner.mjs --visual --update-snapshots` when appearance changes.
 
 ## Enabling GitHub Pages (one-time setup)
 
