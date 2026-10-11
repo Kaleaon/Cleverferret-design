@@ -92,6 +92,9 @@ Landing snapshots load the locked Fontsource Inter/JetBrains Mono fixtures and w
 so CDN timing does not change layout. The runner prefers the installed Playwright browser and
 compares decoded RGBA pixels (PNG compression/row filters are ignored). Refresh reviewed
 baselines with `node tools/ci-runner.mjs --visual --update-snapshots` when appearance changes.
+The committed baselines use Ubuntu 24.04 and the locked Playwright browser, matching CI.
+Use that environment for exact comparisons; a different Linux font rasterizer can differ even
+with identical font files. Inspect the images before accepting a baseline refresh.
 
 ## Enabling GitHub Pages (one-time setup)
 
