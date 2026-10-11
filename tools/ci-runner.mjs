@@ -269,7 +269,15 @@ async function taskUnitTests() {
   const hasKthemeJest = fs.existsSync(path.join(cwd, 'jest.config.js')) || fs.existsSync(path.join(cwd, 'src/core/ThemeEngine.ts'));
   const hasReactVitest = fs.existsSync(path.join(cwd, 'docs/react/package.json'));
 
+  const designChecks = ['tests/verify_contrast.js', 'tests/verify_system.js']
+    .filter(script => fs.existsSync(path.join(cwd, script)));
   let success = true;
+
+  for (const script of designChecks) {
+    log(`Executing ${script}...`, 'info');
+    const res = spawnSync(process.execPath, [script], { cwd, stdio: 'inherit' });
+    if (res.status !== 0) success = false;
+  }
 
   if (hasKthemeJest) {
     log('Executing Ktheme Jest Unit Tests...', 'info');
@@ -284,7 +292,7 @@ async function taskUnitTests() {
     if (res.status !== 0) success = false;
   }
 
-  if (!hasKthemeJest && !hasReactVitest) {
+  if (!hasKthemeJest && !hasReactVitest && designChecks.length === 0) {
     log('No specific unit test runner found for this directory. Skipped.', 'warn');
     return true;
   }
@@ -539,12 +547,12 @@ async function taskVisualSuite() {
 
       // Attempt interactive panel triggers if available
       try {
-        const sweepBtn = page.getByText('Sweep Console', { exact: true }).first();
+        const sweepBtn = page.getByRole('button', { name: 'Sweep Console', exact: true }).first();
         if (await sweepBtn.isVisible()) {
           await sweepBtn.click();
           await page.waitForTimeout(300);
         }
-        const lcarsBtn = page.getByText('LCARS Amber', { exact: true }).first();
+        const lcarsBtn = page.getByRole('button', { name: 'LCARS Amber', exact: true }).first();
         if (await lcarsBtn.isVisible()) {
           await lcarsBtn.click();
           await page.waitForTimeout(300);

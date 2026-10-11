@@ -1,7 +1,7 @@
 {
   "name": "cleverferret-design",
   "version": "1.0.0",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "validate": "node tools/ci-runner.mjs",
     "test:a11y": "node tools/ci-runner.mjs --a11y",

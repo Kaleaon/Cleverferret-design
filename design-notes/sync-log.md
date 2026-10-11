@@ -3,35 +3,62 @@ branch: main
 path: CleverFerret/src/main/java/com/universalmedialibrary/ui
 
 ## Last sync
+date: 2026-10-11 (app repo at ffb910c7)
 
-date: 2026-09-26T14:43:31Z
+### Taken from the app repo this time
+- `ui/modern/theme/CFTokens.kt`: E-Ink Monochrome and High Contrast become the **Accessibility**
+  colour family (26 packs in total). `CFStatusColors` becomes status tokens and `CFPlayerControls`
+  becomes player tokens. Metal brushes are still copied verbatim.
+- `ui/modern/theme/CFTheme.kt`: the `cfTypography` scale (display → label) is now a foundation.
+- `core/design-system/.../DesignTokensV1.kt`: spacing (`space.0`–`space.16`), radius, motion
+  (100/200/320 ms) and contrast targets.
+- `services/pipeline/PipelineStage.kt`, `services/metadata/sources/*`,
+  `organization/DuplicateDetectionService.kt`, `data/local/entity/UnifiedTag.kt` (`TagType`): the
+  cataloging pipeline, metadata agents, duplicate rules and tag provenance used by the
+  library-management screens.
+- New prototype screens built from existing app screens: Item detail (`detail/ModernDetailScreen.kt`),
+  Queue and Video (`player/`), Reading stats (`stats/`), Onboarding (`onboarding/`), Import inbox
+  (`imports/`), Fix match (`metadata/`), Tag explorer (`tags/`). File repair and Sort rules are new
+  designs on top of `services/epub/*` and `StorageImportPlanBuilder.kt`.
 
-### Updated in this project
+### Drift between the two repos (needs a decision)
+Seven of the ten packs that exist in both repos have different core colours. The spec uses the
+linkpoint-design values; `CFTokens.kt` uses ktheme JSON values. Only the metal brushes match.
 
-- Added a phone prototype (`CleverFerret App.dc.html`) with working navigation across 9 screens and an in-app Theme Studio.
-- Sweep Console now wraps every screen in an LCARS frame whose rail is the navigation.
-- Discover and Search recreated from the repo. Downloads is a new design.
+| Pack | Spec primary / background | CFTokens.kt primary / background |
+| --- | --- | --- |
+| Navy Gold | `#D4AF37` / `#0A1630` | `#FFD166` / `#0E1D33` |
+| Rose Gold | `#C1818B` / `#3D1F2B` | `#E6B0A2` / `#2A0E14` |
+| Emerald Silver | `#C0C0C0` / `#0D3B2E` | `#CDD3D6` / `#0A1F18` |
+| Midnight Amber | `#FFBF00` / `#0C1824` | `#FFA94D` / `#0A0608` |
+| Neo-Noir Neon | `#AA43FF` / `#090A10` | `#FF2EAA` / `#080014` |
+| LCARS | `#F2A65A` / `#120C1C` | `#F2A65A` / `#000000` |
+| Metro | `#00AEEF` / `#001A33` | `#00B7C3` / `#000000` |
+| Paper & Ink, E-Ink, High Contrast | match | match |
+
+Suggested fix: pick one set as canonical and generate the other from it. `cf-system.js` already
+exports everything a generator would need.
+
+### Other decisions recorded here
+- **Sweep Console** now uses the canonical LCARS split frame: the header column swoops down into the
+  divider bar, and the content bar swoops down into the rail. The v1 overlay of titles and readouts on
+  a bar is recorded as a retired deviation. The remaining deviations are listed in the spec under
+  "LCARS conformance".
+- Contrast correction now runs against every surface a role sits on (background, surface,
+  surfaceVariant). Primary used as text gets a lifted `--priText` role.
 
 ## Screen map
-
-| Project screen           | Repo source                                                                                               |
-| ------------------------ | --------------------------------------------------------------------------------------------------------- |
-| Home                     | ui/modern/home/ModernHomeScreen.kt, ui/modern/components/Scaffolding.kt, SharedComponents.kt (MiniPlayer) |
-| Library (phone / tablet) | ui/modern/library/ModernLibraryScreen.kt, ui/modern/domain/Models.kt                                      |
-| Discover                 | ui/modern/discover/ModernDiscoverScreen.kt                                                                |
-| Search                   | ui/modern/search/ModernSearchScreen.kt                                                                    |
-| Audio player             | ui/modern/player/ModernAudioPlayerScreen.kt                                                               |
-| Reader                   | ui/modern/reader/ModernReaderScreen.kt, docs/THEMING.md (Day/Sepia/Night)                                 |
-| Settings                 | ui/modern/settings/ModernSettingsScreen.kt                                                                |
-| Theme Studio             | ui/modern/theme/ModernThemePickerScreen.kt (extended to layout / colour / effect tabs)                    |
-| Tokens / type            | ui/modern/theme/CFTokens.kt, CFTheme.kt, ui/theme/UnifiedThemeSystem.kt, MetallicColors.kt                |
-| Downloads, TV preview    | new                                                                                                       |
+The screen map is generated from `CF.SCREENS` in `docs/cf-system.js` and published on the landing
+page, so it can't fall out of step with the prototype.
 
 ## Other sources
-
 - Kaleaon/linkpoint-design (main): docs/react/src/theme/palettes.js, layouts.js, look.js, color.js, components/ConsoleFrame.jsx
 - Kaleaon/Ktheme (main): theme-creator/src/index.css (spec-sheet and prototype chrome)
+- Kaleaon/calibre_plugins (main): plugin structure and calibre API usage; see `calibre-plugins.md`
+- LCARS reference: https://commons.wikimedia.org/wiki/File:Lcars_wallpaper.svg
 
 ## Sync history
-
+- 2026-10-11: v2.0. Shared token module and UI kit, 20-screen prototype, library management,
+  Accessibility packs, LCARS split frame, spec rebuilt.
+- 2026-09-26T14:43:31Z: phone prototype with 9 screens and Theme Studio; Sweep Console LCARS frame.
 - 2026-09-26T14:20:07Z: spec sheet built (Home, Library, Player, Reader, Settings, tablet, TV previews).
