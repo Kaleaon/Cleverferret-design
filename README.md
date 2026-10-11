@@ -109,3 +109,5 @@ Pages source once:
 - App source: [Kaleaon/CleverFerret](https://github.com/Kaleaon/CleverFerret)
 - Calibre plugins: [Kaleaon/calibre_plugins](https://github.com/Kaleaon/calibre_plugins)
 - Palette and layout reference: Kaleaon/linkpoint-design, Kaleaon/Ktheme
+
+The seven layouts follow [Ktheme universal layout standards v1](https://github.com/Kaleaon/Ktheme/blob/main/docs/universal-layout-standards.md). The published contract is mirrored at `docs/standards/layouts.v1.json`; `node tests/verify_layout_contract.js` verifies token and geometry parity. Its source is Ktheme commit `e50b86d8b032e918a8dc29716a92ae3701e0ca64`, merged in PR #111.

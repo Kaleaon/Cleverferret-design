@@ -1,59 +1,56 @@
-# Android layout parity review
+# Android layout parity and adoption
 
-Reviewed [Kaleaon/CleverFerret at ffb910c7](https://github.com/Kaleaon/CleverFerret/tree/ffb910c76638bcfa0b9041dd7e05cf6561327a4a).
-This is a source review of `ui/modern`, not an emulator validation or a native implementation.
-The design prototype now has the refinements; native adoption needs the work below.
+The original source review used CleverFerret commit
+[`ffb910c7`](https://github.com/Kaleaon/CleverFerret/tree/ffb910c76638bcfa0b9041dd7e05cf6561327a4a).
+It exposed three modern layout IDs, but the production launcher used the older palette/theme
+path. Extending `CFTheme` alone would not have changed the live app.
 
-## Source evidence
+The design refinements are merged in [PR #22](https://github.com/Kaleaon/Cleverferret-design/pull/22).
+The universal standards are merged in [Ktheme PR #111](https://github.com/Kaleaon/Ktheme/pull/111).
+Ktheme's version 1 artifact is mirrored at `docs/standards/layouts.v1.json`, and CI verifies
+all seven web layouts' corners, type families, surface treatment and LCARS frame geometry
+against that exact published artifact.
 
-- [`theme/CFTokens.kt`](https://github.com/Kaleaon/CleverFerret/blob/ffb910c76638bcfa0b9041dd7e05cf6561327a4a/CleverFerret/src/main/java/com/universalmedialibrary/ui/modern/theme/CFTokens.kt)
-  exposes only `CFLayout { Compose, Lcars, Metro }`. Palettes choose a layout, while the prototype
-  stores layout, palette and effect independently. Native LCARS primary/background already match
-  the corrected prototype; full palette roles still need reconciliation (see `sync-log.md`).
-- [`theme/CFTheme.kt`](https://github.com/Kaleaon/CleverFerret/blob/ffb910c76638bcfa0b9041dd7e05cf6561327a4a/CleverFerret/src/main/java/com/universalmedialibrary/ui/modern/theme/CFTheme.kt)
-  supplies Material colors and typography. It does not construct the opposing LCARS frame.
-- [`components/Scaffolding.kt`](https://github.com/Kaleaon/CleverFerret/blob/ffb910c76638bcfa0b9041dd7e05cf6561327a4a/CleverFerret/src/main/java/com/universalmedialibrary/ui/modern/components/Scaffolding.kt)
-  uses a generic Material top bar, a circular metal button, outlined circular chips and fixed
-  rounded settings rows. Those components need layout dispatch for a flat LCARS design or Press.
-- [`components/SharedComponents.kt`](https://github.com/Kaleaon/CleverFerret/blob/ffb910c76638bcfa0b9041dd7e05cf6561327a4a/CleverFerret/src/main/java/com/universalmedialibrary/ui/modern/components/SharedComponents.kt)
-  fixes cover rounding at 6dp and mini-player rounding at 14dp. The player is a floating card;
-  its Previous/Play icons have null content descriptions. Layout tokens and named actions are needed.
-- [`components/MetroTileGrid.kt`](https://github.com/Kaleaon/CleverFerret/blob/ffb910c76638bcfa0b9041dd7e05cf6561327a4a/CleverFerret/src/main/java/com/universalmedialibrary/ui/modern/components/MetroTileGrid.kt)
-  already uses an adaptive minimum-width grid and spacing tokens. Check actual tile aspect/height
-  at screen call sites before adding a maximum; the grid alone does not establish those dimensions.
+## Native implementation
 
-## Native implementation sequence
+Production adoption is prepared in CleverFerret's `codex/universal-layout-standards` branch.
+`SettingsRepository` persists the layout independently of the existing palette/dark-mode IDs;
+`MainViewModel` supplies it to the launcher and Theme Gallery. Both the live theme and modern
+component theme consume the bundled Ktheme contract. Unknown IDs default to Compose; old
+`Compose`, `Lcars` and `Metro` names map to `compose`, `sweep` and `tiles`.
 
-1. Introduce independent persisted layout/palette/effect IDs with migration from existing themes.
-   Preserve old IDs and map `Lcars` → `sweep`, `Metro` → `tiles`, `Compose` → `compose`.
-   Add the four missing layout IDs without making palette selection overwrite layout.
-2. Add typed layout tokens for shapes, label/content casing, typography, borders, action treatment
-   and navigation. Keep reference metal stops separate from accessible text/CTA brushes.
-   Settle remaining palette drift, then generate shared data with a parity check.
-3. Build a layout-aware scaffold and shared components. Draw LCARS curves from the common geometry;
-   reserve player and Snackbar rows, respect safe insets, and keep content scrollable. Use the same
-   semantics for actions regardless of their visual treatment.
-4. Apply layout dispatch to modern screen call sites, including home, library, detail, themes,
-   settings, import/metadata screens and player. A theme token alone will not change their structure.
-5. Validate phone/tablet, landscape, large text, TalkBack, reduced motion and dynamic media titles.
+| Prototype ID | Native treatment |
+| --- | --- |
+| compose | Material shapes, phone bar → wide rail |
+| terminal | JetBrains Mono, consistent 4dp corners, metadata at least 12sp |
+| sweep | Black field, opposing elliptical sweeps, filled text rail, text transport, measured docks |
+| tiles | Open Sans, square shapes, lowercase pivot navigation, preserved media titles, actions bounded at 160dp |
+| glass | Nunito Sans, soft shapes and opaque text surfaces as the safe glass fallback |
+| rules | Jost, persistent rail, sharp corners and quiet surfaces |
+| press | Source Serif 4/Jost, quiet solid actions and shadow-free surfaces |
 
-| Prototype ID | Native starting point | Required treatment |
-| --- | --- | --- |
-| compose | `Compose` | Adaptive bar/rail, existing MD3 shapes |
-| terminal | Missing ID | Mono type, 4dp corners, boxed rows, readable metadata |
-| sweep | `Lcars` colors | Opposing frame, black field, filled segments, text transport, player/feedback docks |
-| tiles | `Metro`, adaptive grid | Lowercase navigation only; bounded wide tiles and square surfaces |
-| glass | Missing ID | Soft panels; contrast over actual composited backgrounds |
-| rules | Missing ID | Persistent rail, hairlines, sharp shapes, word-safe title wrapping |
-| press | Missing ID | Serif content, quiet rules/actions, minimal player shadow |
+The native frame derives outer radii 94 × 30dp from rail 76dp, bar 12dp and inner radius 18dp.
+Its two inner/outer curve centers are `(94, 86)` and `(94, 150)`, matching the prototype.
+The shared scaffold reserves measured player/feedback rows and respects system safe insets.
+Shared media corner/elevation tokens extend the selected shapes to routed screens and controls.
+The native production palette registry retains 22 existing palettes; the prototype has 26
+packs and eight effect packs. Choosing a native sweep pairs it with the user's palette and
+is labeled LCARS-inspired. Palette/effect equivalence is not implied by layout parity.
 
-## Native acceptance gates
+## Validation evidence and limits
 
-- Every layout changes component structure/treatment as specified, independently of palette.
-- Shared targets are at least 48dp, with accessible names for playback and icon actions.
-- LCARS curves share centers; readouts remain in black space and docks never obscure content.
-- Titles fit at large font scales without forced mid-word breaks; navigation remains reachable.
-- Contrast is checked on rendered surfaces and gradient samples, including glass backdrops.
-- Follow the app's `AGENTS.md`: `./gradlew detekt`, `./gradlew testDebugUnitTest` and
-  `./gradlew assembleDebug` before opening/updating an Android implementation PR. Keep complexity
-  and magic-number rules active; name geometry tokens instead of embedding numbers in composables.
+The prototype's 20-screen × 7-layout checks, contrast/gradient/glass audits and reviewed
+phone/tablet screenshots passed for PR #22. The new contract parity check is part of its unit
+validation. Ktheme passed its build and 149 tests across 26 suites.
+
+Six native contract tests passed under JUnit, covering IDs/migration/defaults, portable
+requirements, geometry, corners and invalid contracts. Native Detekt passed during this work;
+final Android build/test verification is still being completed around dependency downloads
+returning HTTP 503. Standalone contract or API compilation checks do not establish that the
+full app builds. Native device/emulator screenshots, large text, TalkBack, landscape and
+rendered contrast still need review before claiming full visual/accessibility parity.
+
+The native glass fallback keeps text surfaces opaque. Actual wallpaper/backdrop blur needs
+a new composition audit. Bundled fonts retain their OFL licenses; Latin subset resources use
+Android fallback glyphs for other scripts. Content pictograms, platform status bars and legacy
+screen-specific components remain documented deviations from the reference.
