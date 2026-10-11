@@ -813,6 +813,7 @@ async function taskLinkCheck() {
       const link = match[1].trim();
       if (!link) continue;
       if (/^(https?:|mailto:|tel:|javascript:|data:|\/\/)/i.test(link)) continue;
+      if (link.includes('{{') || link.includes('}}')) continue;
 
       totalLinks++;
       const [urlPart, hashPart] = link.split('#');
