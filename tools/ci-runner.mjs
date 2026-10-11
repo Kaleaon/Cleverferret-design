@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-import fs from 'node:fs';
-import path from 'node:path';
-import net from 'node:net';
-import http from 'node:http';
-import { comparePNGBuffers } from './png-compare.mjs';
-import { spawnSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
+import fs from "node:fs";
+import path from "node:path";
+import net from "node:net";
+import http from "node:http";
+import { comparePNGBuffers } from "./png-compare.mjs";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -191,7 +191,6 @@ async function startServerHarness(rootDirectory, requestedPort = 0) {
   });
 }
 
-
 // Helper to resolve Playwright browser launch
 async function getPlaywrightBrowser() {
   const playwright = await import("playwright");
@@ -203,7 +202,7 @@ async function getPlaywrightBrowser() {
     "/usr/bin/chromium",
   ].filter(Boolean);
 
-  const fallbackPath = possiblePaths.find(p => fs.existsSync(p));
+  const fallbackPath = possiblePaths.find((p) => fs.existsSync(p));
 
   const launchOpts = {
     headless: true,
@@ -215,12 +214,21 @@ async function getPlaywrightBrowser() {
     ],
   };
 
-  if (process.env.CHROMIUM_PATH) launchOpts.executablePath = process.env.CHROMIUM_PATH;
+  if (process.env.CHROMIUM_PATH)
+    launchOpts.executablePath = process.env.CHROMIUM_PATH;
   try {
     return await playwright.chromium.launch(launchOpts);
   } catch (error) {
-    if (process.env.CHROMIUM_PATH || !fallbackPath || !error.message.includes('Executable doesn')) throw error;
-    return await playwright.chromium.launch({ ...launchOpts, executablePath: fallbackPath });
+    if (
+      process.env.CHROMIUM_PATH ||
+      !fallbackPath ||
+      !error.message.includes("Executable doesn")
+    )
+      throw error;
+    return await playwright.chromium.launch({
+      ...launchOpts,
+      executablePath: fallbackPath,
+    });
   }
 }
 
@@ -235,8 +243,13 @@ async function taskUnitTests() {
     path.join(cwd, "docs/react/package.json")
   );
 
-  const designChecks = ['tests/verify_contrast.js', 'tests/verify_system.js', 'tests/verify_layout_contract.js', 'tests/verify_images.mjs', 'tests/verify_layouts.mjs']
-    .filter(script => fs.existsSync(path.join(cwd, script)));
+  const designChecks = [
+    "tests/verify_contrast.js",
+    "tests/verify_system.js",
+    "tests/verify_layout_contract.js",
+    "tests/verify_images.mjs",
+    "tests/verify_layouts.mjs",
+  ].filter((script) => fs.existsSync(path.join(cwd, script)));
   let success = true;
 
   for (const script of designChecks) {
@@ -349,7 +362,10 @@ async function taskA11yAudit() {
       (route) => route.fulfill({ status: 200, body: "" })
     );
     try {
-      await page.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+      await page.goto(targetUrl, {
+        waitUntil: "domcontentloaded",
+        timeout: 15000,
+      });
     } catch (_) {
       await page.goto(targetUrl, { waitUntil: "commit", timeout: 15000 });
     }
@@ -538,14 +554,26 @@ async function taskA11yAudit() {
 // TASK 4: Playwright Visual Snapshot Regression Suite
 async function useSnapshotFonts(page) {
   const fonts = [
-    ['Inter', '@fontsource-variable/inter', 'inter-latin-wght-normal.woff2'],
-    ['JetBrains Mono', '@fontsource-variable/jetbrains-mono', 'jetbrains-mono-latin-wght-normal.woff2'],
+    ["Inter", "@fontsource-variable/inter", "inter-latin-wght-normal.woff2"],
+    [
+      "JetBrains Mono",
+      "@fontsource-variable/jetbrains-mono",
+      "jetbrains-mono-latin-wght-normal.woff2",
+    ],
   ];
-  const css = fonts.map(([family, pkg, file]) => {
-    const bytes = fs.readFileSync(path.join(cwd, 'node_modules', pkg, 'files', file));
-    return `@font-face{font-family:'${family}';font-style:normal;font-weight:100 900;font-display:block;src:url(data:font/woff2;base64,${bytes.toString('base64')}) format('woff2')}`;
-  }).join('\n');
-  await page.route('https://fonts.googleapis.com/**', route => route.fulfill({ contentType: 'text/css', body: css }));
+  const css = fonts
+    .map(([family, pkg, file]) => {
+      const bytes = fs.readFileSync(
+        path.join(cwd, "node_modules", pkg, "files", file)
+      );
+      return `@font-face{font-family:'${family}';font-style:normal;font-weight:100 900;font-display:block;src:url(data:font/woff2;base64,${bytes.toString(
+        "base64"
+      )}) format('woff2')}`;
+    })
+    .join("\n");
+  await page.route("https://fonts.googleapis.com/**", (route) =>
+    route.fulfill({ contentType: "text/css", body: css })
+  );
 }
 
 async function taskVisualSuite() {
@@ -587,10 +615,15 @@ async function taskVisualSuite() {
     browser = await getPlaywrightBrowser();
 
     for (const vp of viewports) {
-      log(`Capturing visual snapshots for viewport: ${vp.name} (${vp.width}x${vp.height})`, 'info');
-      const page = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
+      log(
+        `Capturing visual snapshots for viewport: ${vp.name} (${vp.width}x${vp.height})`,
+        "info"
+      );
+      const page = await browser.newPage({
+        viewport: { width: vp.width, height: vp.height },
+      });
       if (fs.existsSync(docsIndex)) await useSnapshotFonts(page);
-      await page.goto(targetUrl, { waitUntil: 'domcontentloaded' });
+      await page.goto(targetUrl, { waitUntil: "domcontentloaded" });
       await page.evaluate(() => document.fonts.ready);
       await page.waitForTimeout(1000);
 
