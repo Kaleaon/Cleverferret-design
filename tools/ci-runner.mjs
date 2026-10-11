@@ -206,7 +206,7 @@ async function taskUnitTests() {
   const hasKthemeJest = fs.existsSync(path.join(cwd, 'jest.config.js')) || fs.existsSync(path.join(cwd, 'src/core/ThemeEngine.ts'));
   const hasReactVitest = fs.existsSync(path.join(cwd, 'docs/react/package.json'));
 
-  const designChecks = ['tests/verify_contrast.js', 'tests/verify_system.js', 'tests/verify_images.mjs', 'tests/verify_layouts.mjs']
+  const designChecks = ['tests/verify_contrast.js', 'tests/verify_system.js', 'tests/verify_layout_contract.js', 'tests/verify_images.mjs', 'tests/verify_layouts.mjs']
     .filter(script => fs.existsSync(path.join(cwd, script)));
   let success = true;
 
