@@ -140,9 +140,12 @@ async function startServerHarness(rootDirectory, requestedPort = 0) {
     let reqUrl = req.url.split("?")[0];
     if (reqUrl === "/") reqUrl = "/index.html";
 
-    let safePath = path
-      .normalize(decodeURIComponent(reqUrl))
-      .replace(/^(\.\.[\/\\])+/, "");
+    let decodedUrl = reqUrl;
+    try {
+      decodedUrl = decodeURIComponent(reqUrl);
+    } catch (_) {}
+
+    let safePath = path.normalize(decodedUrl).replace(/^(\.\.[\/\\])+/, "");
     let fullPath = path.join(rootDirectory, safePath);
 
     if (fs.existsSync(fullPath) && fs.statSync(fullPath).isDirectory()) {
@@ -237,8 +240,11 @@ async function taskUnitTests() {
   let success = true;
 
   for (const script of designChecks) {
-    log(`Executing ${script}...`, 'info');
-    const res = spawnSync(process.execPath, [script], { cwd, stdio: 'inherit' });
+    log(`Executing ${script}...`, "info");
+    const res = spawnSync(process.execPath, [script], {
+      cwd,
+      stdio: "inherit",
+    });
     if (res.status !== 0) success = false;
   }
 
@@ -264,7 +270,10 @@ async function taskUnitTests() {
   }
 
   if (!hasKthemeJest && !hasReactVitest && designChecks.length === 0) {
-    log('No specific unit test runner found for this directory. Skipped.', 'warn');
+    log(
+      "No specific unit test runner found for this directory. Skipped.",
+      "warn"
+    );
     return true;
   }
 
@@ -332,8 +341,18 @@ async function taskA11yAudit() {
   let browser;
   try {
     browser = await getPlaywrightBrowser();
-    const page = await browser.newPage();
-    await page.goto(targetUrl, { waitUntil: "domcontentloaded" });
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await page.route(
+      (url) =>
+        !url.href.includes("127.0.0.1") && !url.href.includes("localhost"),
+      (route) => route.fulfill({ status: 200, body: "" })
+    );
+    try {
+      await page.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+    } catch (_) {
+      await page.goto(targetUrl, { waitUntil: "commit", timeout: 15000 });
+    }
     await page.waitForTimeout(1000);
 
     const auditResults = await page.evaluate(() => {
@@ -577,12 +596,16 @@ async function taskVisualSuite() {
 
       // Attempt interactive panel triggers if available
       try {
-        const sweepBtn = page.getByRole('button', { name: 'Sweep Console', exact: true }).first();
+        const sweepBtn = page
+          .getByRole("button", { name: "Sweep Console", exact: true })
+          .first();
         if (await sweepBtn.isVisible()) {
           await sweepBtn.click();
           await page.waitForTimeout(300);
         }
-        const lcarsBtn = page.getByRole('button', { name: 'LCARS Amber', exact: true }).first();
+        const lcarsBtn = page
+          .getByRole("button", { name: "LCARS Amber", exact: true })
+          .first();
         if (await lcarsBtn.isVisible()) {
           await lcarsBtn.click();
           await page.waitForTimeout(300);

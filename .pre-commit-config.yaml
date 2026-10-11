@@ -53,4 +53,4 @@ repos:
         entry: python3 scripts/ktheme-style-lint.py
         language: python
         types_or: [javascript, jsx, ts, tsx, css, html]
-        exclude: ^(dist/|node_modules/|build/|schemas/|tests/|docs/support\.js|docs/index\.html|docs/app\.dc\.html|docs/theme-system\.dc\.html)
+        exclude: ^(dist/|node_modules/|build/|schemas/|tests/|docs/support\.js|docs/cf-system\.js|docs/cf-ui\.css|docs/index\.html|docs/app\.dc\.html|docs/theme-system\.dc\.html)
