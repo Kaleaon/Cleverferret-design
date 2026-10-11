@@ -154,8 +154,8 @@
       desc: 'Mono · 4px corners · boxed cards · tracked caps',
       note: 'Dense grid, mono type, 4px corners, boxed cards with hairline outlines, tracked uppercase titles. The reader switches to mono too.' },
     sweep: { name: 'Sweep Console', nav: 'sweep', navSpec: 'sweep → sweep', fontName: 'Antonio + Nunito Sans', ff: '"Nunito Sans",sans-serif', dff: 'Antonio,sans-serif', lf: 'Antonio,sans-serif', rl: 0, rp: 0, rt: 0, rc: 0, rs: 999, ri: 999, ra: 0, tt: 'uppercase', htls: '.1em', tw: 700, card: 'lcars', qgap: '3px',
-      desc: 'LCARS elbow frame · rail segments are the nav',
-      note: 'The elbow (bar → curve → rail) is the frame and the rail segments are the navigation. The content corner is concentric with the elbow arc at a uniform gap, titles sit bottom-right in the bar, headers run cap → title → bar → end cap, and every bar ends in a rounded cap. Fills only: no borders, no gradients.' },
+      desc: 'LCARS split frame · rail segments are the nav',
+      note: 'Canonical LCARS split frame: the header frame’s column swoops down into the divider bar, and the content frame’s bar swoops down into the rail below it, so the two elbows face each other across a double bar. Titles and readouts sit in black space beside the bars, never on them. Labels sit bottom-right inside segments, the content corner is concentric with the elbow, and every bar ends in a rounded cap or a black gap. Fills only: no borders, no gradients.' },
     tiles: { name: 'Metro Tiles', nav: 'tiles', navSpec: 'pivot + app bar → rail', fontName: 'Open Sans', ff: '"Open Sans",sans-serif', dff: '"Open Sans",sans-serif', lf: '"Open Sans",sans-serif', rl: 0, rp: 0, rt: 0, rc: 0, rs: 0, ri: 0, ra: 0, tt: 'lowercase', htls: '0', tw: 300, card: 'flat', qgap: '4px',
       desc: 'Windows Phone: pivot headers, square accent tiles, circle app bar',
       note: 'Zero radius, light lowercase pivot titles that scroll as one strip, solid accent tiles, and a round-button app bar along the bottom edge.' },
@@ -168,6 +168,25 @@
     press: { name: 'Press', nav: 'tabs', navSpec: 'tabs → rail', fontName: 'Source Serif 4 + Jost', ff: '"Source Serif 4",Georgia,serif', dff: '"Source Serif 4",Georgia,serif', lf: 'Jost,sans-serif', rl: 6, rp: 3, rt: 2, rc: 2, rs: 2, ri: 2, ra: 4, tt: 'none', htls: '0', tw: 700, card: 'quiet', qgap: '0px',
       desc: 'Editorial serif · 2px corners · quiet rows',
       note: 'Editorial: serif body, 2px corners, quiet underlined rows and generous leading. The legibility layout for large type.' },
+  };
+
+  // Sweep Console against LCARS conventions (reference: commons.wikimedia.org/wiki/File:Lcars_wallpaper.svg).
+  // status: kept = follows the convention · deviation = knowingly breaks it · retired = removed deviation.
+  const LCARS = {
+    rules: [
+      ['Split frame', 'The header column swoops down into the divider bar, and the content bar swoops down into the rail below it. The two elbows face each other across a double bar.'],
+      ['Text in black space', 'Screen titles and readouts sit in the black field beside or above a bar, right-aligned. A bar is never a text background.'],
+      ['Labels inside segments', 'Rail and button labels sit bottom-right inside their segment, with a small numeric code top-left.'],
+      ['Concentric corners', 'The inner corner of each elbow is concentric with its outer sweep, at the same gap everywhere.'],
+      ['Caps and gaps', 'Bars end in a rounded cap or butt against a 4px black gap. No borders, gradients or shadows.'],
+    ],
+    deviations: [
+      ['retired', 'Overlay on a bar', 'Sweep Console v1 drew the screen title and the BOOKS / SYNC / HFY readouts on top of the header bar, and the sync footer on a bottom bar. LCARS keeps bars free of text. Replaced by the split frame; titles and readouts now sit in black space.'],
+      ['deviation', 'Floating mini player and toasts', 'They float over the content frame instead of docking into a bar. Kept because playback and feedback must stay visible on a phone.'],
+      ['deviation', 'Pictogram icons', 'Material Symbols appear inside content cards. Canon LCARS uses text and numeric codes only. Kept for recognition and accessibility; the rail and frame stay text-only.'],
+      ['deviation', 'Platform status bar', 'The Android status bar sits above the frame. It is required by the platform.'],
+      ['deviation', 'Effect packs', 'Glow, glass, grain and gradient borders can be layered on the console. LCARS is flat; the Flat effect pack is the conformant choice.'],
+    ],
   };
 
   // ─── Effect packs ──────────────────────────────────────────────────────
@@ -542,7 +561,7 @@
     hx, toHex, mix, rgba, ratio, pickInk, gradOf, px, contrast,
     KEYS, ROLE_NAMES, PALETTES, FAMILIES, METAL, CLAMPS, STATUS, LAYOUTS, EFFECTS,
     TYPE, SPACE, GUTTERS, RADIUS, MOTION, CONTRAST, CATALOG, SCREENS, DEFAULT_THEME,
-    PIPELINE, CONFIDENCE, confidenceOf, SEVERITY, FIXES, AGENTS, INBOX, CANDIDATES, MATCH_FIELDS, NAMING, templateParts, applyTemplate, TAG_SOURCES, TAG_GROUPS, AUTO_TAG_RULES, PLUGINS, PLUGIN_TIERS,
+    LCARS, PIPELINE, CONFIDENCE, confidenceOf, SEVERITY, FIXES, AGENTS, INBOX, CANDIDATES, MATCH_FIELDS, NAMING, templateParts, applyTemplate, TAG_SOURCES, TAG_GROUPS, AUTO_TAG_RULES, PLUGINS, PLUGIN_TIERS,
     palette, effectiveTheme, resolve, auditPairs, themeId, prefersReducedMotion,
     byId: id => CATALOG.find(x => x.id === id),
     counts: { layouts: Object.keys(LAYOUTS).length, palettes: Object.keys(PALETTES).length, effects: Object.keys(EFFECTS).length, screens: SCREENS.length },
