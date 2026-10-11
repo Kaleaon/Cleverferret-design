@@ -28,6 +28,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: ${{ hashFiles('package-lock.json', '**/package-lock.json', 'yarn.lock') != '' && 'npm' || '' }}
+      - name: Install dependencies
+        run: |
+          if [ -f "package.json" ]; then
+            npm ci || npm install
+          fi
+          if [ -d "docs/react" ]; then
+            cd docs/react && (npm ci || npm install) && cd ../..
+          fi
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
       - name: Run CI Test Matrix
         run: node tools/ci-runner.mjs --all
 
