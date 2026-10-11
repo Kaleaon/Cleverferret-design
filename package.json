@@ -1,0 +1,14 @@
+{
+  "name": "cleverferret-design",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "validate": "node tools/ci-runner.mjs",
+    "test:a11y": "node tools/ci-runner.mjs --a11y",
+    "test:visual": "node tools/ci-runner.mjs --visual",
+    "test:unit": "node tools/ci-runner.mjs --unit"
+  },
+  "devDependencies": {
+    "playwright": "^1.45.0"
+  }
+}
