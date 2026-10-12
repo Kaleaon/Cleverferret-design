@@ -82,7 +82,16 @@ ${colors.bold}FLAGS:${colors.reset}
 }
 
 // If no specific task flag was passed (or --all was supplied), run all tasks applicable to the current repo
-if (args.includes('--all') || (!runUnit && !runCatalog && !runA11y && !runVisual && !runContrast && !runLinks && !runSyntax)) {
+if (
+  args.includes("--all") ||
+  (!runUnit &&
+    !runCatalog &&
+    !runA11y &&
+    !runVisual &&
+    !runContrast &&
+    !runLinks &&
+    !runSyntax)
+) {
   runUnit = true;
   runCatalog = true;
   runA11y = true;
@@ -660,7 +669,10 @@ async function taskVisualSuite() {
   try {
     browser = await getPlaywrightBrowser();
     if (!browser) {
-      log("Playwright browser is unavailable. Skipping visual snapshot regression testing.", 'warn');
+      log(
+        "Playwright browser is unavailable. Skipping visual snapshot regression testing.",
+        "warn"
+      );
       return true;
     }
 
@@ -763,11 +775,11 @@ function findFiles(dir, extensions, fileList = []) {
   for (const entry of entries) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (entry.name !== 'node_modules' && !entry.name.startsWith('.')) {
+      if (entry.name !== "node_modules" && !entry.name.startsWith(".")) {
         findFiles(fullPath, extensions, fileList);
       }
     } else if (entry.isFile()) {
-      if (extensions.some(ext => entry.name.endsWith(ext))) {
+      if (extensions.some((ext) => entry.name.endsWith(ext))) {
         fileList.push(fullPath);
       }
     }
@@ -777,28 +789,31 @@ function findFiles(dir, extensions, fileList = []) {
 
 // TASK 5: WCAG Contrast Palette Audit
 async function taskContrastAudit() {
-  const testFile = path.join(cwd, 'tests/verify_contrast.js');
+  const testFile = path.join(cwd, "tests/verify_contrast.js");
   if (!fs.existsSync(testFile)) {
-    log('No tests/verify_contrast.js found in this repository. Skipped.', 'info');
+    log(
+      "No tests/verify_contrast.js found in this repository. Skipped.",
+      "info"
+    );
     return true;
   }
 
-  log('Running WCAG Contrast Palette Audit...', 'header');
-  const res = spawnSync('node', [testFile], { cwd, stdio: 'inherit' });
+  log("Running WCAG Contrast Palette Audit...", "header");
+  const res = spawnSync("node", [testFile], { cwd, stdio: "inherit" });
   if (res.status === 0) {
-    log('WCAG Contrast audit passed.', 'success');
+    log("WCAG Contrast audit passed.", "success");
     return true;
   } else {
-    log('WCAG Contrast audit failed.', 'error');
+    log("WCAG Contrast audit failed.", "error");
     return false;
   }
 }
 
 // TASK 6: HTML Link & Asset Verification
 async function taskLinkCheck() {
-  log('Running HTML Link & Asset Verification...', 'header');
-  const docsDir = path.join(cwd, 'docs');
-  const htmlFiles = findFiles(docsDir, ['.html']);
+  log("Running HTML Link & Asset Verification...", "header");
+  const docsDir = path.join(cwd, "docs");
+  const htmlFiles = findFiles(docsDir, [".html"]);
 
   let totalLinks = 0;
   let brokenLinks = 0;
@@ -806,25 +821,28 @@ async function taskLinkCheck() {
   const linkRegex = /(?:href|src)=["']([^"']+)["']/gi;
 
   for (const htmlFile of htmlFiles) {
-    const content = fs.readFileSync(htmlFile, 'utf8');
+    const content = fs.readFileSync(htmlFile, "utf8");
     const relativeHtmlPath = path.relative(cwd, htmlFile);
     let match;
 
     while ((match = linkRegex.exec(content)) !== null) {
       const link = match[1].trim();
       if (!link) continue;
-      if (/^(https?:|mailto:|tel:|javascript:|data:|\/\/)/i.test(link)) continue;
-      if (link.includes('{{') || link.includes('}}')) continue;
+      if (/^(https?:|mailto:|tel:|javascript:|data:|\/\/)/i.test(link))
+        continue;
+      if (link.includes("{{") || link.includes("}}")) continue;
 
       totalLinks++;
-      const [urlPart, hashPart] = link.split('#');
-      const cleanPath = urlPart.split('?')[0];
+      const [urlPart, hashPart] = link.split("#");
+      const cleanPath = urlPart.split("?")[0];
 
       if (!cleanPath) {
         if (hashPart) {
-          const idPattern = new RegExp(`(?:id|name)=["']${hashPart}["']`, 'i');
+          const idPattern = new RegExp(`(?:id|name)=["']${hashPart}["']`, "i");
           if (!idPattern.test(content)) {
-            errors.push(`${relativeHtmlPath}: anchor '#${hashPart}' not found in document`);
+            errors.push(
+              `${relativeHtmlPath}: anchor '#${hashPart}' not found in document`
+            );
             brokenLinks++;
           }
         }
@@ -833,13 +851,23 @@ async function taskLinkCheck() {
 
       const targetPath = path.resolve(path.dirname(htmlFile), cleanPath);
       if (!fs.existsSync(targetPath)) {
-        errors.push(`${relativeHtmlPath}: link target '${link}' not found (${path.relative(cwd, targetPath)})`);
+        errors.push(
+          `${relativeHtmlPath}: link target '${link}' not found (${path.relative(
+            cwd,
+            targetPath
+          )})`
+        );
         brokenLinks++;
-      } else if (hashPart && (cleanPath.endsWith('.html') || cleanPath.endsWith('.dc.html'))) {
-        const targetContent = fs.readFileSync(targetPath, 'utf8');
-        const idPattern = new RegExp(`(?:id|name)=["']${hashPart}["']`, 'i');
+      } else if (
+        hashPart &&
+        (cleanPath.endsWith(".html") || cleanPath.endsWith(".dc.html"))
+      ) {
+        const targetContent = fs.readFileSync(targetPath, "utf8");
+        const idPattern = new RegExp(`(?:id|name)=["']${hashPart}["']`, "i");
         if (!idPattern.test(targetContent)) {
-          errors.push(`${relativeHtmlPath}: anchor '#${hashPart}' not found in target ${cleanPath}`);
+          errors.push(
+            `${relativeHtmlPath}: anchor '#${hashPart}' not found in target ${cleanPath}`
+          );
           brokenLinks++;
         }
       }
@@ -847,22 +875,28 @@ async function taskLinkCheck() {
   }
 
   if (brokenLinks === 0) {
-    log(`HTML link check passed (${htmlFiles.length} HTML files / ${totalLinks} local links verified).`, 'success');
+    log(
+      `HTML link check passed (${htmlFiles.length} HTML files / ${totalLinks} local links verified).`,
+      "success"
+    );
     return true;
   } else {
-    log(`${brokenLinks} broken link(s) found across ${htmlFiles.length} HTML files:`, 'error');
-    errors.forEach(e => console.error(`  - ${e}`));
+    log(
+      `${brokenLinks} broken link(s) found across ${htmlFiles.length} HTML files:`,
+      "error"
+    );
+    errors.forEach((e) => console.error(`  - ${e}`));
     return false;
   }
 }
 
 // TASK 7: JS Syntax Validation
 async function taskSyntaxCheck() {
-  log('Running JS/MJS Syntax Validation...', 'header');
-  const dirsToScan = ['docs', 'tests', 'tools'].map(d => path.join(cwd, d));
+  log("Running JS/MJS Syntax Validation...", "header");
+  const dirsToScan = ["docs", "tests", "tools"].map((d) => path.join(cwd, d));
   let jsFiles = [];
   for (const dir of dirsToScan) {
-    findFiles(dir, ['.js', '.mjs'], jsFiles);
+    findFiles(dir, [".js", ".mjs"], jsFiles);
   }
 
   let syntaxFailures = 0;
@@ -870,19 +904,27 @@ async function taskSyntaxCheck() {
 
   for (const jsFile of jsFiles) {
     const relativePath = path.relative(cwd, jsFile);
-    const proc = spawnSync('node', ['--check', jsFile], { cwd, encoding: 'utf8' });
+    const proc = spawnSync("node", ["--check", jsFile], {
+      cwd,
+      encoding: "utf8",
+    });
     if (proc.status !== 0) {
       syntaxFailures++;
-      errors.push(`Syntax error in ${relativePath}:\n${proc.stderr || proc.stdout}`);
+      errors.push(
+        `Syntax error in ${relativePath}:\n${proc.stderr || proc.stdout}`
+      );
     }
   }
 
   if (syntaxFailures === 0) {
-    log(`JS syntax validation passed (${jsFiles.length} JS/MJS files verified).`, 'success');
+    log(
+      `JS syntax validation passed (${jsFiles.length} JS/MJS files verified).`,
+      "success"
+    );
     return true;
   } else {
-    log(`${syntaxFailures} file(s) failed syntax check:`, 'error');
-    errors.forEach(e => console.error(`  - ${e}`));
+    log(`${syntaxFailures} file(s) failed syntax check:`, "error");
+    errors.forEach((e) => console.error(`  - ${e}`));
     return false;
   }
 }
@@ -963,9 +1005,13 @@ ${colors.bold}${colors.cyan}====================================================
       let md = `## Unified Design System Validation Summary\n\n`;
       md += `| Task | Status |\n| --- | --- |\n`;
       for (const [task, pass] of Object.entries(results)) {
-        md += `| **${task.toUpperCase()}** | ${pass ? '✅ PASS' : '❌ FAIL'} |\n`;
+        md += `| **${task.toUpperCase()}** | ${
+          pass ? "✅ PASS" : "❌ FAIL"
+        } |\n`;
       }
-      md += `\n**Overall Result:** ${overallPass ? '✅ ALL CHECKS PASSED' : '❌ CHECKS FAILED'}\n`;
+      md += `\n**Overall Result:** ${
+        overallPass ? "✅ ALL CHECKS PASSED" : "❌ CHECKS FAILED"
+      }\n`;
       fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, md);
     } catch (_) {}
   }
