@@ -223,7 +223,9 @@ try {
         () =>
           Math.round(
             document
-              .querySelector('.phone-frame nav[aria-label="Sidebar navigation"]')
+              .querySelector(
+                '.phone-frame nav[aria-label="Sidebar navigation"]'
+              )
               ?.getBoundingClientRect().width || 0
           ) === 72
       );
