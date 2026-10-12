@@ -223,16 +223,18 @@ try {
         () =>
           Math.round(
             document
-              .querySelector('.phone-frame nav[aria-label="Main"]')
+              .querySelector('.phone-frame nav[aria-label="Sidebar navigation"]')
               ?.getBoundingClientRect().width || 0
           ) === 72
       );
       assert.equal(
-        await page.locator('.phone-frame nav[aria-label="Main"]').count(),
+        await page
+          .locator('.phone-frame nav[aria-label="Sidebar navigation"]')
+          .count(),
         1
       );
       const navWidth = await page
-        .locator('.phone-frame nav[aria-label="Main"]')
+        .locator('.phone-frame nav[aria-label="Sidebar navigation"]')
         .evaluate((el) => Math.round(el.getBoundingClientRect().width));
       assert.equal(navWidth, 72, `${design[0]} tablet rail`);
     }
@@ -259,7 +261,7 @@ try {
       await page.waitForFunction(
         () =>
           document
-            .querySelector('.phone-frame nav[aria-label="Main"]')
+            .querySelector('.phone-frame nav[aria-label="Main navigation"]')
             ?.getBoundingClientRect().width > 72
       );
     await page.locator('.cf-mini button[aria-label="Play"]').click();
