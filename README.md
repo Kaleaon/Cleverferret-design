@@ -13,6 +13,7 @@ Served from `docs/` at `https://kaleaon.github.io/Cleverferret-design/` once Pag
 - **Landing page** (`docs/index.html`): overview, design principles, every colour pack, and the
   screen-to-source map.
 - **App prototype** (`docs/app.dc.html`): 20 navigable screens with real state, in four groups.
+
   - Browse: Home, Library, Discover, Downloads, Settings, Search, Item detail
   - Library management: Import inbox, Fix match, File repair, Sort rules, Calibre plugins, Tag explorer
   - Play & read: Audio player, Queue, Reader, Video player, Reading stats
@@ -20,6 +21,7 @@ Served from `docs/` at `https://kaleaon.github.io/Cleverferret-design/` once Pag
 
   The side panel switches theme and jumps between screens. Deep links work too, for example
   `app.dc.html?screen=inbox&layout=sweep&palette=lcars&effect=flat`.
+
 - **Theme system** (`docs/theme-system.dc.html`): the spec sheet. It covers live previews (the real
   prototype, embedded), foundations, layout, colour and effect packs, LCARS conformance, a WCAG audit
   of every pack, library-management patterns, components and portable theme JSON.

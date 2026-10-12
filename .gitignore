@@ -1,2 +1,4 @@
 node_modules/
 docs/screenshots/diffs/
+.pre-commit-cache/
+docs/screenshots/diffs/

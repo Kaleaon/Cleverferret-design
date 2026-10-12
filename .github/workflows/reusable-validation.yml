@@ -4,15 +4,15 @@ on:
   workflow_call:
     inputs:
       target-flags:
-        description: 'Target flags to pass to tools/ci-runner.mjs (e.g. --unit, --a11y, --visual)'
+        description: "Target flags to pass to tools/ci-runner.mjs (e.g. --unit, --a11y, --visual)"
         required: false
         type: string
-        default: ''
+        default: ""
       node-version:
-        description: 'Node.js version to set up'
+        description: "Node.js version to set up"
         required: false
         type: string
-        default: '22'
+        default: "22"
 
 jobs:
   validate:

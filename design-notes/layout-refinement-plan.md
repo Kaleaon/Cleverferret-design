@@ -18,15 +18,15 @@ implementation work. This pass does not claim a shipped Android redesign.
 5. **Prepare native work.** Record source evidence, layout mapping, persistence migration,
    component dispatch and acceptance checks before changing Android production code.
 
-| Layout | Implemented refinement | Acceptance evidence |
-| --- | --- | --- |
-| Compose | Live phone bar/tablet rail adaptation | Browser resize and playback checks |
-| Ink Terminal | All radii 4px; small metadata increased to 12px | Shared token checks and phone review |
+| Layout        | Implemented refinement                                                          | Acceptance evidence                                                |
+| ------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Compose       | Live phone bar/tablet rail adaptation                                           | Browser resize and playback checks                                 |
+| Ink Terminal  | All radii 4px; small metadata increased to 12px                                 | Shared token checks and phone review                               |
 | Sweep Console | Concentric opposing sweeps, black field, filled controls, text transport, docks | Geometry, no dock/content overlap, readout and playback assertions |
-| Metro Tiles | Preserve media title case; cap wide quick-action height | Browser title style and tile height checks |
-| Aero Glass | Correct text against composited washes/panels; accessible UI gradients | All palette/effect contrast samples |
-| Rule & Rail | Responsive hero title and reduced media tracking; readable rail labels | Phone review and target checks |
-| Press | Quiet solid CTA, reduced weight, player shadow removed | Phone review and shared component rules |
+| Metro Tiles   | Preserve media title case; cap wide quick-action height                         | Browser title style and tile height checks                         |
+| Aero Glass    | Correct text against composited washes/panels; accessible UI gradients          | All palette/effect contrast samples                                |
+| Rule & Rail   | Responsive hero title and reduced media tracking; readable rail labels          | Phone review and target checks                                     |
+| Press         | Quiet solid CTA, reduced weight, player shadow removed                          | Phone review and shared component rules                            |
 
 Shared controls use minimum 48px targets, including small icon buttons, search, naming selectors,
 plugin toggles and range controls. Browser tests use local React runtime files and fallback fonts

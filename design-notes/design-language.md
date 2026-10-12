@@ -22,13 +22,13 @@ How CleverFerret looks and behaves, and where each part lives in code. The value
 
 ## Foundations
 
-| Scale | Values | Kotlin source |
-| --- | --- | --- |
-| Type | Display L 44/52 … Label S 10/14 (13 roles) | `CFTheme.kt` `cfTypography` |
-| Spacing | 0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64; frame gaps LCARS 4, Metro grid 10 | `DesignTokensV1.SPACING_DP`, `CFSpacing` |
-| Radius | core s4 m8 l12 xl16 full; each layout pack overrides seven radii | `DesignTokensV1.RADIUS_DP` |
-| Motion | fast 100, normal 200, slow 320 ms; shimmer 2.8 s, pulse 2.4 s | `DesignTokensV1.MOTION_DURATION` |
-| Contrast | body 4.5, large 3, UI 3, focus 3, AAA 7 | `DesignTokensV1.CONTRAST_TARGETS` |
+| Scale    | Values                                                                     | Kotlin source                            |
+| -------- | -------------------------------------------------------------------------- | ---------------------------------------- |
+| Type     | Display L 44/52 … Label S 10/14 (13 roles)                                 | `CFTheme.kt` `cfTypography`              |
+| Spacing  | 0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64; frame gaps LCARS 4, Metro grid 10 | `DesignTokensV1.SPACING_DP`, `CFSpacing` |
+| Radius   | core s4 m8 l12 xl16 full; each layout pack overrides seven radii           | `DesignTokensV1.RADIUS_DP`               |
+| Motion   | fast 100, normal 200, slow 320 ms; shimmer 2.8 s, pulse 2.4 s              | `DesignTokensV1.MOTION_DURATION`         |
+| Contrast | body 4.5, large 3, UI 3, focus 3, AAA 7                                    | `DesignTokensV1.CONTRAST_TARGETS`        |
 
 ## Colour roles beyond MD3
 
@@ -41,32 +41,32 @@ How CleverFerret looks and behaves, and where each part lives in code. The value
 
 ## Patterns
 
-| Pattern | Where | Notes |
-| --- | --- | --- |
-| Section header | every list | LCARS packs render cap → title → bar → end cap; others a plain title |
-| Metal CTA | Resume, Apply, File all | one per screen; pulses only with Architect or Prism |
-| Tonal action (`lm-act`) | inbox rows, library manager | secondary actions that still need weight |
-| Pipeline strip | Import inbox | Scan → Normalize → Match → Repair → File; the next stage with work left is highlighted |
-| Confidence badge | inbox, Fix match | ≥90 files automatically, 60–89 waits for review, <60 is never applied without asking |
-| Field diff | Fix match | checkbox per field; unticked fields keep their current value |
-| Issue switch row | File repair | severity icon, problem, fix, before → after; originals are kept for 30 days |
-| Path template | Sort rules | tokens shown as chips; Calibre layout for books, Plex/Jellyfin for video and music |
-| Hierarchical tag | Tag explorer, detail | `Parent › Child` breadcrumb, count and source icon (You, Auto, Calibre, Plex, Jellyfin) |
-| Manifest form | Calibre plugins | switch, text, secret, segmented, chips; replaces Qt dialogs |
-| Empty, loading, error | everywhere | `cf-empty`, `cf-skel` (shimmer follows motion), failed status with Retry |
-| Live region | toasts | one persistent `role="status"` region, not one mounted per toast |
+| Pattern                 | Where                       | Notes                                                                                   |
+| ----------------------- | --------------------------- | --------------------------------------------------------------------------------------- |
+| Section header          | every list                  | LCARS packs render cap → title → bar → end cap; others a plain title                    |
+| Metal CTA               | Resume, Apply, File all     | one per screen; pulses only with Architect or Prism                                     |
+| Tonal action (`lm-act`) | inbox rows, library manager | secondary actions that still need weight                                                |
+| Pipeline strip          | Import inbox                | Scan → Normalize → Match → Repair → File; the next stage with work left is highlighted  |
+| Confidence badge        | inbox, Fix match            | ≥90 files automatically, 60–89 waits for review, <60 is never applied without asking    |
+| Field diff              | Fix match                   | checkbox per field; unticked fields keep their current value                            |
+| Issue switch row        | File repair                 | severity icon, problem, fix, before → after; originals are kept for 30 days             |
+| Path template           | Sort rules                  | tokens shown as chips; Calibre layout for books, Plex/Jellyfin for video and music      |
+| Hierarchical tag        | Tag explorer, detail        | `Parent › Child` breadcrumb, count and source icon (You, Auto, Calibre, Plex, Jellyfin) |
+| Manifest form           | Calibre plugins             | switch, text, secret, segmented, chips; replaces Qt dialogs                             |
+| Empty, loading, error   | everywhere                  | `cf-empty`, `cf-skel` (shimmer follows motion), failed status with Retry                |
+| Live region             | toasts                      | one persistent `role="status"` region, not one mounted per toast                        |
 
 ## Layout packs at a glance
 
-| Pack | Navigation | Character |
-| --- | --- | --- |
-| Compose | bar → rail | MD3, pill CTAs (default) |
-| Ink Terminal | tabs → rail | mono, boxed, tracked caps |
+| Pack          | Navigation        | Character                                                                 |
+| ------------- | ----------------- | ------------------------------------------------------------------------- |
+| Compose       | bar → rail        | MD3, pill CTAs (default)                                                  |
+| Ink Terminal  | tabs → rail       | mono, boxed, tracked caps                                                 |
 | Sweep Console | LCARS split frame | elbows, segmented rail, Antonio; see the spec's LCARS conformance section |
-| Metro Tiles | pivot + app bar | zero radius, lowercase pivots, accent tiles |
-| Aero Glass | tabs → rail | soft glossy panels |
-| Rule & Rail | side rail | hairlines, sharp corners, 0.3em tracking |
-| Press | tabs → rail | editorial serif, quiet rows |
+| Metro Tiles   | pivot + app bar   | zero radius, lowercase pivots, accent tiles                               |
+| Aero Glass    | tabs → rail       | soft glossy panels                                                        |
+| Rule & Rail   | side rail         | hairlines, sharp corners, 0.3em tracking                                  |
+| Press         | tabs → rail       | editorial serif, quiet rows                                               |
 
 Compose, Ink Terminal, Aero Glass and Press switch from a bottom bar to a 72px rail at a
 720px prototype width, including a live resize. Metro keeps lowercase navigation while preserving
