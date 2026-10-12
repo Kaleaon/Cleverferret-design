@@ -1776,13 +1776,55 @@
         canvasStyleEl = null;
       }
     }
+    let themeRafId = null;
+    let pendingTheme = null;
+    let pendingVars = null;
+
+    function flushThemeUpdates() {
+      themeRafId = null;
+      if (pendingTheme !== null) {
+        appTheme = pendingTheme;
+        pendingTheme = null;
+        applyCanvasBg();
+      }
+      if (pendingVars) {
+        const vars = pendingVars;
+        pendingVars = null;
+        Object.entries(vars).forEach(([k, v]) => {
+          if (v !== undefined && v !== null) {
+            doc.documentElement.style.setProperty(k, String(v));
+          } else {
+            doc.documentElement.style.removeProperty(k);
+          }
+        });
+      }
+    }
+
+    function scheduleThemeFlush() {
+      if (typeof requestAnimationFrame === "function") {
+        if (themeRafId === null) {
+          themeRafId = requestAnimationFrame(flushThemeUpdates);
+        }
+      } else {
+        flushThemeUpdates();
+      }
+    }
+
     window.addEventListener("message", (e) => {
       const type = e.data && e.data.type;
       if (type === "__dc_theme") {
         const t = e.data.theme;
         if (t === "light" || t === "dark") {
-          appTheme = t;
-          applyCanvasBg();
+          pendingTheme = t;
+          scheduleThemeFlush();
+        }
+        return;
+      }
+      if (type === "__dc_theme_vars" || type === "__dc_css_vars") {
+        const vars = e.data.vars || e.data.styles;
+        if (vars && typeof vars === "object") {
+          pendingVars = Object.assign(pendingVars || {}, vars);
+          scheduleThemeFlush();
         }
         return;
       }
