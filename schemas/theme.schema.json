@@ -77,6 +77,42 @@
     },
     "tokens": {
       "type": "object",
+      "properties": {
+        "elevation": { "$ref": "#/properties/elevation" },
+        "zIndex": { "$ref": "#/properties/zIndex" }
+      },
+      "additionalProperties": true
+    },
+    "elevation": {
+      "type": "object",
+      "description": "Standardized elevation depth shadow tokens",
+      "properties": {
+        "elevation-0": { "type": "string" },
+        "elevation-1": { "type": "string" },
+        "elevation-2": { "type": "string" },
+        "elevation-3": { "type": "string" },
+        "elevation-4": { "type": "string" },
+        "elevation-5": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "zIndex": {
+      "type": "object",
+      "description": "Standardized stacking layer z-index tokens",
+      "properties": {
+        "z-base": { "type": ["integer", "string"] },
+        "z-card": { "type": ["integer", "string"] },
+        "z-window": { "type": ["integer", "string"] },
+        "z-dock": { "type": ["integer", "string"] },
+        "z-taskbar": { "type": ["integer", "string"] },
+        "z-header": { "type": ["integer", "string"] },
+        "z-dropdown": { "type": ["integer", "string"] },
+        "z-overlay": { "type": ["integer", "string"] },
+        "z-toast": { "type": ["integer", "string"] },
+        "z-modal": { "type": ["integer", "string"] },
+        "z-popover": { "type": ["integer", "string"] },
+        "z-tooltip": { "type": ["integer", "string"] }
+      },
       "additionalProperties": true
     },
     "adaptation": {
