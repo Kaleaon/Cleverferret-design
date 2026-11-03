@@ -39,6 +39,9 @@ jobs:
             cd docs/react && (npm ci || npm install) && cd ../..
           fi
 
+      - name: Validate theme schemas
+        run: npx ktheme-schema sync --check
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
