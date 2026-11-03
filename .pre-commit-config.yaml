@@ -46,11 +46,10 @@ repos:
         types: [json]
         args: ["--schemafile", "schemas/theme.schema.json"]
 
-  - repo: local
+  - repo: https://github.com/Kaleaon/Ktheme
+    rev: main
     hooks:
       - id: ktheme-style-lint
-        name: ktheme-style-lint
-        entry: python3 scripts/ktheme-style-lint.py
-        language: python
-        types_or: [javascript, jsx, ts, tsx, css, html]
+        language: script
+        entry: scripts/ktheme-style-lint.py
         exclude: ^(dist/|node_modules/|build/|schemas/|tests/|docs/support\.js|docs/cf-system\.js|docs/cf-ui\.css|docs/index\.html|docs/app\.dc\.html|docs/theme-system\.dc\.html)
