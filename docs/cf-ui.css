@@ -830,7 +830,7 @@ input[type="range"].cf-range.sm::-moz-range-thumb {
 }
 .vd-panel {
   color: #f4f4f5;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--ktheme-font-family, Inter, system-ui, sans-serif);
 }
 .vd-chip {
   display: inline-flex;
