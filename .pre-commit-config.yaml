@@ -44,7 +44,11 @@ repos:
         name: check-jsonschema (theme presets)
         files: ^(docs/[^/]+\.json|themes/[^/]+\.json|themes/examples/[^/]+\.json|ktheme-pr/themes/community/[^/]+\.json)$
         types: [json]
-        args: ["--schemafile", "schemas/theme.schema.json"]
+        args:
+          [
+            "--schemafile",
+            "https://raw.githubusercontent.com/Kaleaon/Ktheme/main/schemas/theme.schema.json",
+          ]
 
   - repo: https://github.com/Kaleaon/Ktheme
     rev: main
